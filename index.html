@@ -4,17 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Space Defender - Game Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a1929, #142c4d, #1d3b63);
             color: white;
             height: 100vh;
             overflow: hidden;
@@ -47,8 +49,9 @@
             justify-content: center;
             align-items: center;
             z-index: 2;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 10, 30, 0.85);
             transition: opacity 0.5s;
+            padding: 20px;
         }
         
         .hidden {
@@ -56,18 +59,27 @@
         }
         
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
             text-align: center;
-            text-shadow: 0 0 10px #00b3ff, 0 0 20px #00b3ff;
+            text-shadow: 0 0 15px #00f7ff, 0 0 25px #00f7ff;
             color: #fff;
+            font-weight: 800;
+            letter-spacing: 2px;
         }
         
         h2 {
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             margin-bottom: 1.5rem;
             text-align: center;
-            color: #ffcc00;
+            color: #ffdd00;
+            text-shadow: 0 0 10px #ffdd00;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ffdd00;
         }
         
         p {
@@ -75,28 +87,42 @@
             margin-bottom: 1.5rem;
             text-align: center;
             max-width: 90%;
+            line-height: 1.6;
         }
         
         .btn {
-            background: linear-gradient(to bottom, #ffcc00, #ff9900);
+            background: linear-gradient(to bottom, #ffdd00, #ffaa00);
             color: #000;
             border: none;
-            padding: 15px 30px;
+            padding: 16px 32px;
             font-size: 1.2rem;
             border-radius: 50px;
-            margin: 10px;
+            margin: 12px;
             cursor: pointer;
             font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
             transition: all 0.2s;
             outline: none;
-            min-width: 200px;
+            min-width: 220px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
         
         .btn:active {
             transform: scale(0.95);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0));
+            transform: rotate(30deg);
         }
         
         .btn-secondary {
@@ -104,20 +130,47 @@
             color: white;
         }
         
+        .btn-premium {
+            background: linear-gradient(to bottom, #9d50bb, #6e48aa);
+            color: white;
+        }
+        
         #controls-info {
-            margin-top: 20px;
+            margin-top: 25px;
             font-size: 1rem;
-            color: #ccc;
+            color: #aaccff;
+            text-align: center;
+            max-width: 80%;
         }
         
         #game-ui {
             position: absolute;
-            top: 10px;
-            left: 10px;
+            top: 15px;
+            left: 15px;
+            right: 15px;
             z-index: 3;
             color: white;
             font-size: 1.2rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            pointer-events: none;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+        }
+        
+        #level-display {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 3;
+            color: #ffdd00;
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ffdd00;
             pointer-events: none;
         }
         
@@ -125,62 +178,80 @@
             position: absolute;
             bottom: 30px;
             left: 30px;
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 140px;
             z-index: 3;
             touch-action: none;
+        }
+        
+        #joystick-base {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 221, 0, 0.2);
+            border-radius: 50%;
+            border: 2px solid rgba(255, 221, 0, 0.5);
         }
         
         #joystick {
             position: absolute;
             width: 60px;
             height: 60px;
-            background: rgba(255, 204, 0, 0.7);
+            background: rgba(255, 221, 0, 0.9);
             border-radius: 50%;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
+            box-shadow: 0 0 20px rgba(255, 221, 0, 0.7);
         }
         
         #shoot-btn {
             position: absolute;
             bottom: 40px;
             right: 40px;
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
-            background: rgba(255, 0, 0, 0.7);
+            background: rgba(255, 50, 50, 0.8);
             z-index: 3;
             display: flex;
             justify-content: center;
             align-items: center;
             color: white;
             font-weight: bold;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            font-size: 1.2rem;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.6);
             touch-action: none;
+            border: 2px solid rgba(255, 255, 255, 0.5);
         }
         
         .upgrade {
             display: flex;
             justify-content: space-between;
-            width: 90%;
-            max-width: 400px;
-            margin: 10px 0;
-            padding: 10px;
+            align-items: center;
+            width: 95%;
+            max-width: 450px;
+            margin: 12px 0;
+            padding: 15px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .upgrade-info {
+            flex: 1;
         }
         
         .stars {
             display: flex;
-            margin-top: 10px;
+            margin-top: 8px;
         }
         
         .star {
-            color: #ffcc00;
+            color: #ffdd00;
             font-size: 1.5rem;
             margin: 0 2px;
+            text-shadow: 0 0 5px #ffdd00;
         }
         
         #pause-btn {
@@ -189,14 +260,122 @@
             right: 15px;
             z-index: 3;
             background: rgba(255, 255, 255, 0.2);
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .level-indicator {
+            width: 90%;
+            max-width: 500px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .level-progress {
+            height: 100%;
+            background: linear-gradient(to right, #00f7ff, #0095ff);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .difficulty-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .easy {
+            background: linear-gradient(to right, #00c853, #64dd17);
+        }
+        
+        .medium {
+            background: linear-gradient(to right, #ffab00, #ffd600);
+        }
+        
+        .hard {
+            background: linear-gradient(to right, #ff6d00, #ff3d00);
+        }
+        
+        .very-hard {
+            background: linear-gradient(to right, #d50000, #ff1744);
+        }
+        
+        .powerup {
+            position: absolute;
+            z-index: 2;
+            animation: float 3s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .boss-health {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            z-index: 3;
+            border: 2px solid #ff3d00;
+            overflow: hidden;
+        }
+        
+        .boss-health-bar {
+            height: 100%;
+            background: linear-gradient(to right, #ff3d00, #ff6d00);
+            width: 100%;
+            transition: width 0.3s;
+        }
+        
+        .achievement {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 25px;
+            border-radius: 10px;
+            z-index: 10;
+            text-align: center;
+            border-left: 5px solid #ffdd00;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .achievement.show {
+            opacity: 1;
+        }
+        
+        .upgrade-btn {
+            background: linear-gradient(to bottom, #00c853, #009624);
+            padding: 10px 20px;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
@@ -207,22 +386,29 @@
         <div id="game-ui">
             <div id="score">Score: 0</div>
             <div id="lives">Lives: 3</div>
-            <div id="level">Level: 1</div>
+            <div id="level-text">Level: 1</div>
         </div>
         
+        <div id="level-display">Level 1 - Mudah</div>
+        
         <div id="joystick-area">
+            <div id="joystick-base"></div>
             <div id="joystick"></div>
         </div>
         
-        <div id="shoot-btn">FIRE</div>
+        <div id="shoot-btn"><i class="fas fa-fire"></i></div>
         
-        <div id="pause-btn">II</div>
+        <div id="pause-btn"><i class="fas fa-pause"></i></div>
         
         <div id="start-screen" class="screen">
             <h1>SPACE DEFENDER</h1>
-            <p>Pertahankan Bumi dari serangan alien dengan pesawat tempur terbaik!</p>
-            <button id="start-btn" class="btn">MULAI PERMAINAN</button>
-            <button id="upgrade-btn" class="btn btn-secondary">UPGRADE PESAWAT</button>
+            <p>Pertahankan galaksi dari invasi alien! Kumpulkan power-up dan jadi pahlawan luar angkasa.</p>
+            <div class="level-indicator">
+                <div class="level-progress" style="width: 2%;"></div>
+            </div>
+            <button id="start-btn" class="btn"><i class="fas fa-play"></i> MULAI PERMAINAN</button>
+            <button id="upgrade-btn" class="btn btn-secondary"><i class="fas fa-cogs"></i> UPGRADE PESAWAT</button>
+            <button id="stats-btn" class="btn btn-premium"><i class="fas fa-chart-line"></i> STATISTIK</button>
             <div id="controls-info">
                 Gunakan joystick kiri untuk bergerak dan tombol FIRE untuk menembak
             </div>
@@ -230,8 +416,10 @@
         
         <div id="upgrade-screen" class="screen hidden">
             <h2>UPGRADE PESAWAT</h2>
+            <p>Gunakan koin yang dikumpulkan untuk meningkatkan kemampuan pesawat</p>
+            
             <div class="upgrade">
-                <div>
+                <div class="upgrade-info">
                     <h3>Kecepatan Tembakan</h3>
                     <div class="stars">
                         <span class="star">★</span>
@@ -239,10 +427,11 @@
                         <span class="star">☆</span>
                     </div>
                 </div>
-                <button class="btn" style="padding: 8px 15px; font-size: 0.9rem;">100</button>
+                <button class="upgrade-btn">250 <i class="fas fa-coins" style="color: #ffdd00;"></i></button>
             </div>
+            
             <div class="upgrade">
-                <div>
+                <div class="upgrade-info">
                     <h3>Kekuatan Peluru</h3>
                     <div class="stars">
                         <span class="star">★</span>
@@ -250,10 +439,11 @@
                         <span class="star">☆</span>
                     </div>
                 </div>
-                <button class="btn" style="padding: 8px 15px; font-size: 0.9rem;">150</button>
+                <button class="upgrade-btn">350 <i class="fas fa-coins" style="color: #ffdd00;"></i></button>
             </div>
+            
             <div class="upgrade">
-                <div>
+                <div class="upgrade-info">
                     <h3>Kecepatan Pesawat</h3>
                     <div class="stars">
                         <span class="star">★</span>
@@ -261,23 +451,78 @@
                         <span class="star">★</span>
                     </div>
                 </div>
-                <button class="btn" style="padding: 8px 15px; font-size: 0.9rem;">200</button>
+                <button class="upgrade-btn">200 <i class="fas fa-coins" style="color: #ffdd00;"></i></button>
             </div>
-            <button id="back-btn" class="btn btn-secondary">KEMBALI</button>
+            
+            <div class="upgrade">
+                <div class="upgrade-info">
+                    <h3>Perisai Energi</h3>
+                    <div class="stars">
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                    </div>
+                </div>
+                <button class="upgrade-btn">500 <i class="fas fa-coins" style="color: #ffdd00;"></i></button>
+            </div>
+            
+            <button id="back-btn" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> KEMBALI</button>
+        </div>
+        
+        <div id="stats-screen" class="screen hidden">
+            <h2>STATISTIK</h2>
+            
+            <div class="upgrade">
+                <div class="upgrade-info">
+                    <h3>Level Tertinggi</h3>
+                    <p>15 <span class="difficulty-badge easy">Mudah</span></p>
+                </div>
+            </div>
+            
+            <div class="upgrade">
+                <div class="upgrade-info">
+                    <h3>Musuh Dihancurkan</h3>
+                    <p>1,245</p>
+                </div>
+            </div>
+            
+            <div class="upgrade">
+                <div class="upgrade-info">
+                    <h3>Skor Tertinggi</h3>
+                    <p>125,400</p>
+                </div>
+            </div>
+            
+            <div class="upgrade">
+                <div class="upgrade-info">
+                    <h3>Waktu Bermain</h3>
+                    <p>5 jam 32 menit</p>
+                </div>
+            </div>
+            
+            <button id="stats-back-btn" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> KEMBALI</button>
         </div>
         
         <div id="pause-screen" class="screen hidden">
             <h2>GAME PAUSED</h2>
-            <button id="resume-btn" class="btn">LANJUTKAN</button>
-            <button id="restart-btn" class="btn btn-secondary">MULAI ULANG</button>
-            <button id="menu-btn" class="btn btn-secondary">MENU UTAMA</button>
+            <button id="resume-btn" class="btn"><i class="fas fa-play"></i> LANJUTKAN</button>
+            <button id="restart-btn" class="btn btn-secondary"><i class="fas fa-redo"></i> MULAI ULANG</button>
+            <button id="menu-btn" class="btn btn-secondary"><i class="fas fa-home"></i> MENU UTAMA</button>
         </div>
         
         <div id="gameover-screen" class="screen hidden">
             <h2>GAME OVER</h2>
             <p id="final-score">Skor Akhir: 0</p>
-            <button id="playagain-btn" class="btn">MAIN LAGI</button>
-            <button id="mainmenu-btn" class="btn btn-secondary">MENU UTAMA</button>
+            <p id="level-reached">Level Tercapai: 1</p>
+            <button id="playagain-btn" class="btn"><i class="fas fa-play"></i> MAIN LAGI</button>
+            <button id="mainmenu-btn" class="btn btn-secondary"><i class="fas fa-home"></i> MENU UTAMA</button>
+        </div>
+        
+        <div id="level-up-screen" class="screen hidden">
+            <h2>LEVEL UP!</h2>
+            <p id="new-level">Level 2</p>
+            <p id="difficulty-change">Kesulitan: Mudah</p>
+            <button id="continue-btn" class="btn"><i class="fas fa-arrow-right"></i> LANJUTKAN</button>
         </div>
     </div>
 
@@ -289,17 +534,33 @@
         let bullets = [];
         let particles = [];
         let stars = [];
+        let powerups = [];
+        let bosses = [];
         let score = 0;
         let lives = 3;
         let level = 1;
+        let maxLevel = 50;
         let gameRunning = false;
         let lastTime = 0;
         let joystickPos = { x: 0, y: 0 };
         let joystickActive = false;
+        let coins = 0;
+        let playerUpgrades = {
+            fireRate: 1,
+            bulletPower: 1,
+            speed: 1,
+            shield: 0
+        };
         
         // Ukuran game
         const GAME_WIDTH = window.innerWidth;
         const GAME_HEIGHT = window.innerHeight;
+        
+        // Konstanta level
+        const LEVEL_EASY_END = 15;
+        const LEVEL_MEDIUM_END = 30;
+        const LEVEL_HARD_END = 40;
+        const LEVEL_VERY_HARD_END = 50;
         
         // Kelas Player
         class Player {
@@ -308,10 +569,13 @@
                 this.height = 60;
                 this.x = GAME_WIDTH / 2 - this.width / 2;
                 this.y = GAME_HEIGHT - this.height - 30;
-                this.speed = 5;
-                this.color = '#ffcc00';
+                this.speed = 5 + (playerUpgrades.speed * 0.5);
+                this.color = '#ffdd00';
                 this.shootCooldown = 0;
-                this.shootRate = 10;
+                this.shootRate = 10 - (playerUpgrades.fireRate * 0.5);
+                this.bulletPower = playerUpgrades.bulletPower;
+                this.hasShield = playerUpgrades.shield > 0;
+                this.shieldStrength = playerUpgrades.shield * 20;
             }
             
             update(deltaTime) {
@@ -344,34 +608,70 @@
                 ctx.fill();
                 
                 // Efek api dari mesin
-                ctx.fillStyle = '#ff9900';
+                ctx.fillStyle = '#ffaa00';
                 ctx.beginPath();
                 ctx.moveTo(this.x + this.width / 4, this.y + this.height);
                 ctx.lineTo(this.x + this.width / 2, this.y + this.height + 20);
                 ctx.lineTo(this.x + 3 * this.width / 4, this.y + this.height);
                 ctx.closePath();
                 ctx.fill();
+                
+                // Gambar perisai jika ada
+                if (this.hasShield) {
+                    ctx.strokeStyle = `rgba(0, 150, 255, ${0.5 + (this.shieldStrength / 40) * 0.5})`;
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width * 0.7, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
             }
             
             shoot() {
                 if (this.shootCooldown <= 0) {
-                    bullets.push(new Bullet(this.x + this.width / 2 - 5, this.y, 10, 20, '#00ff00', 10));
+                    // Tembakan normal
+                    bullets.push(new Bullet(this.x + this.width / 2 - 5, this.y, 10, 20, '#00ff00', 10, this.bulletPower));
+                    
+                    // Tembakan tambahan jika sudah di-upgrade
+                    if (this.bulletPower >= 2) {
+                        bullets.push(new Bullet(this.x + this.width / 4 - 5, this.y + this.height / 2, 8, 15, '#00ff00', 10, 1));
+                        bullets.push(new Bullet(this.x + 3 * this.width / 4 - 5, this.y + this.height / 2, 8, 15, '#00ff00', 10, 1));
+                    }
+                    
+                    if (this.bulletPower >= 3) {
+                        bullets.push(new Bullet(this.x, this.y + this.height / 3, 8, 15, '#00ff00', 12, 1));
+                        bullets.push(new Bullet(this.x + this.width - 8, this.y + this.height / 3, 8, 15, '#00ff00', 12, 1));
+                    }
+                    
                     this.shootCooldown = this.shootRate;
                     return true;
                 }
                 return false;
+            }
+            
+            takeDamage() {
+                if (this.hasShield) {
+                    this.shieldStrength -= 10;
+                    if (this.shieldStrength <= 0) {
+                        this.hasShield = false;
+                    }
+                    return false; // Tidak mengambil damage karena dilindungi perisai
+                }
+                return true; // Mengambil damage
             }
         }
         
         // Kelas Musuh
         class Enemy {
             constructor() {
-                this.width = 40;
-                this.height = 40;
+                const difficulty = getDifficultyForLevel(level);
+                this.width = 30 + (level * 0.5);
+                this.height = 30 + (level * 0.5);
                 this.x = Math.random() * (GAME_WIDTH - this.width);
                 this.y = -this.height;
-                this.speed = 2 + Math.random() * 2;
+                this.speed = 2 + Math.random() * 2 + (level * 0.1);
                 this.color = `hsl(${Math.random() * 360}, 70%, 50%)`;
+                this.health = 1 + Math.floor(level / 5);
+                this.value = 10 * this.health;
             }
             
             update(deltaTime) {
@@ -392,22 +692,116 @@
                 ctx.lineTo(this.x, this.y);
                 ctx.closePath();
                 ctx.fill();
+                
+                // Gambar health bar untuk musuh dengan health lebih dari 1
+                if (this.health > 1) {
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                    ctx.fillRect(this.x, this.y - 10, this.width, 5);
+                    ctx.fillStyle = 'rgba(0, 255, 0, 0.8)';
+                    ctx.fillRect(this.x, this.y - 10, this.width * (this.health / (1 + Math.floor(level / 5))), 5);
+                }
+            }
+        }
+        
+        // Kelas Boss
+        class Boss {
+            constructor() {
+                this.width = 120;
+                this.height = 120;
+                this.x = GAME_WIDTH / 2 - this.width / 2;
+                this.y = -this.height;
+                this.speed = 1;
+                this.color = '#ff3d00';
+                this.health = 10 + (level * 2);
+                this.maxHealth = this.health;
+                this.value = 100 * this.health;
+                this.moveDirection = 1;
+                this.shootCooldown = 0;
+            }
+            
+            update(deltaTime) {
+                // Gerakan boss
+                if (this.y < 100) {
+                    this.y += this.speed;
+                } else {
+                    this.x += this.speed * this.moveDirection;
+                    if (this.x <= 0 || this.x >= GAME_WIDTH - this.width) {
+                        this.moveDirection *= -1;
+                    }
+                }
+                
+                // Tembakan boss
+                this.shootCooldown -= deltaTime;
+                if (this.shootCooldown <= 0 && this.y >= 100) {
+                    this.shoot();
+                    this.shootCooldown = 50 - (level * 0.5);
+                }
+            }
+            
+            draw(ctx) {
+                // Gambar boss
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Gambar detail boss
+                ctx.fillStyle = '#ff6d00';
+                ctx.beginPath();
+                ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 3, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Gambar health bar
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(this.x, this.y - 20, this.width, 10);
+                ctx.fillStyle = 'rgba(255, 0, 0, 0.8)';
+                ctx.fillRect(this.x, this.y - 20, this.width * (this.health / this.maxHealth), 10);
+            }
+            
+            shoot() {
+                // Tembakan ke arah player
+                const angle = Math.atan2((player.y + player.height / 2) - (this.y + this.height / 2), 
+                                        (player.x + player.width / 2) - (this.x + this.width / 2));
+                
+                bullets.push(new Bullet(
+                    this.x + this.width / 2 - 7, 
+                    this.y + this.height / 2 - 7, 
+                    15, 15, '#ff3d00', 5, 1, angle, true
+                ));
+                
+                // Tembakan tambahan untuk level tinggi
+                if (level > 20) {
+                    bullets.push(new Bullet(
+                        this.x + this.width / 2 - 7, 
+                        this.y + this.height / 2 - 7, 
+                        15, 15, '#ff3d00', 5, 1, angle + 0.3, true
+                    ));
+                    bullets.push(new Bullet(
+                        this.x + this.width / 2 - 7, 
+                        this.y + this.height / 2 - 7, 
+                        15, 15, '#ff3d00', 5, 1, angle - 0.3, true
+                    ));
+                }
             }
         }
         
         // Kelas Peluru
         class Bullet {
-            constructor(x, y, width, height, color, speed) {
+            constructor(x, y, width, height, color, speed, power, angle = -Math.PI/2, isEnemyBullet = false) {
                 this.x = x;
                 this.y = y;
                 this.width = width;
                 this.height = height;
                 this.color = color;
                 this.speed = speed;
+                this.power = power;
+                this.angle = angle;
+                this.isEnemyBullet = isEnemyBullet;
             }
             
             update(deltaTime) {
-                this.y -= this.speed;
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed;
             }
             
             draw(ctx) {
@@ -415,8 +809,67 @@
                 ctx.fillRect(this.x, this.y, this.width, this.height);
                 
                 // Efek cahaya peluru
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.fillStyle = this.isEnemyBullet ? 'rgba(255, 100, 100, 0.5)' : 'rgba(200, 255, 200, 0.5)';
                 ctx.fillRect(this.x - 2, this.y - 2, this.width + 4, this.height + 4);
+            }
+        }
+        
+        // Kelas Power-up
+        class PowerUp {
+            constructor(x, y, type) {
+                this.x = x;
+                this.y = y;
+                this.width = 30;
+                this.height = 30;
+                this.type = type; // 'health', 'shield', 'fire', 'coin'
+                this.speed = 2;
+                
+                switch(type) {
+                    case 'health':
+                        this.color = '#ff5252';
+                        break;
+                    case 'shield':
+                        this.color = '#2196f3';
+                        break;
+                    case 'fire':
+                        this.color = '#ff9800';
+                        break;
+                    case 'coin':
+                        this.color = '#ffdd00';
+                        break;
+                }
+            }
+            
+            update() {
+                this.y += this.speed;
+            }
+            
+            draw(ctx) {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x + this.width/2, this.y + this.height/2, this.width/2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Gambar ikon berdasarkan jenis power-up
+                ctx.fillStyle = 'white';
+                ctx.font = '20px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                switch(this.type) {
+                    case 'health':
+                        ctx.fillText('❤', this.x + this.width/2, this.y + this.height/2);
+                        break;
+                    case 'shield':
+                        ctx.fillText('🛡', this.x + this.width/2, this.y + this.height/2);
+                        break;
+                    case 'fire':
+                        ctx.fillText('🔥', this.x + this.width/2, this.y + this.height/2);
+                        break;
+                    case 'coin':
+                        ctx.fillText('🪙', this.x + this.width/2, this.y + this.height/2);
+                        break;
+                }
             }
         }
         
@@ -474,6 +927,28 @@
             }
         }
         
+        // Fungsi utilitas
+        function getDifficultyForLevel(level) {
+            if (level <= LEVEL_EASY_END) return 'easy';
+            if (level <= LEVEL_MEDIUM_END) return 'medium';
+            if (level <= LEVEL_HARD_END) return 'hard';
+            return 'very-hard';
+        }
+        
+        function getDifficultyText(level) {
+            if (level <= LEVEL_EASY_END) return 'Mudah';
+            if (level <= LEVEL_MEDIUM_END) return 'Sedang';
+            if (level <= LEVEL_HARD_END) return 'Sulit';
+            return 'Sangat Sulit';
+        }
+        
+        function getDifficultyClass(level) {
+            if (level <= LEVEL_EASY_END) return 'easy';
+            if (level <= LEVEL_MEDIUM_END) return 'medium';
+            if (level <= LEVEL_HARD_END) return 'hard';
+            return 'very-hard';
+        }
+        
         // Inisialisasi game
         function init() {
             canvas = document.getElementById('game-canvas');
@@ -491,6 +966,9 @@
             
             // Tampilkan layar mulai
             showScreen('start-screen');
+            
+            // Update progress level
+            updateLevelProgress();
         }
         
         // Setup event listeners
@@ -498,9 +976,13 @@
             // Tombol layar mulai
             document.getElementById('start-btn').addEventListener('click', startGame);
             document.getElementById('upgrade-btn').addEventListener('click', () => showScreen('upgrade-screen'));
+            document.getElementById('stats-btn').addEventListener('click', () => showScreen('stats-screen'));
             
             // Tombol layar upgrade
             document.getElementById('back-btn').addEventListener('click', () => showScreen('start-screen'));
+            
+            // Tombol layar statistik
+            document.getElementById('stats-back-btn').addEventListener('click', () => showScreen('start-screen'));
             
             // Tombol pause
             document.getElementById('pause-btn').addEventListener('click', pauseGame);
@@ -513,6 +995,9 @@
             // Tombol layar game over
             document.getElementById('playagain-btn').addEventListener('click', startGame);
             document.getElementById('mainmenu-btn').addEventListener('click', () => showScreen('start-screen'));
+            
+            // Tombol layar level up
+            document.getElementById('continue-btn').addEventListener('click', resumeGame);
             
             // Kontrol joystick
             const joystickArea = document.getElementById('joystick-area');
@@ -601,7 +1086,14 @@
             // Jika kembali ke menu utama, hentikan game
             if (screenId === 'start-screen') {
                 gameRunning = false;
+                updateLevelProgress();
             }
+        }
+        
+        // Update progress level di layar mulai
+        function updateLevelProgress() {
+            const progress = document.querySelector('.level-progress');
+            progress.style.width = `${(level / maxLevel) * 100}%`;
         }
         
         // Mulai game
@@ -611,19 +1103,28 @@
             enemies = [];
             bullets = [];
             particles = [];
+            powerups = [];
+            bosses = [];
             score = 0;
             lives = 3;
-            level = 1;
-            
-            // Buat beberapa musuh awal
-            for (let i = 0; i < 5; i++) {
-                enemies.push(new Enemy());
-            }
             
             // Update UI
             document.getElementById('score').textContent = `Score: ${score}`;
             document.getElementById('lives').textContent = `Lives: ${lives}`;
-            document.getElementById('level').textContent = `Level: ${level}`;
+            document.getElementById('level-text').textContent = `Level: ${level}`;
+            document.getElementById('level-display').textContent = `Level ${level} - ${getDifficultyText(level)}`;
+            document.getElementById('level-display').className = getDifficultyClass(level);
+            
+            // Buat beberapa musuh awal berdasarkan level
+            const enemyCount = 5 + Math.floor(level / 2);
+            for (let i = 0; i < enemyCount; i++) {
+                enemies.push(new Enemy());
+            }
+            
+            // Jika level kelipatan 5, tambahkan boss
+            if (level % 5 === 0) {
+                bosses.push(new Boss());
+            }
             
             // Mulai game loop
             gameRunning = true;
@@ -650,6 +1151,7 @@
             lastTime = performance.now();
             requestAnimationFrame(gameLoop);
             document.getElementById('pause-screen').classList.add('hidden');
+            document.getElementById('level-up-screen').classList.add('hidden');
         }
         
         // Mulai ulang game
@@ -657,10 +1159,37 @@
             startGame();
         }
         
+        // Level up
+        function levelUp() {
+            if (level < maxLevel) {
+                level++;
+                
+                // Tampilkan layar level up
+                document.getElementById('new-level').textContent = `Level ${level}`;
+                document.getElementById('difficulty-change').textContent = `Kesulitan: ${getDifficultyText(level)}`;
+                document.getElementById('level-up-screen').classList.remove('hidden');
+                gameRunning = false;
+                
+                // Update UI
+                document.getElementById('level-text').textContent = `Level: ${level}`;
+                document.getElementById('level-display').textContent = `Level ${level} - ${getDifficultyText(level)}`;
+                document.getElementById('level-display').className = getDifficultyClass(level);
+                
+                // Update progress level
+                updateLevelProgress();
+            } else {
+                // Game selesai (mencapai level maksimal)
+                showScreen('gameover-screen');
+                document.getElementById('final-score').textContent = `Skor Akhir: ${score}`;
+                document.getElementById('level-reached').textContent = `Selamat! Anda menyelesaikan semua level!`;
+            }
+        }
+        
         // Game over
         function gameOver() {
             gameRunning = false;
             document.getElementById('final-score').textContent = `Skor Akhir: ${score}`;
+            document.getElementById('level-reached').textContent = `Level Tercapai: ${level}`;
             showScreen('gameover-screen');
         }
         
@@ -689,13 +1218,29 @@
             // Update musuh
             enemies.forEach(enemy => enemy.update(deltaTime));
             
+            // Update boss
+            bosses.forEach(boss => boss.update(deltaTime));
+            
             // Update peluru
             for (let i = bullets.length - 1; i >= 0; i--) {
                 bullets[i].update(deltaTime);
                 
                 // Hapus peluru yang keluar layar
-                if (bullets[i].y + bullets[i].height < 0) {
+                if (bullets[i].y + bullets[i].height < 0 || 
+                    bullets[i].y > GAME_HEIGHT ||
+                    bullets[i].x + bullets[i].width < 0 ||
+                    bullets[i].x > GAME_WIDTH) {
                     bullets.splice(i, 1);
+                }
+            }
+            
+            // Update power-up
+            for (let i = powerups.length - 1; i >= 0; i--) {
+                powerups[i].update();
+                
+                // Hapus power-up yang keluar layar
+                if (powerups[i].y > GAME_HEIGHT) {
+                    powerups.splice(i, 1);
                 }
             }
             
@@ -715,13 +1260,9 @@
             // Deteksi tabrakan
             checkCollisions();
             
-            // Tingkatkan kesulitan seiring waktu
-            if (score > level * 1000) {
-                level++;
-                document.getElementById('level').textContent = `Level: ${level}`;
-                
-                // Tambah musuh setiap naik level
-                enemies.push(new Enemy());
+            // Cek jika semua musuh dan boss sudah dikalahkan
+            if (enemies.length === 0 && bosses.length === 0) {
+                levelUp();
             }
         }
         
@@ -729,6 +1270,8 @@
         function checkCollisions() {
             // Deteksi tabrakan peluru dengan musuh
             for (let i = bullets.length - 1; i >= 0; i--) {
+                if (bullets[i].isEnemyBullet) continue; // Lewati peluru musuh
+                
                 for (let j = enemies.length - 1; j >= 0; j--) {
                     if (
                         bullets[i].x < enemies[j].x + enemies[j].width &&
@@ -737,24 +1280,109 @@
                         bullets[i].y + bullets[i].height > enemies[j].y
                     ) {
                         // Tabrakan terjadi
-                        score += 100;
-                        document.getElementById('score').textContent = `Score: ${score}`;
+                        enemies[j].health -= bullets[i].power;
                         
                         // Buat partikel ledakan
-                        for (let k = 0; k < 20; k++) {
+                        for (let k = 0; k < 5; k++) {
                             particles.push(new Particle(
-                                enemies[j].x + enemies[j].width / 2,
-                                enemies[j].y + enemies[j].height / 2,
+                                bullets[i].x + bullets[i].width / 2,
+                                bullets[i].y + bullets[i].height / 2,
                                 enemies[j].color
                             ));
                         }
                         
-                        // Hapus peluru dan musuh
+                        // Hapus peluru
                         bullets.splice(i, 1);
-                        enemies.splice(j, 1);
                         
-                        // Tambah musuh baru
-                        enemies.push(new Enemy());
+                        // Cek jika musuh hancur
+                        if (enemies[j].health <= 0) {
+                            score += enemies[j].value;
+                            document.getElementById('score').textContent = `Score: ${score}`;
+                            
+                            // Buat partikel ledakan lebih banyak
+                            for (let k = 0; k < 20; k++) {
+                                particles.push(new Particle(
+                                    enemies[j].x + enemies[j].width / 2,
+                                    enemies[j].y + enemies[j].height / 2,
+                                    enemies[j].color
+                                ));
+                            }
+                            
+                            // Chance untuk drop power-up (20%)
+                            if (Math.random() < 0.2) {
+                                const types = ['health', 'shield', 'fire', 'coin'];
+                                const type = types[Math.floor(Math.random() * types.length)];
+                                powerups.push(new PowerUp(
+                                    enemies[j].x + enemies[j].width / 2,
+                                    enemies[j].y + enemies[j].height / 2,
+                                    type
+                                ));
+                            }
+                            
+                            // Hapus musuh
+                            enemies.splice(j, 1);
+                            
+                            // Tambah musuh baru jika perlu
+                            if (enemies.length < 3 + Math.floor(level / 2)) {
+                                enemies.push(new Enemy());
+                            }
+                        }
+                        
+                        break;
+                    }
+                }
+                
+                // Deteksi tabrakan peluru dengan boss
+                for (let j = bosses.length - 1; j >= 0; j--) {
+                    if (
+                        bullets[i].x < bosses[j].x + bosses[j].width &&
+                        bullets[i].x + bullets[i].width > bosses[j].x &&
+                        bullets[i].y < bosses[j].y + bosses[j].height &&
+                        bullets[i].y + bullets[i].height > bosses[j].y
+                    ) {
+                        // Tabrakan terjadi
+                        bosses[j].health -= bullets[i].power;
+                        
+                        // Buat partikel ledakan
+                        for (let k = 0; k < 10; k++) {
+                            particles.push(new Particle(
+                                bullets[i].x + bullets[i].width / 2,
+                                bullets[i].y + bullets[i].height / 2,
+                                bosses[j].color
+                            ));
+                        }
+                        
+                        // Hapus peluru
+                        bullets.splice(i, 1);
+                        
+                        // Cek jika boss hancur
+                        if (bosses[j].health <= 0) {
+                            score += bosses[j].value;
+                            document.getElementById('score').textContent = `Score: ${score}`;
+                            
+                            // Buat partikel ledakan lebih banyak
+                            for (let k = 0; k < 50; k++) {
+                                particles.push(new Particle(
+                                    bosses[j].x + bosses[j].width / 2,
+                                    bosses[j].y + bosses[j].height / 2,
+                                    bosses[j].color
+                                ));
+                            }
+                            
+                            // Drop power-up pasti dari boss
+                            const types = ['health', 'shield', 'fire', 'coin'];
+                            for (let k = 0; k < 3; k++) {
+                                const type = types[Math.floor(Math.random() * types.length)];
+                                powerups.push(new PowerUp(
+                                    bosses[j].x + bosses[j].width / 2,
+                                    bosses[j].y + bosses[j].height / 2,
+                                    type
+                                ));
+                            }
+                            
+                            // Hapus boss
+                            bosses.splice(j, 1);
+                        }
                         
                         break;
                     }
@@ -770,8 +1398,10 @@
                     player.y + player.height > enemies[j].y
                 ) {
                     // Tabrakan terjadi
-                    lives--;
-                    document.getElementById('lives').textContent = `Lives: ${lives}`;
+                    if (player.takeDamage()) {
+                        lives--;
+                        document.getElementById('lives').textContent = `Lives: ${lives}`;
+                    }
                     
                     // Buat partikel ledakan
                     for (let k = 0; k < 30; k++) {
@@ -796,6 +1426,79 @@
                     break;
                 }
             }
+            
+            // Deteksi tabrakan player dengan peluru musuh
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                if (!bullets[i].isEnemyBullet) continue;
+                
+                if (
+                    bullets[i].x < player.x + player.width &&
+                    bullets[i].x + bullets[i].width > player.x &&
+                    bullets[i].y < player.y + player.height &&
+                    bullets[i].y + bullets[i].height > player.y
+                ) {
+                    // Tabrakan terjadi
+                    if (player.takeDamage()) {
+                        lives--;
+                        document.getElementById('lives').textContent = `Lives: ${lives}`;
+                    }
+                    
+                    // Buat partikel ledakan
+                    for (let k = 0; k < 10; k++) {
+                        particles.push(new Particle(
+                            bullets[i].x + bullets[i].width / 2,
+                            bullets[i].y + bullets[i].height / 2,
+                            bullets[i].color
+                        ));
+                    }
+                    
+                    // Hapus peluru
+                    bullets.splice(i, 1);
+                    
+                    // Cek game over
+                    if (lives <= 0) {
+                        gameOver();
+                    }
+                    
+                    break;
+                }
+            }
+            
+            // Deteksi tabrakan player dengan power-up
+            for (let i = powerups.length - 1; i >= 0; i--) {
+                if (
+                    powerups[i].x < player.x + player.width &&
+                    powerups[i].x + powerups[i].width > player.x &&
+                    powerups[i].y < player.y + player.height &&
+                    powerups[i].y + powerups[i].height > player.y
+                ) {
+                    // Power-up diambil
+                    switch(powerups[i].type) {
+                        case 'health':
+                            lives = Math.min(lives + 1, 5);
+                            document.getElementById('lives').textContent = `Lives: ${lives}`;
+                            break;
+                        case 'shield':
+                            player.hasShield = true;
+                            player.shieldStrength = 100;
+                            break;
+                        case 'fire':
+                            playerUpgrades.bulletPower = Math.min(playerUpgrades.bulletPower + 1, 3);
+                            player.bulletPower = playerUpgrades.bulletPower;
+                            break;
+                        case 'coin':
+                            coins += 50;
+                            score += 100;
+                            document.getElementById('score').textContent = `Score: ${score}`;
+                            break;
+                    }
+                    
+                    // Hapus power-up
+                    powerups.splice(i, 1);
+                    
+                    break;
+                }
+            }
         }
         
         // Render game
@@ -810,8 +1513,14 @@
             // Gambar partikel
             particles.forEach(particle => particle.draw(ctx));
             
+            // Gambar power-up
+            powerups.forEach(powerup => powerup.draw(ctx));
+            
             // Gambar musuh
             enemies.forEach(enemy => enemy.draw(ctx));
+            
+            // Gambar boss
+            bosses.forEach(boss => boss.draw(ctx));
             
             // Gambar peluru
             bullets.forEach(bullet => bullet.draw(ctx));
