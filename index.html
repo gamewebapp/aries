@@ -15,13 +15,14 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a1929, #142c4d, #1d3b63);
+            font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0f2e, #142c4d, #1d3b63);
             color: white;
             height: 100vh;
             overflow: hidden;
             position: fixed;
             width: 100%;
+            text-shadow: 0 0 5px rgba(0, 247, 255, 0.7);
         }
         
         #game-container {
@@ -49,9 +50,10 @@
             justify-content: center;
             align-items: center;
             z-index: 2;
-            background: rgba(0, 10, 30, 0.85);
+            background: radial-gradient(circle at center, rgba(10, 20, 50, 0.95) 0%, rgba(5, 10, 30, 0.98) 100%);
             transition: opacity 0.5s;
             padding: 20px;
+            text-align: center;
         }
         
         .hidden {
@@ -59,35 +61,53 @@
         }
         
         h1 {
-            font-size: 3rem;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
             margin-bottom: 1.5rem;
             text-align: center;
-            text-shadow: 0 0 15px #00f7ff, 0 0 25px #00f7ff;
-            color: #fff;
+            background: linear-gradient(to right, #ffdd00, #ffaa00, #ffdd00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             font-weight: 800;
             letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 0.5rem;
+            text-shadow: 0 0 15px rgba(255, 221, 0, 0.5);
+            animation: glow 2s infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #ffdd00, 0 0 20px #ffdd00;
+            }
+            to {
+                text-shadow: 0 0 15px #ffaa00, 0 0 30px #ffaa00, 0 0 40px #ffaa00;
+            }
         }
         
         h2 {
-            font-size: 2.2rem;
+            font-size: clamp(1.8rem, 6vw, 3rem);
             margin-bottom: 1.5rem;
             text-align: center;
             color: #ffdd00;
             text-shadow: 0 0 10px #ffdd00;
+            font-weight: 700;
         }
         
         h3 {
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
             margin-bottom: 1rem;
             color: #ffdd00;
+            font-weight: 600;
         }
         
         p {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.3rem);
             margin-bottom: 1.5rem;
             text-align: center;
             max-width: 90%;
             line-height: 1.6;
+            color: #aaccff;
         }
         
         .btn {
@@ -95,18 +115,20 @@
             color: #000;
             border: none;
             padding: 16px 32px;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 4vw, 1.3rem);
             border-radius: 50px;
             margin: 12px;
             cursor: pointer;
             font-weight: bold;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 221, 0, 0.5);
             transition: all 0.2s;
             outline: none;
             min-width: 220px;
+            max-width: 90%;
             text-align: center;
             position: relative;
             overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
         }
         
         .btn:active {
@@ -128,19 +150,25 @@
         .btn-secondary {
             background: linear-gradient(to bottom, #555, #333);
             color: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
         }
         
         .btn-premium {
             background: linear-gradient(to bottom, #9d50bb, #6e48aa);
             color: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(157, 80, 187, 0.5);
         }
         
         #controls-info {
             margin-top: 25px;
-            font-size: 1rem;
+            font-size: clamp(0.8rem, 3vw, 1rem);
             color: #aaccff;
             text-align: center;
             max-width: 80%;
+            background: rgba(0, 20, 40, 0.6);
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 247, 255, 0.3);
         }
         
         #game-ui {
@@ -150,14 +178,16 @@
             right: 15px;
             z-index: 3;
             color: white;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.3rem);
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
             pointer-events: none;
             display: flex;
             justify-content: space-between;
             padding: 10px 15px;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
             border-radius: 10px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         #level-display {
@@ -168,61 +198,131 @@
             text-align: center;
             z-index: 3;
             color: #ffdd00;
-            font-size: 1.4rem;
+            font-size: clamp(1rem, 3vw, 1.4rem);
             font-weight: bold;
             text-shadow: 0 0 10px #ffdd00;
             pointer-events: none;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 0;
+            backdrop-filter: blur(5px);
         }
         
-        #joystick-area {
+        .controls-container {
             position: absolute;
-            bottom: 30px;
-            left: 30px;
-            width: 140px;
-            height: 140px;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
             z-index: 3;
             touch-action: none;
         }
         
-        #joystick-base {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 221, 0, 0.2);
-            border-radius: 50%;
-            border: 2px solid rgba(255, 221, 0, 0.5);
+        .d-pad {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 5px;
         }
         
-        #joystick {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 221, 0, 0.9);
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 20px rgba(255, 221, 0, 0.7);
+        .control-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            backdrop-filter: blur(5px);
+            transition: all 0.1s;
+        }
+        
+        .control-btn:active {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0.95);
+        }
+        
+        .center-btn {
+            grid-column: 2;
+            grid-row: 2;
+            background: rgba(255, 221, 0, 0.3);
+        }
+        
+        #up-btn {
+            grid-column: 2;
+            grid-row: 1;
+        }
+        
+        #left-btn {
+            grid-column: 1;
+            grid-row: 2;
+        }
+        
+        #right-btn {
+            grid-column: 3;
+            grid-row: 2;
+        }
+        
+        #down-btn {
+            grid-column: 2;
+            grid-row: 3;
+        }
+        
+        #action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
         }
         
         #shoot-btn {
-            position: absolute;
-            bottom: 40px;
-            right: 40px;
-            width: 90px;
-            height: 90px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            background: rgba(255, 50, 50, 0.8);
-            z-index: 3;
+            background: rgba(255, 50, 50, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.6);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            transition: all 0.1s;
+        }
+        
+        #shoot-btn:active {
+            background: rgba(255, 50, 50, 0.9);
+            transform: scale(0.95);
+        }
+        
+        #special-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(0, 150, 255, 0.7);
             display: flex;
             justify-content: center;
             align-items: center;
             color: white;
             font-weight: bold;
             font-size: 1.2rem;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.6);
-            touch-action: none;
+            box-shadow: 0 0 20px rgba(0, 150, 255, 0.6);
             border: 2px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            transition: all 0.1s;
+        }
+        
+        #special-btn:active {
+            background: rgba(0, 150, 255, 0.9);
+            transform: scale(0.95);
         }
         
         .upgrade {
@@ -230,12 +330,13 @@
             justify-content: space-between;
             align-items: center;
             width: 95%;
-            max-width: 450px;
+            max-width: 500px;
             margin: 12px 0;
             padding: 15px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
         }
         
         .upgrade-info {
@@ -269,6 +370,12 @@
             font-size: 1.5rem;
             color: white;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        #pause-btn:active {
+            background: rgba(255, 255, 255, 0.3);
         }
         
         .level-indicator {
@@ -279,6 +386,7 @@
             border-radius: 10px;
             margin: 15px 0;
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .level-progress {
@@ -287,6 +395,7 @@
             border-radius: 10px;
             width: 0%;
             transition: width 0.5s;
+            box-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
         }
         
         .difficulty-badge {
@@ -360,6 +469,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
             opacity: 0;
             transition: opacity 0.5s;
+            backdrop-filter: blur(5px);
         }
         
         .achievement.show {
@@ -376,10 +486,113 @@
             border: none;
             cursor: pointer;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            min-width: 100px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .d-pad {
+                width: 120px;
+                height: 120px;
+            }
+            
+            #shoot-btn {
+                width: 70px;
+                height: 70px;
+            }
+            
+            #special-btn {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .btn {
+                min-width: 200px;
+                padding: 14px 28px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .d-pad {
+                width: 100px;
+                height: 100px;
+            }
+            
+            #shoot-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.2rem;
+            }
+            
+            #special-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+            
+            .controls-container {
+                padding: 0 10px;
+            }
+            
+            .btn {
+                min-width: 180px;
+                padding: 12px 24px;
+                font-size: 1rem;
+            }
+            
+            #game-ui {
+                flex-direction: column;
+                gap: 5px;
+                align-items: center;
+                padding: 8px;
+            }
+        }
+        
+        /* Background stars animation */
+        .stars-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .star-particle {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 5s infinite ease-in-out;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(100, 100, 255, 0.5);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(100, 100, 255, 0.7);
         }
     </style>
 </head>
 <body>
+    <div class="stars-background" id="stars-bg"></div>
+    
     <div id="game-container">
         <canvas id="game-canvas"></canvas>
         
@@ -391,12 +604,20 @@
         
         <div id="level-display">Level 1 - Mudah</div>
         
-        <div id="joystick-area">
-            <div id="joystick-base"></div>
-            <div id="joystick"></div>
+        <div class="controls-container">
+            <div class="d-pad">
+                <div class="control-btn" id="up-btn"><i class="fas fa-arrow-up"></i></div>
+                <div class="control-btn" id="left-btn"><i class="fas fa-arrow-left"></i></div>
+                <div class="control-btn center-btn"><i class="fas fa-crosshairs"></i></div>
+                <div class="control-btn" id="right-btn"><i class="fas fa-arrow-right"></i></div>
+                <div class="control-btn" id="down-btn"><i class="fas fa-arrow-down"></i></div>
+            </div>
+            
+            <div id="action-buttons">
+                <div id="shoot-btn"><i class="fas fa-fire"></i></div>
+                <div id="special-btn"><i class="fas fa-bolt"></i></div>
+            </div>
         </div>
-        
-        <div id="shoot-btn"><i class="fas fa-fire"></i></div>
         
         <div id="pause-btn"><i class="fas fa-pause"></i></div>
         
@@ -410,7 +631,7 @@
             <button id="upgrade-btn" class="btn btn-secondary"><i class="fas fa-cogs"></i> UPGRADE PESAWAT</button>
             <button id="stats-btn" class="btn btn-premium"><i class="fas fa-chart-line"></i> STATISTIK</button>
             <div id="controls-info">
-                Gunakan joystick kiri untuk bergerak dan tombol FIRE untuk menembak
+                Gunakan tombol panah untuk bergerak dan tombol FIRE untuk menembak
             </div>
         </div>
         
@@ -552,6 +773,14 @@
             shield: 0
         };
         
+        // Kontrol manual
+        let keys = {
+            up: false,
+            down: false,
+            left: false,
+            right: false
+        };
+        
         // Ukuran game
         const GAME_WIDTH = window.innerWidth;
         const GAME_HEIGHT = window.innerHeight;
@@ -579,11 +808,11 @@
             }
             
             update(deltaTime) {
-                // Gerakan berdasarkan joystick
-                if (joystickActive) {
-                    this.x += joystickPos.x * this.speed;
-                    this.y += joystickPos.y * this.speed;
-                }
+                // Gerakan berdasarkan kontrol manual
+                if (keys.up) this.y -= this.speed;
+                if (keys.down) this.y += this.speed;
+                if (keys.left) this.x -= this.speed;
+                if (keys.right) this.x += this.speed;
                 
                 // Batasi player di dalam layar
                 if (this.x < 0) this.x = 0;
@@ -732,9 +961,9 @@
                 
                 // Tembakan boss
                 this.shootCooldown -= deltaTime;
-                if (this.shootCooldown <= 0 && this.y >= 100) {
-                    this.shoot();
-                    this.shootCooldown = 50 - (level * 0.5);
+                if (this.shootCooldown <= 0) {
+                    bullets.push(new Bullet(this.x + this.width / 2 - 5, this.y + this.height, 10, 10, '#ff3d00', -5, 1));
+                    this.shootCooldown = 60;
                 }
             }
             
@@ -746,48 +975,22 @@
                 ctx.fill();
                 
                 // Gambar detail boss
-                ctx.fillStyle = '#ff6d00';
+                ctx.fillStyle = '#000';
                 ctx.beginPath();
-                ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 3, 0, Math.PI * 2);
+                ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 4, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Gambar health bar
+                // Health bar
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
                 ctx.fillRect(this.x, this.y - 20, this.width, 10);
                 ctx.fillStyle = 'rgba(255, 0, 0, 0.8)';
                 ctx.fillRect(this.x, this.y - 20, this.width * (this.health / this.maxHealth), 10);
             }
-            
-            shoot() {
-                // Tembakan ke arah player
-                const angle = Math.atan2((player.y + player.height / 2) - (this.y + this.height / 2), 
-                                        (player.x + player.width / 2) - (this.x + this.width / 2));
-                
-                bullets.push(new Bullet(
-                    this.x + this.width / 2 - 7, 
-                    this.y + this.height / 2 - 7, 
-                    15, 15, '#ff3d00', 5, 1, angle, true
-                ));
-                
-                // Tembakan tambahan untuk level tinggi
-                if (level > 20) {
-                    bullets.push(new Bullet(
-                        this.x + this.width / 2 - 7, 
-                        this.y + this.height / 2 - 7, 
-                        15, 15, '#ff3d00', 5, 1, angle + 0.3, true
-                    ));
-                    bullets.push(new Bullet(
-                        this.x + this.width / 2 - 7, 
-                        this.y + this.height / 2 - 7, 
-                        15, 15, '#ff3d00', 5, 1, angle - 0.3, true
-                    ));
-                }
-            }
         }
         
         // Kelas Peluru
         class Bullet {
-            constructor(x, y, width, height, color, speed, power, angle = -Math.PI/2, isEnemyBullet = false) {
+            constructor(x, y, width, height, color, speed, power) {
                 this.x = x;
                 this.y = y;
                 this.width = width;
@@ -795,22 +998,47 @@
                 this.color = color;
                 this.speed = speed;
                 this.power = power;
-                this.angle = angle;
-                this.isEnemyBullet = isEnemyBullet;
             }
             
             update(deltaTime) {
-                this.x += Math.cos(this.angle) * this.speed;
-                this.y += Math.sin(this.angle) * this.speed;
+                this.y += this.speed;
             }
             
             draw(ctx) {
                 ctx.fillStyle = this.color;
                 ctx.fillRect(this.x, this.y, this.width, this.height);
                 
-                // Efek cahaya peluru
-                ctx.fillStyle = this.isEnemyBullet ? 'rgba(255, 100, 100, 0.5)' : 'rgba(200, 255, 200, 0.5)';
-                ctx.fillRect(this.x - 2, this.y - 2, this.width + 4, this.height + 4);
+                // Efek cahaya untuk peluru
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.fillRect(this.x - 2, this.y - 2, this.width + 4, 2);
+            }
+        }
+        
+        // Kelas Particle untuk efek visual
+        class Particle {
+            constructor(x, y, color, size, speedX, speedY, life) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.size = size;
+                this.speedX = speedX;
+                this.speedY = speedY;
+                this.life = life;
+                this.maxLife = life;
+            }
+            
+            update(deltaTime) {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.life--;
+            }
+            
+            draw(ctx) {
+                const alpha = this.life / this.maxLife;
+                ctx.fillStyle = `rgba(${this.color}, ${alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
             }
         }
         
@@ -821,18 +1049,21 @@
                 this.y = y;
                 this.width = 30;
                 this.height = 30;
-                this.type = type; // 'health', 'shield', 'fire', 'coin'
                 this.speed = 2;
+                this.type = type; // 'health', 'shield', 'fire', 'speed'
                 
                 switch(type) {
                     case 'health':
-                        this.color = '#ff5252';
+                        this.color = '#ff0000';
                         break;
                     case 'shield':
-                        this.color = '#2196f3';
+                        this.color = '#0095ff';
                         break;
                     case 'fire':
-                        this.color = '#ff9800';
+                        this.color = '#ffaa00';
+                        break;
+                    case 'speed':
+                        this.color = '#00ff00';
                         break;
                     case 'coin':
                         this.color = '#ffdd00';
@@ -840,94 +1071,43 @@
                 }
             }
             
-            update() {
+            update(deltaTime) {
                 this.y += this.speed;
             }
             
             draw(ctx) {
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
-                ctx.arc(this.x + this.width/2, this.y + this.height/2, this.width/2, 0, Math.PI * 2);
+                ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Gambar ikon berdasarkan jenis power-up
-                ctx.fillStyle = 'white';
+                // Gambar ikon sesuai jenis power-up
+                ctx.fillStyle = '#fff';
                 ctx.font = '20px Arial';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 
                 switch(this.type) {
                     case 'health':
-                        ctx.fillText('❤', this.x + this.width/2, this.y + this.height/2);
+                        ctx.fillText('♥', this.x + this.width / 2, this.y + this.height / 2);
                         break;
                     case 'shield':
-                        ctx.fillText('🛡', this.x + this.width/2, this.y + this.height/2);
+                        ctx.fillText('⛨', this.x + this.width / 2, this.y + this.height / 2);
                         break;
                     case 'fire':
-                        ctx.fillText('🔥', this.x + this.width/2, this.y + this.height/2);
+                        ctx.fillText('🔥', this.x + this.width / 2, this.y + this.height / 2);
+                        break;
+                    case 'speed':
+                        ctx.fillText('⚡', this.x + this.width / 2, this.y + this.height / 2);
                         break;
                     case 'coin':
-                        ctx.fillText('🪙', this.x + this.width/2, this.y + this.height/2);
+                        ctx.fillText('🪙', this.x + this.width / 2, this.y + this.height / 2);
                         break;
                 }
             }
         }
         
-        // Kelas Partikel
-        class Particle {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                this.size = Math.random() * 5 + 2;
-                this.speedX = Math.random() * 6 - 3;
-                this.speedY = Math.random() * 6 - 3;
-                this.life = 20;
-            }
-            
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.life--;
-            }
-            
-            draw(ctx) {
-                ctx.fillStyle = this.color;
-                ctx.globalAlpha = this.life / 20;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.globalAlpha = 1;
-            }
-        }
-        
-        // Kelas Bintang
-        class Star {
-            constructor() {
-                this.x = Math.random() * GAME_WIDTH;
-                this.y = Math.random() * GAME_HEIGHT;
-                this.size = Math.random() * 2 + 1;
-                this.speed = Math.random() * 2 + 1;
-                this.brightness = Math.random() * 0.5 + 0.5;
-            }
-            
-            update() {
-                this.y += this.speed;
-                if (this.y > GAME_HEIGHT) {
-                    this.y = 0;
-                    this.x = Math.random() * GAME_WIDTH;
-                }
-            }
-            
-            draw(ctx) {
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.brightness})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-        
-        // Fungsi utilitas
+        // Fungsi untuk mendapatkan tingkat kesulitan berdasarkan level
         function getDifficultyForLevel(level) {
             if (level <= LEVEL_EASY_END) return 'easy';
             if (level <= LEVEL_MEDIUM_END) return 'medium';
@@ -935,40 +1115,59 @@
             return 'very-hard';
         }
         
-        function getDifficultyText(level) {
+        // Fungsi untuk mendapatkan nama kesulitan
+        function getDifficultyName(level) {
             if (level <= LEVEL_EASY_END) return 'Mudah';
             if (level <= LEVEL_MEDIUM_END) return 'Sedang';
             if (level <= LEVEL_HARD_END) return 'Sulit';
             return 'Sangat Sulit';
         }
         
-        function getDifficultyClass(level) {
-            if (level <= LEVEL_EASY_END) return 'easy';
-            if (level <= LEVEL_MEDIUM_END) return 'medium';
-            if (level <= LEVEL_HARD_END) return 'hard';
-            return 'very-hard';
+        // Fungsi untuk membuat bintang latar belakang
+        function createStars() {
+            stars = [];
+            for (let i = 0; i < 200; i++) {
+                stars.push({
+                    x: Math.random() * GAME_WIDTH,
+                    y: Math.random() * GAME_HEIGHT,
+                    size: Math.random() * 3,
+                    speed: 0.1 + Math.random() * 0.5,
+                    opacity: 0.2 + Math.random() * 0.8
+                });
+            }
+            
+            // Juga buat bintang di elemen stars background
+            const starsBg = document.getElementById('stars-bg');
+            starsBg.innerHTML = '';
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star-particle';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 5 + 's';
+                starsBg.appendChild(star);
+            }
         }
         
-        // Inisialisasi game
+        // Fungsi untuk inisialisasi game
         function init() {
             canvas = document.getElementById('game-canvas');
             ctx = canvas.getContext('2d');
+            
+            // Atur ukuran canvas
             canvas.width = GAME_WIDTH;
             canvas.height = GAME_HEIGHT;
             
             // Buat bintang latar belakang
-            for (let i = 0; i < 100; i++) {
-                stars.push(new Star());
-            }
+            createStars();
             
             // Setup event listeners
             setupEventListeners();
             
             // Tampilkan layar mulai
             showScreen('start-screen');
-            
-            // Update progress level
-            updateLevelProgress();
         }
         
         // Setup event listeners
@@ -978,214 +1177,504 @@
             document.getElementById('upgrade-btn').addEventListener('click', () => showScreen('upgrade-screen'));
             document.getElementById('stats-btn').addEventListener('click', () => showScreen('stats-screen'));
             
-            // Tombol layar upgrade
+            // Tombol kembali
             document.getElementById('back-btn').addEventListener('click', () => showScreen('start-screen'));
-            
-            // Tombol layar statistik
             document.getElementById('stats-back-btn').addEventListener('click', () => showScreen('start-screen'));
+            
+            // Tombol pause screen
+            document.getElementById('resume-btn').addEventListener('click', resumeGame);
+            document.getElementById('restart-btn').addEventListener('click', restartGame);
+            document.getElementById('menu-btn').addEventListener('click', () => {
+                gameRunning = false;
+                showScreen('start-screen');
+            });
+            
+            // Tombol game over screen
+            document.getElementById('playagain-btn').addEventListener('click', startGame);
+            document.getElementById('mainmenu-btn').addEventListener('click', () => showScreen('start-screen'));
+            
+            // Tombol level up screen
+            document.getElementById('continue-btn').addEventListener('click', resumeGame);
             
             // Tombol pause
             document.getElementById('pause-btn').addEventListener('click', pauseGame);
             
-            // Tombol layar pause
-            document.getElementById('resume-btn').addEventListener('click', resumeGame);
-            document.getElementById('restart-btn').addEventListener('click', restartGame);
-            document.getElementById('menu-btn').addEventListener('click', () => showScreen('start-screen'));
-            
-            // Tombol layar game over
-            document.getElementById('playagain-btn').addEventListener('click', startGame);
-            document.getElementById('mainmenu-btn').addEventListener('click', () => showScreen('start-screen'));
-            
-            // Tombol layar level up
-            document.getElementById('continue-btn').addEventListener('click', resumeGame);
-            
-            // Kontrol joystick
-            const joystickArea = document.getElementById('joystick-area');
-            const joystick = document.getElementById('joystick');
-            
-            joystickArea.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                joystickActive = true;
-                updateJoystick(e);
-            });
-            
-            joystickArea.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                updateJoystick(e);
-            });
-            
-            joystickArea.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                joystickActive = false;
-                joystickPos = { x: 0, y: 0 };
-                joystick.style.transform = 'translate(-50%, -50%)';
-            });
-            
-            // Tombol tembak
+            // Kontrol manual
+            const upBtn = document.getElementById('up-btn');
+            const downBtn = document.getElementById('down-btn');
+            const leftBtn = document.getElementById('left-btn');
+            const rightBtn = document.getElementById('right-btn');
             const shootBtn = document.getElementById('shoot-btn');
             
-            shootBtn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                if (gameRunning) {
-                    player.shoot();
+            // Kontrol sentuh untuk tombol
+            upBtn.addEventListener('touchstart', () => keys.up = true);
+            upBtn.addEventListener('touchend', () => keys.up = false);
+            
+            downBtn.addEventListener('touchstart', () => keys.down = true);
+            downBtn.addEventListener('touchend', () => keys.down = false);
+            
+            leftBtn.addEventListener('touchstart', () => keys.left = true);
+            leftBtn.addEventListener('touchend', () => keys.left = false);
+            
+            rightBtn.addEventListener('touchstart', () => keys.right = true);
+            rightBtn.addEventListener('touchend', () => keys.right = false);
+            
+            shootBtn.addEventListener('touchstart', () => {
+                if (gameRunning) player.shoot();
+            });
+            
+            // Kontrol keyboard untuk desktop
+            window.addEventListener('keydown', (e) => {
+                if (!gameRunning) return;
+                
+                switch(e.key) {
+                    case 'ArrowUp':
+                    case 'w':
+                    case 'W':
+                        keys.up = true;
+                        break;
+                    case 'ArrowDown':
+                    case 's':
+                    case 'S':
+                        keys.down = true;
+                        break;
+                    case 'ArrowLeft':
+                    case 'a':
+                    case 'A':
+                        keys.left = true;
+                        break;
+                    case 'ArrowRight':
+                    case 'd':
+                    case 'D':
+                        keys.right = true;
+                        break;
+                    case ' ':
+                        player.shoot();
+                        break;
                 }
             });
             
-            shootBtn.addEventListener('touchmove', (e) => {
-                e.preventDefault();
+            window.addEventListener('keyup', (e) => {
+                switch(e.key) {
+                    case 'ArrowUp':
+                    case 'w':
+                    case 'W':
+                        keys.up = false;
+                        break;
+                    case 'ArrowDown':
+                    case 's':
+                    case 'S':
+                        keys.down = false;
+                        break;
+                    case 'ArrowLeft':
+                    case 'a':
+                    case 'A':
+                        keys.left = false;
+                        break;
+                    case 'ArrowRight':
+                    case 'd':
+                    case 'D':
+                        keys.right = false;
+                        break;
+                }
             });
-            
-            shootBtn.addEventListener('touchend', (e) => {
-                e.preventDefault();
-            });
         }
         
-        // Update posisi joystick
-        function updateJoystick(e) {
-            const rect = joystickArea.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            
-            const touch = e.touches[0];
-            const touchX = touch.clientX;
-            const touchY = touch.clientY;
-            
-            // Hitung jarak dari pusat joystick
-            let dx = touchX - centerX;
-            let dy = touchY - centerY;
-            
-            // Batasi joystick dalam area
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            const maxDistance = rect.width / 2;
-            
-            if (distance > maxDistance) {
-                dx = dx * maxDistance / distance;
-                dy = dy * maxDistance / distance;
-            }
-            
-            // Update posisi visual joystick
-            joystick.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-            
-            // Normalisasi nilai untuk pergerakan player
-            joystickPos = {
-                x: dx / maxDistance,
-                y: dy / maxDistance
-            };
-        }
-        
-        // Tampilkan layar tertentu
-        function showScreen(screenId) {
-            // Sembunyikan semua layar
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.add('hidden');
-            });
-            
-            // Tampilkan layar yang dipilih
-            document.getElementById(screenId).classList.remove('hidden');
-            
-            // Jika kembali ke menu utama, hentikan game
-            if (screenId === 'start-screen') {
-                gameRunning = false;
-                updateLevelProgress();
-            }
-        }
-        
-        // Update progress level di layar mulai
-        function updateLevelProgress() {
-            const progress = document.querySelector('.level-progress');
-            progress.style.width = `${(level / maxLevel) * 100}%`;
-        }
-        
-        // Mulai game
+        // Fungsi untuk memulai game
         function startGame() {
-            // Reset game state
-            player = new Player();
+            // Reset variabel game
+            score = 0;
+            lives = 3;
+            level = 1;
+            coins = 0;
             enemies = [];
             bullets = [];
             particles = [];
             powerups = [];
             bosses = [];
-            score = 0;
-            lives = 3;
+            
+            // Buat player baru
+            player = new Player();
             
             // Update UI
-            document.getElementById('score').textContent = `Score: ${score}`;
-            document.getElementById('lives').textContent = `Lives: ${lives}`;
-            document.getElementById('level-text').textContent = `Level: ${level}`;
-            document.getElementById('level-display').textContent = `Level ${level} - ${getDifficultyText(level)}`;
-            document.getElementById('level-display').className = getDifficultyClass(level);
+            updateUI();
             
-            // Buat beberapa musuh awal berdasarkan level
-            const enemyCount = 5 + Math.floor(level / 2);
-            for (let i = 0; i < enemyCount; i++) {
-                enemies.push(new Enemy());
-            }
-            
-            // Jika level kelipatan 5, tambahkan boss
-            if (level % 5 === 0) {
-                bosses.push(new Boss());
-            }
+            // Tampilkan level display
+            document.getElementById('level-display').textContent = `Level ${level} - ${getDifficultyName(level)}`;
             
             // Mulai game loop
             gameRunning = true;
             lastTime = performance.now();
-            requestAnimationFrame(gameLoop);
             
             // Sembunyikan semua layar
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.add('hidden');
-            });
+            hideAllScreens();
+            
+            // Mulai request animation frame
+            requestAnimationFrame(gameLoop);
         }
         
-        // Jeda game
-        function pauseGame() {
-            if (gameRunning) {
-                gameRunning = false;
-                showScreen('pause-screen');
-            }
-        }
-        
-        // Lanjutkan game
-        function resumeGame() {
+        // Fungsi untuk merestart game
+        function restartGame() {
+            // Reset variabel game
+            score = 0;
+            lives = 3;
+            level = 1;
+            enemies = [];
+            bullets = [];
+            particles = [];
+            powerups = [];
+            bosses = [];
+            
+            // Buat player baru
+            player = new Player();
+            
+            // Update UI
+            updateUI();
+            
+            // Tampilkan level display
+            document.getElementById('level-display').textContent = `Level ${level} - ${getDifficultyName(level)}`;
+            
+            // Mulai game loop
             gameRunning = true;
             lastTime = performance.now();
+            
+            // Sembunyikan semua layar
+            hideAllScreens();
+            
+            // Mulai request animation frame
             requestAnimationFrame(gameLoop);
-            document.getElementById('pause-screen').classList.add('hidden');
-            document.getElementById('level-up-screen').classList.add('hidden');
         }
         
-        // Mulai ulang game
-        function restartGame() {
-            startGame();
+        // Fungsi untuk menjalankan game loop
+        function gameLoop(timestamp) {
+            if (!gameRunning) return;
+            
+            // Hitung delta time
+            const deltaTime = (timestamp - lastTime) / 16.67; // Normalize to 60fps
+            lastTime = timestamp;
+            
+            // Update game state
+            update(deltaTime);
+            
+            // Render game
+            render();
+            
+            // Request frame berikutnya
+            requestAnimationFrame(gameLoop);
         }
         
-        // Level up
-        function levelUp() {
-            if (level < maxLevel) {
-                level++;
+        // Fungsi update game state
+        function update(deltaTime) {
+            // Update player
+            player.update(deltaTime);
+            
+            // Update enemies
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                enemies[i].update(deltaTime);
                 
-                // Tampilkan layar level up
-                document.getElementById('new-level').textContent = `Level ${level}`;
-                document.getElementById('difficulty-change').textContent = `Kesulitan: ${getDifficultyText(level)}`;
-                document.getElementById('level-up-screen').classList.remove('hidden');
-                gameRunning = false;
+                // Deteksi tabrakan dengan player
+                if (
+                    player.x < enemies[i].x + enemies[i].width &&
+                    player.x + player.width > enemies[i].x &&
+                    player.y < enemies[i].y + enemies[i].height &&
+                    player.y + player.height > enemies[i].y
+                ) {
+                    // Player kena damage
+                    if (player.takeDamage()) {
+                        lives--;
+                        updateUI();
+                        
+                        // Buat efek ledakan
+                        createExplosion(enemies[i].x + enemies[i].width / 2, enemies[i].y + enemies[i].height / 2, '#ff0000');
+                        
+                        // Hapus enemy
+                        enemies.splice(i, 1);
+                        
+                        // Cek game over
+                        if (lives <= 0) {
+                            gameOver();
+                            return;
+                        }
+                    }
+                }
+            }
+            
+            // Update bullets
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                bullets[i].update(deltaTime);
                 
-                // Update UI
-                document.getElementById('level-text').textContent = `Level: ${level}`;
-                document.getElementById('level-display').textContent = `Level ${level} - ${getDifficultyText(level)}`;
-                document.getElementById('level-display').className = getDifficultyClass(level);
+                // Hapus bullet jika keluar layar
+                if (bullets[i].y < -bullets[i].height || bullets[i].y > GAME_HEIGHT) {
+                    bullets.splice(i, 1);
+                    continue;
+                }
                 
-                // Update progress level
-                updateLevelProgress();
-            } else {
-                // Game selesai (mencapai level maksimal)
-                showScreen('gameover-screen');
-                document.getElementById('final-score').textContent = `Skor Akhir: ${score}`;
-                document.getElementById('level-reached').textContent = `Selamat! Anda menyelesaikan semua level!`;
+                // Deteksi tabrakan bullet player dengan enemy
+                if (bullets[i].speed < 0) { // Hanya bullet player yang speed-nya negatif
+                    for (let j = enemies.length - 1; j >= 0; j--) {
+                        if (
+                            bullets[i].x < enemies[j].x + enemies[j].width &&
+                            bullets[i].x + bullets[i].width > enemies[j].x &&
+                            bullets[i].y < enemies[j].y + enemies[j].height &&
+                            bullets[i].y + bullets[i].height > enemies[j].y
+                        ) {
+                            // Kurangi health enemy
+                            enemies[j].health -= bullets[i].power;
+                            
+                            // Hapus bullet
+                            bullets.splice(i, 1);
+                            
+                            // Jika health enemy habis
+                            if (enemies[j].health <= 0) {
+                                // Tambah score
+                                score += enemies[j].value;
+                                
+                                // Buat efek ledakan
+                                createExplosion(enemies[j].x + enemies[j].width / 2, enemies[j].y + enemies[j].height / 2, '#ffff00');
+                                
+                                // Random chance untuk spawn power-up
+                                if (Math.random() < 0.2) {
+                                    const types = ['health', 'shield', 'fire', 'speed', 'coin'];
+                                    const type = types[Math.floor(Math.random() * types.length)];
+                                    powerups.push(new PowerUp(enemies[j].x, enemies[j].y, type));
+                                }
+                                
+                                // Hapus enemy
+                                enemies.splice(j, 1);
+                                
+                                // Update UI
+                                updateUI();
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            // Update particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update(deltaTime);
+                if (particles[i].life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            
+            // Update power-ups
+            for (let i = powerups.length - 1; i >= 0; i--) {
+                powerups[i].update(deltaTime);
+                
+                // Hapus jika keluar layar
+                if (powerups[i].y > GAME_HEIGHT) {
+                    powerups.splice(i, 1);
+                    continue;
+                }
+                
+                // Deteksi tabrakan dengan player
+                if (
+                    player.x < powerups[i].x + powerups[i].width &&
+                    player.x + player.width > powerups[i].x &&
+                    player.y < powerups[i].y + powerups[i].height &&
+                    player.y + player.height > powerups[i].y
+                ) {
+                    // Terapkan power-up
+                    applyPowerUp(powerups[i].type);
+                    
+                    // Hapus power-up
+                    powerups.splice(i, 1);
+                }
+            }
+            
+            // Update bosses
+            for (let i = bosses.length - 1; i >= 0; i--) {
+                bosses[i].update(deltaTime);
+                
+                // Deteksi tabrakan bullet player dengan boss
+                for (let j = bullets.length - 1; j >= 0; j--) {
+                    if (bullets[j].speed < 0) { // Hanya bullet player
+                        if (
+                            bullets[j].x < bosses[i].x + bosses[i].width &&
+                            bullets[j].x + bullets[j].width > bosses[i].x &&
+                            bullets[j].y < bosses[i].y + bosses[i].height &&
+                            bullets[j].y + bullets[j].height > bosses[i].y
+                        ) {
+                            // Kurangi health boss
+                            bosses[i].health -= bullets[j].power;
+                            
+                            // Hapus bullet
+                            bullets.splice(j, 1);
+                            
+                            // Jika health boss habis
+                            if (bosses[i].health <= 0) {
+                                // Tambah score
+                                score += bosses[i].value;
+                                
+                                // Buat efek ledakan besar
+                                for (let k = 0; k < 50; k++) {
+                                    const angle = Math.random() * Math.PI * 2;
+                                    const speed = Math.random() * 5;
+                                    particles.push(new Particle(
+                                        bosses[i].x + bosses[i].width / 2,
+                                        bosses[i].y + bosses[i].height / 2,
+                                        '255, 100, 0',
+                                        Math.random() * 5 + 2,
+                                        Math.cos(angle) * speed,
+                                        Math.sin(angle) * speed,
+                                        Math.random() * 50 + 30
+                                    ));
+                                }
+                                
+                                // Spawn beberapa power-up
+                                for (let k = 0; k < 5; k++) {
+                                    const types = ['health', 'shield', 'fire', 'speed', 'coin'];
+                                    const type = types[Math.floor(Math.random() * types.length)];
+                                    powerups.push(new PowerUp(
+                                        bosses[i].x + Math.random() * bosses[i].width,
+                                        bosses[i].y + Math.random() * bosses[i].height,
+                                        type
+                                    ));
+                                }
+                                
+                                // Hapus boss
+                                bosses.splice(i, 1);
+                                
+                                // Update UI
+                                updateUI();
+                                
+                                // Level up
+                                levelUp();
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            // Spawn enemy berdasarkan level
+            const enemySpawnRate = 0.05 + (level * 0.01);
+            if (Math.random() < enemySpawnRate && enemies.length < 10 + level) {
+                enemies.push(new Enemy());
+            }
+            
+            // Spawn boss setiap 5 level
+            if (level % 5 === 0 && bosses.length === 0 && enemies.length === 0) {
+                bosses.push(new Boss());
             }
         }
         
-        // Game over
+        // Fungsi render game
+        function render() {
+            // Clear canvas
+            ctx.fillStyle = 'rgba(10, 15, 30, 0.2)';
+            ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+            
+            // Gambar bintang latar belakang
+            ctx.fillStyle = '#ffffff';
+            for (const star of stars) {
+                ctx.globalAlpha = star.opacity;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Update posisi bintang untuk efek parallax
+                star.y += star.speed;
+                if (star.y > GAME_HEIGHT) {
+                    star.y = 0;
+                    star.x = Math.random() * GAME_WIDTH;
+                }
+            }
+            ctx.globalAlpha = 1;
+            
+            // Gambar particles
+            for (const particle of particles) {
+                particle.draw(ctx);
+            }
+            
+            // Gambar power-ups
+            for (const powerup of powerups) {
+                powerup.draw(ctx);
+            }
+            
+            // Gambar bullets
+            for (const bullet of bullets) {
+                bullet.draw(ctx);
+            }
+            
+            // Gambar enemies
+            for (const enemy of enemies) {
+                enemy.draw(ctx);
+            }
+            
+            // Gambar bosses
+            for (const boss of bosses) {
+                boss.draw(ctx);
+            }
+            
+            // Gambar player
+            player.draw(ctx);
+        }
+        
+        // Fungsi untuk membuat efek ledakan
+        function createExplosion(x, y, color) {
+            for (let i = 0; i < 20; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 3;
+                particles.push(new Particle(
+                    x, y, 
+                    color === '#ff0000' ? '255, 0, 0' : '255, 255, 0',
+                    Math.random() * 3 + 1,
+                    Math.cos(angle) * speed,
+                    Math.sin(angle) * speed,
+                    Math.random() * 30 + 20
+                ));
+            }
+        }
+        
+        // Fungsi untuk menerapkan power-up
+        function applyPowerUp(type) {
+            switch(type) {
+                case 'health':
+                    lives = Math.min(lives + 1, 5);
+                    break;
+                case 'shield':
+                    player.hasShield = true;
+                    player.shieldStrength = 20;
+                    break;
+                case 'fire':
+                    playerUpgrades.fireRate = Math.min(playerUpgrades.fireRate + 1, 5);
+                    player.shootRate = 10 - (playerUpgrades.fireRate * 0.5);
+                    break;
+                case 'speed':
+                    playerUpgrades.speed = Math.min(playerUpgrades.speed + 1, 5);
+                    player.speed = 5 + (playerUpgrades.speed * 0.5);
+                    break;
+                case 'coin':
+                    coins += 50;
+                    break;
+            }
+            updateUI();
+        }
+        
+        // Fungsi untuk level up
+        function levelUp() {
+            level++;
+            
+            // Update level display
+            document.getElementById('level-display').textContent = `Level ${level} - ${getDifficultyName(level)}`;
+            
+            // Update progress bar
+            const progressPercent = (level / maxLevel) * 100;
+            document.querySelector('.level-progress').style.width = `${progressPercent}%`;
+            
+            // Tampilkan level up screen setiap 5 level
+            if (level % 5 === 0) {
+                pauseGame();
+                document.getElementById('new-level').textContent = `Level ${level}`;
+                document.getElementById('difficulty-change').textContent = `Kesulitan: ${getDifficultyName(level)}`;
+                showScreen('level-up-screen');
+            }
+        }
+        
+        // Fungsi untuk game over
         function gameOver() {
             gameRunning = false;
             document.getElementById('final-score').textContent = `Skor Akhir: ${score}`;
@@ -1193,343 +1682,45 @@
             showScreen('gameover-screen');
         }
         
-        // Game loop
-        function gameLoop(timestamp) {
-            if (!gameRunning) return;
-            
-            const deltaTime = (timestamp - lastTime) / 16.67; // Normalize to 60fps
-            lastTime = timestamp;
-            
-            // Update
-            update(deltaTime);
-            
-            // Render
-            render();
-            
-            // Request frame berikutnya
+        // Fungsi untuk pause game
+        function pauseGame() {
+            gameRunning = false;
+            showScreen('pause-screen');
+        }
+        
+        // Fungsi untuk resume game
+        function resumeGame() {
+            gameRunning = true;
+            lastTime = performance.now();
+            hideAllScreens();
             requestAnimationFrame(gameLoop);
         }
         
-        // Update game state
-        function update(deltaTime) {
-            // Update player
-            player.update(deltaTime);
-            
-            // Update musuh
-            enemies.forEach(enemy => enemy.update(deltaTime));
-            
-            // Update boss
-            bosses.forEach(boss => boss.update(deltaTime));
-            
-            // Update peluru
-            for (let i = bullets.length - 1; i >= 0; i--) {
-                bullets[i].update(deltaTime);
-                
-                // Hapus peluru yang keluar layar
-                if (bullets[i].y + bullets[i].height < 0 || 
-                    bullets[i].y > GAME_HEIGHT ||
-                    bullets[i].x + bullets[i].width < 0 ||
-                    bullets[i].x > GAME_WIDTH) {
-                    bullets.splice(i, 1);
-                }
-            }
-            
-            // Update power-up
-            for (let i = powerups.length - 1; i >= 0; i--) {
-                powerups[i].update();
-                
-                // Hapus power-up yang keluar layar
-                if (powerups[i].y > GAME_HEIGHT) {
-                    powerups.splice(i, 1);
-                }
-            }
-            
-            // Update partikel
-            for (let i = particles.length - 1; i >= 0; i--) {
-                particles[i].update();
-                
-                // Hapus partikel yang sudah habis hidupnya
-                if (particles[i].life <= 0) {
-                    particles.splice(i, 1);
-                }
-            }
-            
-            // Update bintang
-            stars.forEach(star => star.update());
-            
-            // Deteksi tabrakan
-            checkCollisions();
-            
-            // Cek jika semua musuh dan boss sudah dikalahkan
-            if (enemies.length === 0 && bosses.length === 0) {
-                levelUp();
-            }
+        // Fungsi untuk update UI
+        function updateUI() {
+            document.getElementById('score').textContent = `Score: ${score}`;
+            document.getElementById('lives').textContent = `Lives: ${lives}`;
+            document.getElementById('level-text').textContent = `Level: ${level}`;
         }
         
-        // Deteksi tabrakan
-        function checkCollisions() {
-            // Deteksi tabrakan peluru dengan musuh
-            for (let i = bullets.length - 1; i >= 0; i--) {
-                if (bullets[i].isEnemyBullet) continue; // Lewati peluru musuh
-                
-                for (let j = enemies.length - 1; j >= 0; j--) {
-                    if (
-                        bullets[i].x < enemies[j].x + enemies[j].width &&
-                        bullets[i].x + bullets[i].width > enemies[j].x &&
-                        bullets[i].y < enemies[j].y + enemies[j].height &&
-                        bullets[i].y + bullets[i].height > enemies[j].y
-                    ) {
-                        // Tabrakan terjadi
-                        enemies[j].health -= bullets[i].power;
-                        
-                        // Buat partikel ledakan
-                        for (let k = 0; k < 5; k++) {
-                            particles.push(new Particle(
-                                bullets[i].x + bullets[i].width / 2,
-                                bullets[i].y + bullets[i].height / 2,
-                                enemies[j].color
-                            ));
-                        }
-                        
-                        // Hapus peluru
-                        bullets.splice(i, 1);
-                        
-                        // Cek jika musuh hancur
-                        if (enemies[j].health <= 0) {
-                            score += enemies[j].value;
-                            document.getElementById('score').textContent = `Score: ${score}`;
-                            
-                            // Buat partikel ledakan lebih banyak
-                            for (let k = 0; k < 20; k++) {
-                                particles.push(new Particle(
-                                    enemies[j].x + enemies[j].width / 2,
-                                    enemies[j].y + enemies[j].height / 2,
-                                    enemies[j].color
-                                ));
-                            }
-                            
-                            // Chance untuk drop power-up (20%)
-                            if (Math.random() < 0.2) {
-                                const types = ['health', 'shield', 'fire', 'coin'];
-                                const type = types[Math.floor(Math.random() * types.length)];
-                                powerups.push(new PowerUp(
-                                    enemies[j].x + enemies[j].width / 2,
-                                    enemies[j].y + enemies[j].height / 2,
-                                    type
-                                ));
-                            }
-                            
-                            // Hapus musuh
-                            enemies.splice(j, 1);
-                            
-                            // Tambah musuh baru jika perlu
-                            if (enemies.length < 3 + Math.floor(level / 2)) {
-                                enemies.push(new Enemy());
-                            }
-                        }
-                        
-                        break;
-                    }
-                }
-                
-                // Deteksi tabrakan peluru dengan boss
-                for (let j = bosses.length - 1; j >= 0; j--) {
-                    if (
-                        bullets[i].x < bosses[j].x + bosses[j].width &&
-                        bullets[i].x + bullets[i].width > bosses[j].x &&
-                        bullets[i].y < bosses[j].y + bosses[j].height &&
-                        bullets[i].y + bullets[i].height > bosses[j].y
-                    ) {
-                        // Tabrakan terjadi
-                        bosses[j].health -= bullets[i].power;
-                        
-                        // Buat partikel ledakan
-                        for (let k = 0; k < 10; k++) {
-                            particles.push(new Particle(
-                                bullets[i].x + bullets[i].width / 2,
-                                bullets[i].y + bullets[i].height / 2,
-                                bosses[j].color
-                            ));
-                        }
-                        
-                        // Hapus peluru
-                        bullets.splice(i, 1);
-                        
-                        // Cek jika boss hancur
-                        if (bosses[j].health <= 0) {
-                            score += bosses[j].value;
-                            document.getElementById('score').textContent = `Score: ${score}`;
-                            
-                            // Buat partikel ledakan lebih banyak
-                            for (let k = 0; k < 50; k++) {
-                                particles.push(new Particle(
-                                    bosses[j].x + bosses[j].width / 2,
-                                    bosses[j].y + bosses[j].height / 2,
-                                    bosses[j].color
-                                ));
-                            }
-                            
-                            // Drop power-up pasti dari boss
-                            const types = ['health', 'shield', 'fire', 'coin'];
-                            for (let k = 0; k < 3; k++) {
-                                const type = types[Math.floor(Math.random() * types.length)];
-                                powerups.push(new PowerUp(
-                                    bosses[j].x + bosses[j].width / 2,
-                                    bosses[j].y + bosses[j].height / 2,
-                                    type
-                                ));
-                            }
-                            
-                            // Hapus boss
-                            bosses.splice(j, 1);
-                        }
-                        
-                        break;
-                    }
-                }
-            }
+        // Fungsi untuk menampilkan screen tertentu
+        function showScreen(screenId) {
+            // Sembunyikan semua screen
+            hideAllScreens();
             
-            // Deteksi tabrakan player dengan musuh
-            for (let j = enemies.length - 1; j >= 0; j--) {
-                if (
-                    player.x < enemies[j].x + enemies[j].width &&
-                    player.x + player.width > enemies[j].x &&
-                    player.y < enemies[j].y + enemies[j].height &&
-                    player.y + player.height > enemies[j].y
-                ) {
-                    // Tabrakan terjadi
-                    if (player.takeDamage()) {
-                        lives--;
-                        document.getElementById('lives').textContent = `Lives: ${lives}`;
-                    }
-                    
-                    // Buat partikel ledakan
-                    for (let k = 0; k < 30; k++) {
-                        particles.push(new Particle(
-                            player.x + player.width / 2,
-                            player.y + player.height / 2,
-                            player.color
-                        ));
-                    }
-                    
-                    // Hapus musuh
-                    enemies.splice(j, 1);
-                    
-                    // Tambah musuh baru
-                    enemies.push(new Enemy());
-                    
-                    // Cek game over
-                    if (lives <= 0) {
-                        gameOver();
-                    }
-                    
-                    break;
-                }
-            }
-            
-            // Deteksi tabrakan player dengan peluru musuh
-            for (let i = bullets.length - 1; i >= 0; i--) {
-                if (!bullets[i].isEnemyBullet) continue;
-                
-                if (
-                    bullets[i].x < player.x + player.width &&
-                    bullets[i].x + bullets[i].width > player.x &&
-                    bullets[i].y < player.y + player.height &&
-                    bullets[i].y + bullets[i].height > player.y
-                ) {
-                    // Tabrakan terjadi
-                    if (player.takeDamage()) {
-                        lives--;
-                        document.getElementById('lives').textContent = `Lives: ${lives}`;
-                    }
-                    
-                    // Buat partikel ledakan
-                    for (let k = 0; k < 10; k++) {
-                        particles.push(new Particle(
-                            bullets[i].x + bullets[i].width / 2,
-                            bullets[i].y + bullets[i].height / 2,
-                            bullets[i].color
-                        ));
-                    }
-                    
-                    // Hapus peluru
-                    bullets.splice(i, 1);
-                    
-                    // Cek game over
-                    if (lives <= 0) {
-                        gameOver();
-                    }
-                    
-                    break;
-                }
-            }
-            
-            // Deteksi tabrakan player dengan power-up
-            for (let i = powerups.length - 1; i >= 0; i--) {
-                if (
-                    powerups[i].x < player.x + player.width &&
-                    powerups[i].x + powerups[i].width > player.x &&
-                    powerups[i].y < player.y + player.height &&
-                    powerups[i].y + powerups[i].height > player.y
-                ) {
-                    // Power-up diambil
-                    switch(powerups[i].type) {
-                        case 'health':
-                            lives = Math.min(lives + 1, 5);
-                            document.getElementById('lives').textContent = `Lives: ${lives}`;
-                            break;
-                        case 'shield':
-                            player.hasShield = true;
-                            player.shieldStrength = 100;
-                            break;
-                        case 'fire':
-                            playerUpgrades.bulletPower = Math.min(playerUpgrades.bulletPower + 1, 3);
-                            player.bulletPower = playerUpgrades.bulletPower;
-                            break;
-                        case 'coin':
-                            coins += 50;
-                            score += 100;
-                            document.getElementById('score').textContent = `Score: ${score}`;
-                            break;
-                    }
-                    
-                    // Hapus power-up
-                    powerups.splice(i, 1);
-                    
-                    break;
-                }
-            }
+            // Tampilkan screen yang diminta
+            document.getElementById(screenId).classList.remove('hidden');
         }
         
-        // Render game
-        function render() {
-            // Bersihkan canvas
-            ctx.fillStyle = '#000';
-            ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-            
-            // Gambar bintang
-            stars.forEach(star => star.draw(ctx));
-            
-            // Gambar partikel
-            particles.forEach(particle => particle.draw(ctx));
-            
-            // Gambar power-up
-            powerups.forEach(powerup => powerup.draw(ctx));
-            
-            // Gambar musuh
-            enemies.forEach(enemy => enemy.draw(ctx));
-            
-            // Gambar boss
-            bosses.forEach(boss => boss.draw(ctx));
-            
-            // Gambar peluru
-            bullets.forEach(bullet => bullet.draw(ctx));
-            
-            // Gambar player
-            player.draw(ctx);
+        // Fungsi untuk menyembunyikan semua screen
+        function hideAllScreens() {
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => {
+                screen.classList.add('hidden');
+            });
         }
         
-        // Jalankan inisialisasi saat window dimuat
+        // Inisialisasi game saat halaman dimuat
         window.addEventListener('load', init);
     </script>
 </body>
