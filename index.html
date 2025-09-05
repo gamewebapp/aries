@@ -532,6 +532,7 @@
             
             .controls-container {
                 padding: 0 10px;
+                bottom: 10px;
             }
             
             .btn {
@@ -545,6 +546,11 @@
                 gap: 5px;
                 align-items: center;
                 padding: 8px;
+                top: 5px;
+            }
+            
+            #level-display {
+                top: 80px;
             }
         }
         
@@ -571,22 +577,106 @@
             50% { opacity: 1; }
         }
         
-        /* Scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* Coin animation */
+        @keyframes coinSpin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
         }
         
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
+        .coin {
+            display: inline-block;
+            animation: coinSpin 3s infinite linear;
         }
         
-        ::-webkit-scrollbar-thumb {
-            background: rgba(100, 100, 255, 0.5);
-            border-radius: 4px;
+        /* Player ship styles */
+        .player-ship {
+            position: relative;
+            width: 50px;
+            height: 60px;
         }
         
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(100, 100, 255, 0.7);
+        .ship-body {
+            position: absolute;
+            width: 100%;
+            height: 70%;
+            bottom: 0;
+            background: linear-gradient(to bottom, #ffdd00, #ffaa00);
+            border-radius: 50% 50% 40% 40%;
+            overflow: hidden;
+        }
+        
+        .ship-cockpit {
+            position: absolute;
+            width: 40%;
+            height: 40%;
+            top: 15%;
+            left: 30%;
+            background: linear-gradient(to bottom, #00f7ff, #0095ff);
+            border-radius: 50%;
+            border: 2px solid #0066ff;
+        }
+        
+        .ship-wing-left, .ship-wing-right {
+            position: absolute;
+            width: 30%;
+            height: 30%;
+            bottom: 30%;
+            background: linear-gradient(to bottom, #ffdd00, #ff8800);
+        }
+        
+        .ship-wing-left {
+            left: -20%;
+            border-radius: 50% 0 0 50%;
+            transform: skewY(-30deg);
+        }
+        
+        .ship-wing-right {
+            right: -20%;
+            border-radius: 0 50% 50% 0;
+            transform: skewY(30deg);
+        }
+        
+        .ship-engine {
+            position: absolute;
+            width: 20%;
+            height: 20%;
+            bottom: -10%;
+            background: #ff5500;
+            border-radius: 50%;
+        }
+        
+        .ship-engine-left {
+            left: 20%;
+        }
+        
+        .ship-engine-right {
+            right: 20%;
+        }
+        
+        /* Enemy ship styles */
+        .enemy-ship {
+            position: relative;
+            width: 40px;
+            height: 40px;
+        }
+        
+        .enemy-body {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #ff3d00, #ff6d00);
+            border-radius: 50% 50% 30% 30%;
+            transform: rotate(180deg);
+        }
+        
+        .enemy-detail {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            bottom: 10%;
+            left: 25%;
+            background: #000;
+            border-radius: 50%;
         }
     </style>
 </head>
@@ -599,6 +689,7 @@
         <div id="game-ui">
             <div id="score">Score: 0</div>
             <div id="lives">Lives: 3</div>
+            <div id="coins">Coins: 0</div>
             <div id="level-text">Level: 1</div>
         </div>
         
@@ -623,7 +714,7 @@
         
         <div id="start-screen" class="screen">
             <h1>SPACE DEFENDER</h1>
-            <p>Pertahankan galaksi dari invasi alien! Kumpulkan power-up dan jadi pahlawan luar angkasa.</p>
+            <p>Pertahankan galaksi dari invasi alien! Kumpulkan koin dan upgrade pesawatmu.</p>
             <div class="level-indicator">
                 <div class="level-progress" style="width: 2%;"></div>
             </div>
@@ -641,50 +732,50 @@
             
             <div class="upgrade">
                 <div class="upgrade-info">
-                    <h3>Kecepatan Tembakan</h3>
+                    <h3>Kecepatan Tembakan <span class="coin"><i class="fas fa-coins" style="color: #ffdd00;"></i></span></h3>
                     <div class="stars">
                         <span class="star">★</span>
                         <span class="star">★</span>
                         <span class="star">☆</span>
                     </div>
                 </div>
-                <button class="upgrade-btn">250 <i class="fas fa-coins" style="color: #ffdd00;"></i></button>
+                <button class="upgrade-btn">250</button>
             </div>
             
             <div class="upgrade">
                 <div class="upgrade-info">
-                    <h3>Kekuatan Peluru</h3>
+                    <h3>Kekuatan Peluru <span class="coin"><i class="fas fa-coins" style="color: #ffdd00;"></i></span></h3>
                     <div class="stars">
                         <span class="star">★</span>
                         <span class="star">☆</span>
                         <span class="star">☆</span>
                     </div>
                 </div>
-                <button class="upgrade-btn">350 <i class="fas fa-coins" style="color: #ffdd00;"></i></button>
+                <button class="upgrade-btn">350</button>
             </div>
             
             <div class="upgrade">
                 <div class="upgrade-info">
-                    <h3>Kecepatan Pesawat</h3>
+                    <h3>Kecepatan Pesawat <span class="coin"><i class="fas fa-coins" style="color: #ffdd00;"></i></span></h3>
                     <div class="stars">
                         <span class="star">★</span>
                         <span class="star">★</span>
                         <span class="star">★</span>
                     </div>
                 </div>
-                <button class="upgrade-btn">200 <i class="fas fa-coins" style="color: #ffdd00;"></i></button>
+                <button class="upgrade-btn">200</button>
             </div>
             
             <div class="upgrade">
                 <div class="upgrade-info">
-                    <h3>Perisai Energi</h3>
+                    <h3>Perisai Energi <span class="coin"><i class="fas fa-coins" style="color: #ffdd00;"></i></span></h3>
                     <div class="stars">
                         <span class="star">☆</span>
                         <span class="star">☆</span>
                         <span class="star">☆</span>
                     </div>
                 </div>
-                <button class="upgrade-btn">500 <i class="fas fa-coins" style="color: #ffdd00;"></i></button>
+                <button class="upgrade-btn">500</button>
             </div>
             
             <button id="back-btn" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> KEMBALI</button>
@@ -716,6 +807,13 @@
             
             <div class="upgrade">
                 <div class="upgrade-info">
+                    <h3>Koin Dikumpulkan</h3>
+                    <p>5,750</p>
+                </div>
+            </div>
+            
+            <div class="upgrade">
+                <div class="upgrade-info">
                     <h3>Waktu Bermain</h3>
                     <p>5 jam 32 menit</p>
                 </div>
@@ -734,6 +832,7 @@
         <div id="gameover-screen" class="screen hidden">
             <h2>GAME OVER</h2>
             <p id="final-score">Skor Akhir: 0</p>
+            <p id="final-coins">Koin Dikumpulkan: 0</p>
             <p id="level-reached">Level Tercapai: 1</p>
             <button id="playagain-btn" class="btn"><i class="fas fa-play"></i> MAIN LAGI</button>
             <button id="mainmenu-btn" class="btn btn-secondary"><i class="fas fa-home"></i> MENU UTAMA</button>
@@ -742,6 +841,7 @@
         <div id="level-up-screen" class="screen hidden">
             <h2>LEVEL UP!</h2>
             <p id="new-level">Level 2</p>
+            <p id="coins-earned">Koin Didapat: 50 <span class="coin"><i class="fas fa-coins" style="color: #ffdd00;"></i></span></p>
             <p id="difficulty-change">Kesulitan: Mudah</p>
             <button id="continue-btn" class="btn"><i class="fas fa-arrow-right"></i> LANJUTKAN</button>
         </div>
@@ -759,19 +859,11 @@
         let bosses = [];
         let score = 0;
         let lives = 3;
+        let coins = 0;
         let level = 1;
         let maxLevel = 50;
         let gameRunning = false;
         let lastTime = 0;
-        let joystickPos = { x: 0, y: 0 };
-        let joystickActive = false;
-        let coins = 0;
-        let playerUpgrades = {
-            fireRate: 1,
-            bulletPower: 1,
-            speed: 1,
-            shield: 0
-        };
         
         // Kontrol manual
         let keys = {
@@ -790,6 +882,14 @@
         const LEVEL_MEDIUM_END = 30;
         const LEVEL_HARD_END = 40;
         const LEVEL_VERY_HARD_END = 50;
+        
+        // Player upgrades
+        let playerUpgrades = {
+            fireRate: 1,
+            bulletPower: 1,
+            speed: 1,
+            shield: 0
+        };
         
         // Kelas Player
         class Player {
@@ -827,21 +927,38 @@
             }
             
             draw(ctx) {
-                // Gambar pesawat player
-                ctx.fillStyle = this.color;
+                // Gambar pesawat player yang lebih realistis
+                ctx.save();
+                ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+                
+                // Body pesawat
+                ctx.fillStyle = '#ffdd00';
                 ctx.beginPath();
-                ctx.moveTo(this.x + this.width / 2, this.y);
-                ctx.lineTo(this.x + this.width, this.y + this.height);
-                ctx.lineTo(this.x, this.y + this.height);
+                ctx.moveTo(0, -this.height / 2);
+                ctx.lineTo(this.width / 2, this.height / 2);
+                ctx.lineTo(-this.width / 2, this.height / 2);
                 ctx.closePath();
                 ctx.fill();
                 
-                // Efek api dari mesin
+                // Detail pesawat
                 ctx.fillStyle = '#ffaa00';
                 ctx.beginPath();
-                ctx.moveTo(this.x + this.width / 4, this.y + this.height);
-                ctx.lineTo(this.x + this.width / 2, this.y + this.height + 20);
-                ctx.lineTo(this.x + 3 * this.width / 4, this.y + this.height);
+                ctx.moveTo(0, -this.height / 3);
+                ctx.lineTo(this.width / 3, this.height / 3);
+                ctx.lineTo(-this.width / 3, this.height / 3);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Mesin
+                ctx.fillStyle = '#ff6600';
+                ctx.fillRect(-this.width / 4, this.height / 2, this.width / 2, this.height / 4);
+                
+                // Api mesin
+                ctx.fillStyle = '#ff3300';
+                ctx.beginPath();
+                ctx.moveTo(-this.width / 6, this.height / 2 + this.height / 4);
+                ctx.lineTo(0, this.height / 2 + this.height / 2);
+                ctx.lineTo(this.width / 6, this.height / 2 + this.height / 4);
                 ctx.closePath();
                 ctx.fill();
                 
@@ -850,9 +967,11 @@
                     ctx.strokeStyle = `rgba(0, 150, 255, ${0.5 + (this.shieldStrength / 40) * 0.5})`;
                     ctx.lineWidth = 3;
                     ctx.beginPath();
-                    ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width * 0.7, 0, Math.PI * 2);
+                    ctx.arc(0, 0, this.width * 0.7, 0, Math.PI * 2);
                     ctx.stroke();
                 }
+                
+                ctx.restore();
             }
             
             shoot() {
@@ -901,6 +1020,7 @@
                 this.color = `hsl(${Math.random() * 360}, 70%, 50%)`;
                 this.health = 1 + Math.floor(level / 5);
                 this.value = 10 * this.health;
+                this.coinValue = 5 + Math.floor(level / 2);
             }
             
             update(deltaTime) {
@@ -914,13 +1034,26 @@
             }
             
             draw(ctx) {
+                // Gambar musuh yang lebih realistis
+                ctx.save();
+                ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+                
+                // Body musuh
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
-                ctx.moveTo(this.x + this.width / 2, this.y + this.height);
-                ctx.lineTo(this.x + this.width, this.y);
-                ctx.lineTo(this.x, this.y);
+                ctx.moveTo(0, this.height / 2);
+                ctx.lineTo(this.width / 2, -this.height / 2);
+                ctx.lineTo(-this.width / 2, -this.height / 2);
                 ctx.closePath();
                 ctx.fill();
+                
+                // Detail musuh
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(0, 0, this.width / 4, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.restore();
                 
                 // Gambar health bar untuk musuh dengan health lebih dari 1
                 if (this.health > 1) {
@@ -944,6 +1077,7 @@
                 this.health = 10 + (level * 2);
                 this.maxHealth = this.health;
                 this.value = 100 * this.health;
+                this.coinValue = 100 * level;
                 this.moveDirection = 1;
                 this.shootCooldown = 0;
             }
@@ -968,17 +1102,27 @@
             }
             
             draw(ctx) {
-                // Gambar boss
+                // Gambar boss yang lebih realistis
+                ctx.save();
+                ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+                
+                // Body boss
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
-                ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
+                ctx.arc(0, 0, this.width / 2, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Gambar detail boss
+                // Detail boss
                 ctx.fillStyle = '#000';
                 ctx.beginPath();
-                ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 4, 0, Math.PI * 2);
+                ctx.arc(0, 0, this.width / 4, 0, Math.PI * 2);
                 ctx.fill();
+                
+                // Senjata boss
+                ctx.fillStyle = '#ff6d00';
+                ctx.fillRect(-this.width / 3, -this.height / 2, this.width / 1.5, this.height / 10);
+                
+                ctx.restore();
                 
                 // Health bar
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
@@ -1050,7 +1194,7 @@
                 this.width = 30;
                 this.height = 30;
                 this.speed = 2;
-                this.type = type; // 'health', 'shield', 'fire', 'speed'
+                this.type = type; // 'health', 'shield', 'fire', 'speed', 'coin'
                 
                 switch(type) {
                     case 'health':
@@ -1157,8 +1301,8 @@
             ctx = canvas.getContext('2d');
             
             // Atur ukuran canvas
-            canvas.width = GAME_WIDTH;
-            canvas.height = GAME_HEIGHT;
+            resizeGame();
+            window.addEventListener('resize', resizeGame);
             
             // Buat bintang latar belakang
             createStars();
@@ -1168,6 +1312,34 @@
             
             // Tampilkan layar mulai
             showScreen('start-screen');
+        }
+        
+        // Fungsi untuk menyesuaikan ukuran game
+        function resizeGame() {
+            GAME_WIDTH = window.innerWidth;
+            GAME_HEIGHT = window.innerHeight;
+            
+            canvas.width = GAME_WIDTH;
+            canvas.height = GAME_HEIGHT;
+            
+            // Sesuaikan posisi kontrol untuk perangkat mobile
+            if (GAME_WIDTH < 768) {
+                document.querySelector('.controls-container').style.bottom = '10px';
+                document.querySelector('.d-pad').style.width = '100px';
+                document.querySelector('.d-pad').style.height = '100px';
+                document.getElementById('shoot-btn').style.width = '60px';
+                document.getElementById('shoot-btn').style.height = '60px';
+                document.getElementById('special-btn').style.width = '45px';
+                document.getElementById('special-btn').style.height = '45px';
+            } else {
+                document.querySelector('.controls-container').style.bottom = '20px';
+                document.querySelector('.d-pad').style.width = '150px';
+                document.querySelector('.d-pad').style.height = '150px';
+                document.getElementById('shoot-btn').style.width = '80px';
+                document.getElementById('shoot-btn').style.height = '80px';
+                document.getElementById('special-btn').style.width = '60px';
+                document.getElementById('special-btn').style.height = '60px';
+            }
         }
         
         // Setup event listeners
@@ -1207,19 +1379,30 @@
             const shootBtn = document.getElementById('shoot-btn');
             
             // Kontrol sentuh untuk tombol
-            upBtn.addEventListener('touchstart', () => keys.up = true);
-            upBtn.addEventListener('touchend', () => keys.up = false);
+            const addButtonListeners = (element, key) => {
+                element.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    keys[key] = true;
+                });
+                
+                element.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    keys[key] = false;
+                });
+                
+                element.addEventListener('touchcancel', (e) => {
+                    e.preventDefault();
+                    keys[key] = false;
+                });
+            };
             
-            downBtn.addEventListener('touchstart', () => keys.down = true);
-            downBtn.addEventListener('touchend', () => keys.down = false);
+            addButtonListeners(upBtn, 'up');
+            addButtonListeners(downBtn, 'down');
+            addButtonListeners(leftBtn, 'left');
+            addButtonListeners(rightBtn, 'right');
             
-            leftBtn.addEventListener('touchstart', () => keys.left = true);
-            leftBtn.addEventListener('touchend', () => keys.left = false);
-            
-            rightBtn.addEventListener('touchstart', () => keys.right = true);
-            rightBtn.addEventListener('touchend', () => keys.right = false);
-            
-            shootBtn.addEventListener('touchstart', () => {
+            shootBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
                 if (gameRunning) player.shoot();
             });
             
@@ -1249,7 +1432,10 @@
                         keys.right = true;
                         break;
                     case ' ':
-                        player.shoot();
+                        if (gameRunning) player.shoot();
+                        break;
+                    case 'Escape':
+                        if (gameRunning) pauseGame();
                         break;
                 }
             });
@@ -1285,8 +1471,8 @@
             // Reset variabel game
             score = 0;
             lives = 3;
-            level = 1;
             coins = 0;
+            level = 1;
             enemies = [];
             bullets = [];
             particles = [];
@@ -1318,6 +1504,7 @@
             // Reset variabel game
             score = 0;
             lives = 3;
+            coins = 0;
             level = 1;
             enemies = [];
             bullets = [];
@@ -1426,8 +1613,9 @@
                             
                             // Jika health enemy habis
                             if (enemies[j].health <= 0) {
-                                // Tambah score
+                                // Tambah score dan koin
                                 score += enemies[j].value;
+                                coins += enemies[j].coinValue;
                                 
                                 // Buat efek ledakan
                                 createExplosion(enemies[j].x + enemies[j].width / 2, enemies[j].y + enemies[j].height / 2, '#ffff00');
@@ -1505,8 +1693,9 @@
                             
                             // Jika health boss habis
                             if (bosses[i].health <= 0) {
-                                // Tambah score
+                                // Tambah score dan koin
                                 score += bosses[i].value;
+                                coins += bosses[i].coinValue;
                                 
                                 // Buat efek ledakan besar
                                 for (let k = 0; k < 50; k++) {
@@ -1556,8 +1745,13 @@
             }
             
             // Spawn boss setiap 5 level
-            if (level % 5 === 0 && bosses.length === 0 && enemies.length === 0) {
+            if (level % 5 === 0 && bosses.length === 0 && enemies.length < 5) {
                 bosses.push(new Boss());
+            }
+            
+            // Jika semua musuh dan boss dikalahkan, level up
+            if (enemies.length === 0 && bosses.length === 0) {
+                levelUp();
             }
         }
         
@@ -1656,6 +1850,10 @@
         
         // Fungsi untuk level up
         function levelUp() {
+            // Tambah koin berdasarkan level
+            const coinsEarned = level * 10;
+            coins += coinsEarned;
+            
             level++;
             
             // Update level display
@@ -1666,18 +1864,22 @@
             document.querySelector('.level-progress').style.width = `${progressPercent}%`;
             
             // Tampilkan level up screen setiap 5 level
-            if (level % 5 === 0) {
+            if (level % 5 === 0 || level === 2) {
                 pauseGame();
                 document.getElementById('new-level').textContent = `Level ${level}`;
+                document.getElementById('coins-earned').textContent = `Koin Didapat: ${coinsEarned} 🪙`;
                 document.getElementById('difficulty-change').textContent = `Kesulitan: ${getDifficultyName(level)}`;
                 showScreen('level-up-screen');
             }
+            
+            updateUI();
         }
         
         // Fungsi untuk game over
         function gameOver() {
             gameRunning = false;
             document.getElementById('final-score').textContent = `Skor Akhir: ${score}`;
+            document.getElementById('final-coins').textContent = `Koin Dikumpulkan: ${coins}`;
             document.getElementById('level-reached').textContent = `Level Tercapai: ${level}`;
             showScreen('gameover-screen');
         }
@@ -1700,6 +1902,7 @@
         function updateUI() {
             document.getElementById('score').textContent = `Score: ${score}`;
             document.getElementById('lives').textContent = `Lives: ${lives}`;
+            document.getElementById('coins').textContent = `Coins: ${coins}`;
             document.getElementById('level-text').textContent = `Level: ${level}`;
         }
         
