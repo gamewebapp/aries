@@ -236,12 +236,22 @@
             100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
 
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
         .celebrate {
             animation: celebrate 0.5s ease;
         }
 
         .fade-in {
             animation: fadeIn 0.5s ease;
+        }
+
+        .bounce {
+            animation: bounce 1s;
         }
 
         /* Responsivitas */
@@ -382,6 +392,9 @@
             z-index: 1000;
             opacity: 0;
             transition: opacity 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         /* Level selection */
@@ -419,12 +432,85 @@
             color: white;
             border-color: #2ecc71;
         }
+
+        /* Message notification */
+        .message-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .message {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+        }
+
+        .message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Achievement badge */
+        .achievement-badge {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.5s ease;
+        }
+
+        .achievement-badge.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .achievement-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        /* Premium badge */
+        .premium-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: linear-gradient(135deg, #ffd700, #ff9500);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
     <div class="game-container">
         <div class="header">
-            <h1>Logika Lucu</h1>
+            <h1>Logika Lucu <span class="premium-badge"><i class="fas fa-crown"></i></span></h1>
             <div class="level-info">Level <span id="current-level">1</span> dari 300</div>
             <div class="progress-container">
                 <div class="progress-bar" id="progress-bar"></div>
@@ -529,6 +615,14 @@
 
     <div class="toast" id="toast"></div>
 
+    <div class="message-container" id="message-container"></div>
+
+    <div class="achievement-badge" id="achievement-badge">
+        <div class="achievement-icon"><i class="fas fa-trophy"></i></div>
+        <h3 id="achievement-title">Pencapaian!</h3>
+        <p id="achievement-desc">Anda telah membuka pencapaian baru</p>
+    </div>
+
     <script>
         // Data game - 300 level
         const gameLevels = [
@@ -562,11 +656,101 @@
                 answer: 1,
                 hint: "Anda mungkin sedang duduk di atasnya sekarang."
             },
-            // 295 level lainnya akan ditambahkan di sini...
+            {
+                question: "Apa yang harus dipatahkan sebelum digunakan?",
+                options: ["Telur", "Pensil", "Kaca", "Janji"],
+                answer: 0,
+                hint: "Ini sering kita temui saat sarapan."
+            },
+            {
+                question: "Apa yang penuh dengan lubang tetapi masih menampung air?",
+                options: ["Spons", "Ember", "Jaring", "Topi"],
+                answer: 0,
+                hint: "Ini digunakan untuk membersihkan atau mencuci."
+            },
+            {
+                question: "Apa yang punya tangan tetapi tidak bisa bertepuk tangan?",
+                options: ["Jam", "Pohon", "Baju", "Tangan"],
+                answer: 0,
+                hint: "Ini menunjukkan waktu dan memiliki jarum."
+            },
+            {
+                question: "Apa yang punya kepala dan ekor tetapi tidak punya tubuh?",
+                options: ["Koin", "Ular", "Ikan", "Cacing"],
+                answer: 0,
+                hint: "Ini digunakan sebagai alat pembayaran."
+            },
+            {
+                question: "Apa yang semakin banyak Anda ambil, semakin banyak Anda tinggalkan?",
+                options: ["Langkah kaki", "Foto", "Uang", "Keputusan"],
+                answer: 0,
+                hint: "Ini terkait dengan aktivitas berjalan."
+            },
+            {
+                question: "Apa yang bisa dibawa ke ruangan yang akan langsung memecahkan keheningan?",
+                options: ["Bel", "Radio", "Telepon", "Lilin"],
+                answer: 0,
+                hint: "Ini mengeluarkan suara ketika dibunyikan."
+            },
+            {
+                question: "Apa yang punya satu mata tetapi tidak bisa melihat?",
+                options: ["Jarum", "Kentang", "Kail", "Kancing"],
+                answer: 0,
+                hint: "Ini digunakan untuk menjahit."
+            },
+            {
+                question: "Apa yang selalu di depanmu tetapi tidak bisa dilihat?",
+                options: ["Masa depan", "Udara", "Cahaya", "Angin"],
+                answer: 0,
+                hint: "Ini adalah sesuatu yang belum terjadi."
+            },
+            {
+                question: "Apa yang punya leher tetapi tidak punya kepala?",
+                options: ["Botol", "Kuda", "Jerapah", "Baju"],
+                answer: 0,
+                hint: "Ini digunakan untuk menyimpan cairan."
+            },
+            {
+                question: "Apa yang punya kota tetapi tidak ada rumah, punya gunung tetapi tidak ada batu, punya air tetapi tidak ada ikan?",
+                options: ["Peta", "Globe", "Gambar", "Buku"],
+                answer: 0,
+                hint: "Ini adalah representasi visual dari bumi."
+            },
+            {
+                question: "Apa yang bisa berjalan tanpa kaki dan menangis tanpa mata?",
+                options: ["Awan", "Pohon", "Laut", "Angin"],
+                answer: 0,
+                hint: "Ini di langit dan membawa hujan."
+            },
+            {
+                question: "Apa yang punya banyak kunci tetapi tidak bisa membuka satu pun pintu?",
+                options: ["Piano", "Keyboard", "Gembok", "Lemari"],
+                answer: 0,
+                hint: "Ini adalah alat musik."
+            },
+            {
+                question: "Apa yang punya gigi tetapi tidak bisa makan?",
+                options: ["Gergaji", "Garpu", "Hiu", "Kucing"],
+                answer: 0,
+                hint: "Ini digunakan untuk memotong kayu."
+            },
+            {
+                question: "Apa yang punya wajah tetapi tidak bisa tersenyum?",
+                options: ["Telepon", "Cermin", "Topeng", "Bulan"],
+                answer: 1,
+                hint: "Ini memantulkan bayangan Anda."
+            },
+            {
+                question: "Apa yang punya sungai tetapi tanpa air, punya kota tetapi tanpa bangunan, punya hutan tetapi tanpa pohon?",
+                options: ["Peta", "Globe", "Imajinasi", "Mimpi"],
+                answer: 0,
+                hint: "Ini digunakan untuk navigasi."
+            },
+            // 280 level lainnya akan ditambahkan di sini...
         ];
 
         // Generate level tambahan untuk mencapai 300 level
-        for (let i = 6; i <= 300; i++) {
+        for (let i = 20; i <= 300; i++) {
             const types = [
                 {
                     question: `Level ${i}: Jika ${i} apel dibagi kepada ${i % 5 + 2} orang, berapa apel yang didapat masing-masing?`,
@@ -596,11 +780,57 @@
                     options: [`${i + 1}`, `${i + 3}`, `${i + 5}`, `${i + 7}`],
                     answer: 0,
                     hint: "Periksa setiap angka untuk melihat apakah memiliki faktor lain selain 1 dan dirinya sendiri."
+                },
+                {
+                    question: `Level ${i}: Berapa banyak sisi yang dimiliki sebuah heptagon?`,
+                    options: ["5", "6", "7", "8"],
+                    answer: 2,
+                    hint: "Heptagon adalah bentuk dengan tujuh sisi."
+                },
+                {
+                    question: `Level ${i}: Jika 3 orang dapat menyelesaikan pekerjaan dalam 6 hari, berapa hari yang dibutuhkan 6 orang?`,
+                    options: ["3", "4", "5", "6"],
+                    answer: 0,
+                    hint: "Ini adalah masalah perbandingan berbalik nilai."
                 }
             ];
             
-            gameLevels.push(types[i % 4]);
+            gameLevels.push(types[i % 6]);
         }
+
+        // Pesan penyemangat dan pujian
+        const encouragementMessages = [
+            "Hebat! Anda benar! 🎉",
+            "Luar biasa! Anda menjawab dengan tepat! 👏",
+            "Anda jenius! Jawaban yang benar! 💡",
+            "Wow! Anda memang ahli logika! 🧠",
+            "Sempurna! Anda menjawab dengan benar! ✅",
+            "Fantastis! Pemikiran yang brilian! 🌟",
+            "Anda luar biasa! Teruskan! 🚀",
+            "Keren! Anda benar sekali! 😎",
+            "Mantap! Logika Anda tajam! ⚡",
+            "Anda memang pantas menjadi juara! 🏆"
+        ];
+
+        const hintMessages = [
+            "Petunjuk: {hint}",
+            "Mungkin ini membantu: {hint}",
+            "Coba pertimbangkan: {hint}",
+            "Ini clue untuk Anda: {hint}",
+            "Bantuan: {hint}"
+        ];
+
+        const achievementMessages = {
+            first: { title: "Pemula Hebat", desc: "Menyelesaikan level pertama!" },
+            fifth: { title: "Petualang Logika", desc: "Menyelesaikan 5 level!" },
+            tenth: { title: "Ahli Tebakan", desc: "Menyelesaikan 10 level!" },
+            twenty: { title: "Master Logika", desc: "Menyelesaikan 20 level!" },
+            fifty: { title: "Legenda Logika", desc: "Menyelesaikan 50 level!" },
+            hundred: { title: "Raja Tebakan", desc: "Menyelesaikan 100 level!" },
+            all: { title: "Grand Master", desc: "Menyelesaikan semua level!" },
+            perfect: { title: "Sempurna", desc: "Mendapatkan skor sempurna di 10 level berturut-turut!" },
+            nohint: { title: "Mandiri", desc: "Menyelesaikan 10 level tanpa petunjuk!" }
+        };
 
         // Variabel game state
         let currentLevel = 0;
@@ -609,6 +839,8 @@
         let usedHintThisLevel = false;
         let completedLevels = [];
         let soundEnabled = true;
+        let consecutiveCorrect = 0;
+        let consecutiveNoHint = 0;
 
         // Elemen DOM
         const questionElement = document.getElementById('question');
@@ -634,6 +866,10 @@
         const helpModal = document.getElementById('help-modal');
         const toast = document.getElementById('toast');
         const soundBtn = document.getElementById('sound-btn');
+        const messageContainer = document.getElementById('message-container');
+        const achievementBadge = document.getElementById('achievement-badge');
+        const achievementTitle = document.getElementById('achievement-title');
+        const achievementDesc = document.getElementById('achievement-desc');
 
         // Fungsi untuk memuat level
         function loadLevel(levelIndex) {
@@ -711,8 +947,16 @@
                 // Tampilkan konfeti
                 if (soundEnabled) createConfetti();
                 
-                // Tampilkan notifikasi
-                showToast(`Jawaban benar! +${pointsEarned} poin`);
+                // Tampilkan pesan penyemangat acak
+                const randomMessage = encouragementMessages[Math.floor(Math.random() * encouragementMessages.length)];
+                showMessage(randomMessage, 'success');
+                
+                // Update statistik
+                consecutiveCorrect++;
+                if (!usedHintThisLevel) consecutiveNoHint++;
+                
+                // Cek achievement
+                checkAchievements();
             } else {
                 // Jawaban salah
                 selectedOption.classList.add('incorrect');
@@ -720,8 +964,11 @@
                 // Tandai jawaban yang benar
                 allOptions[correctAnswer].classList.add('correct');
                 
-                // Tampilkan notifikasi
-                showToast('Jawaban salah! Coba level lain atau gunakan petunjuk.');
+                // Tampilkan pesan
+                showMessage('Yah, jawaban salah! Coba level lain atau gunakan petunjuk.', 'error');
+                
+                // Reset statistik
+                consecutiveCorrect = 0;
             }
             
             // Simpan progress
@@ -755,15 +1002,24 @@
                 usedHintThisLevel = true;
                 
                 // Tampilkan petunjuk
-                hintText.textContent = gameLevels[currentLevel].hint;
+                const hint = gameLevels[currentLevel].hint;
+                const randomHintMessage = hintMessages[Math.floor(Math.random() * hintMessages.length)].replace('{hint}', hint);
+                
+                hintText.textContent = hint;
                 hintModal.style.display = 'flex';
+                
+                // Tampilkan notifikasi
+                showMessage(randomHintMessage, 'info');
+                
+                // Reset statistik no hint
+                consecutiveNoHint = 0;
                 
                 // Simpan progress
                 saveProgress();
             } else if (hintsLeft <= 0) {
-                showToast('Anda kehabisan petunjuk!');
+                showMessage('Anda kehabisan petunjuk!', 'error');
             } else {
-                showToast('Anda sudah menggunakan petunjuk untuk level ini');
+                showMessage('Anda sudah menggunakan petunjuk untuk level ini', 'info');
             }
         }
 
@@ -775,16 +1031,53 @@
             } while (randomIndex === currentLevel && gameLevels.length > 1);
             
             loadLevel(randomIndex);
+            showMessage('Memuat level acak...', 'info');
         }
 
         // Fungsi untuk menampilkan notifikasi toast
-        function showToast(message) {
+        function showToast(message, type = 'info') {
             toast.textContent = message;
+            toast.innerHTML = `${getIcon(type)} ${message}`;
             toast.style.opacity = '1';
+            toast.style.background = type === 'error' ? '#ff4757' : type === 'success' ? '#2ed573' : '#3742fa';
             
             setTimeout(() => {
                 toast.style.opacity = '0';
             }, 3000);
+        }
+
+        // Fungsi untuk menampilkan pesan
+        function showMessage(message, type = 'info') {
+            const messageEl = document.createElement('div');
+            messageEl.classList.add('message');
+            messageEl.innerHTML = `${getIcon(type)} ${message}`;
+            messageEl.style.background = type === 'error' ? '#ff6b6b' : type === 'success' ? '#51cf66' : '#339af0';
+            messageEl.style.color = 'white';
+            
+            messageContainer.appendChild(messageEl);
+            
+            // Trigger animation
+            setTimeout(() => {
+                messageEl.classList.add('show');
+            }, 10);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+                setTimeout(() => {
+                    messageEl.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Fungsi untuk mendapatkan ikon berdasarkan tipe pesan
+        function getIcon(type) {
+            switch(type) {
+                case 'success': return '<i class="fas fa-check-circle"></i>';
+                case 'error': return '<i class="fas fa-exclamation-circle"></i>';
+                case 'info': return '<i class="fas fa-info-circle"></i>';
+                default: return '<i class="fas fa-info-circle"></i>';
+            }
         }
 
         // Fungsi untuk membuat efek konfeti
@@ -826,13 +1119,64 @@
             }
         }
 
+        // Fungsi untuk menampilkan achievement
+        function showAchievement(title, description) {
+            achievementTitle.textContent = title;
+            achievementDesc.textContent = description;
+            achievementBadge.classList.add('show');
+            
+            // Play sound if enabled
+            if (soundEnabled) {
+                // In a real game, you would play a sound here
+            }
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                achievementBadge.classList.remove('show');
+            }, 3000);
+        }
+
+        // Fungsi untuk memeriksa achievement
+        function checkAchievements() {
+            const levelCount = completedLevels.length;
+            
+            // Check level milestones
+            if (levelCount === 1) {
+                showAchievement(achievementMessages.first.title, achievementMessages.first.desc);
+            } else if (levelCount === 5) {
+                showAchievement(achievementMessages.fifth.title, achievementMessages.fifth.desc);
+            } else if (levelCount === 10) {
+                showAchievement(achievementMessages.tenth.title, achievementMessages.tenth.desc);
+            } else if (levelCount === 20) {
+                showAchievement(achievementMessages.twenty.title, achievementMessages.twenty.desc);
+            } else if (levelCount === 50) {
+                showAchievement(achievementMessages.fifty.title, achievementMessages.fifty.desc);
+            } else if (levelCount === 100) {
+                showAchievement(achievementMessages.hundred.title, achievementMessages.hundred.desc);
+            } else if (levelCount === gameLevels.length) {
+                showAchievement(achievementMessages.all.title, achievementMessages.all.desc);
+            }
+            
+            // Check perfect streak
+            if (consecutiveCorrect === 10) {
+                showAchievement(achievementMessages.perfect.title, achievementMessages.perfect.desc);
+            }
+            
+            // Check no hint streak
+            if (consecutiveNoHint === 10) {
+                showAchievement(achievementMessages.nohint.title, achievementMessages.nohint.desc);
+            }
+        }
+
         // Fungsi untuk menyimpan progress
         function saveProgress() {
             const progress = {
                 currentLevel,
                 score,
                 hintsLeft,
-                completedLevels
+                completedLevels,
+                consecutiveCorrect,
+                consecutiveNoHint
             };
             
             localStorage.setItem('logikaLucuProgress', JSON.stringify(progress));
@@ -847,6 +1191,8 @@
                 score = progress.score || 0;
                 hintsLeft = progress.hintsLeft || 3;
                 completedLevels = progress.completedLevels || [];
+                consecutiveCorrect = progress.consecutiveCorrect || 0;
+                consecutiveNoHint = progress.consecutiveNoHint || 0;
                 
                 scoreValueElement.textContent = score;
                 hintsValueElement.textContent = hintsLeft;
@@ -859,13 +1205,15 @@
             score = 0;
             hintsLeft = 3;
             completedLevels = [];
+            consecutiveCorrect = 0;
+            consecutiveNoHint = 0;
             
             scoreValueElement.textContent = score;
             hintsValueElement.textContent = hintsLeft;
             
             localStorage.removeItem('logikaLucuProgress');
             
-            showToast('Permainan telah direset');
+            showMessage('Permainan telah direset', 'info');
         }
 
         // Fungsi untuk mengaktifkan/menonaktifkan suara
@@ -873,7 +1221,7 @@
             soundEnabled = !soundEnabled;
             soundBtn.innerHTML = `<i class="fas fa-volume-${soundEnabled ? 'up' : 'mute'}"></i> Suara: ${soundEnabled ? 'On' : 'Off'}`;
             
-            showToast(`Suara ${soundEnabled ? 'diaktifkan' : 'dimatikan'}`);
+            showMessage(`Suara ${soundEnabled ? 'diaktifkan' : 'dimatikan'}`, 'info');
         }
 
         // Inisialisasi game
@@ -945,6 +1293,11 @@
                     menu.style.display = 'none';
                 }
             });
+
+            // Tampilkan pesan selamat datang
+            setTimeout(() => {
+                showMessage('Selamat datang di Logika Lucu! Siap untuk tantangan?', 'info');
+            }, 1000);
         }
 
         // Mulai game
