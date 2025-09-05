@@ -2,1775 +2,953 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Space Defender - Game Premium</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logika Lucu - Game Tebak 300 Level</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a1929, #142c4d, #1d3b63);
-            color: white;
-            height: 100vh;
-            overflow: hidden;
-            position: fixed;
-            width: 100%;
         }
-        
-        #game-container {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            overflow: hidden;
-        }
-        
-        #game-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-        
-        .screen {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+
+        body {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 2;
-            background: rgba(0, 10, 30, 0.85);
-            transition: opacity 0.5s;
             padding: 20px;
+            color: #333;
         }
-        
-        .hidden {
-            display: none !important;
-        }
-        
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            text-shadow: 0 0 15px #00f7ff, 0 0 25px #00f7ff;
-            color: #fff;
-            font-weight: 800;
-            letter-spacing: 2px;
-        }
-        
-        h2 {
-            font-size: 2.2rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            color: #ffdd00;
-            text-shadow: 0 0 10px #ffdd00;
-        }
-        
-        h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #ffdd00;
-        }
-        
-        p {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            max-width: 90%;
-            line-height: 1.6;
-        }
-        
-        .btn {
-            background: linear-gradient(to bottom, #ffdd00, #ffaa00);
-            color: #000;
-            border: none;
-            padding: 16px 32px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            margin: 12px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-            transition: all 0.2s;
-            outline: none;
-            min-width: 220px;
-            text-align: center;
+
+        .game-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
             position: relative;
+        }
+
+        .header {
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            padding: 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .level-info {
+            font-size: 1.2rem;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .progress-container {
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            margin-top: 10px;
             overflow: hidden;
         }
-        
-        .btn:active {
-            transform: scale(0.95);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-        }
-        
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0));
-            transform: rotate(30deg);
-        }
-        
-        .btn-secondary {
-            background: linear-gradient(to bottom, #555, #333);
-            color: white;
-        }
-        
-        .btn-premium {
-            background: linear-gradient(to bottom, #9d50bb, #6e48aa);
-            color: white;
-        }
-        
-        #controls-info {
-            margin-top: 25px;
-            font-size: 1rem;
-            color: #aaccff;
-            text-align: center;
-            max-width: 80%;
-        }
-        
-        #game-ui {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            right: 15px;
-            z-index: 3;
-            color: white;
-            font-size: 1.2rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            pointer-events: none;
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 15px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 10px;
-        }
-        
-        #level-display {
-            position: absolute;
-            top: 15px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            z-index: 3;
-            color: #ffdd00;
-            font-size: 1.4rem;
-            font-weight: bold;
-            text-shadow: 0 0 10px #ffdd00;
-            pointer-events: none;
-        }
-        
-        .controls-container {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 20px;
-            z-index: 3;
-            touch-action: none;
-        }
-        
-        .d-pad {
-            width: 150px;
-            height: 150px;
-            position: relative;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 5px;
-        }
-        
-        .control-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 1.5rem;
-            backdrop-filter: blur(5px);
-            transition: all 0.1s;
-        }
-        
-        .control-btn:active {
-            background: rgba(255, 255, 255, 0.4);
-            transform: scale(0.95);
-        }
-        
-        .center-btn {
-            grid-column: 2;
-            grid-row: 2;
-            background: rgba(255, 221, 0, 0.3);
-        }
-        
-        #up-btn {
-            grid-column: 2;
-            grid-row: 1;
-        }
-        
-        #left-btn {
-            grid-column: 1;
-            grid-row: 2;
-        }
-        
-        #right-btn {
-            grid-column: 3;
-            grid-row: 2;
-        }
-        
-        #down-btn {
-            grid-column: 2;
-            grid-row: 3;
-        }
-        
-        #action-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        #shoot-btn {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: rgba(255, 50, 50, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.5rem;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.6);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(5px);
-            transition: all 0.1s;
-        }
-        
-        #shoot-btn:active {
-            background: rgba(255, 50, 50, 0.9);
-            transform: scale(0.95);
-        }
-        
-        #special-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: rgba(0, 150, 255, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-            box-shadow: 0 0 20px rgba(0, 150, 255, 0.6);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(5px);
-            transition: all 0.1s;
-        }
-        
-        #special-btn:active {
-            background: rgba(0, 150, 255, 0.9);
-            transform: scale(0.95);
-        }
-        
-        .upgrade {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 95%;
-            max-width: 500px;
-            margin: 12px 0;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
-        }
-        
-        .upgrade-info {
-            flex: 1;
-        }
-        
-        .stars {
-            display: flex;
-            margin-top: 8px;
-        }
-        
-        .star {
-            color: #ffdd00;
-            font-size: 1.5rem;
-            margin: 0 2px;
-            text-shadow: 0 0 5px #ffdd00;
-        }
-        
-        #pause-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            z-index: 3;
-            background: rgba(255, 255, 255, 0.2);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
-            color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        #pause-btn:active {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .level-indicator {
-            width: 90%;
-            max-width: 500px;
-            height: 20px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 10px;
-            margin: 15px 0;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .level-progress {
+
+        .progress-bar {
             height: 100%;
-            background: linear-gradient(to right, #00f7ff, #0095ff);
-            border-radius: 10px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
             width: 0%;
-            transition: width 0.5s;
-            box-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+            transition: width 0.5s ease;
+            border-radius: 5px;
         }
-        
-        .difficulty-badge {
-            display: inline-block;
+
+        .game-content {
+            padding: 25px;
+        }
+
+        .question-container {
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            border: 2px dashed #ff7e5f;
+            position: relative;
+        }
+
+        .question-number {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #ff7e5f;
+            color: white;
             padding: 5px 15px;
             border-radius: 20px;
             font-size: 0.9rem;
             font-weight: bold;
-            margin-left: 10px;
         }
-        
-        .easy {
-            background: linear-gradient(to right, #00c853, #64dd17);
+
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
         }
-        
-        .medium {
-            background: linear-gradient(to right, #ffab00, #ffd600);
-        }
-        
-        .hard {
-            background: linear-gradient(to right, #ff6d00, #ff3d00);
-        }
-        
-        .very-hard {
-            background: linear-gradient(to right, #d50000, #ff1744);
-        }
-        
-        .powerup {
-            position: absolute;
-            z-index: 2;
-            animation: float 3s infinite ease-in-out;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .boss-health {
-            position: absolute;
-            top: 70px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            height: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            z-index: 3;
-            border: 2px solid #ff3d00;
+
+        .option {
+            background: linear-gradient(to bottom, #ffffff, #f1f3f6);
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
             overflow: hidden;
         }
-        
-        .boss-health-bar {
-            height: 100%;
-            background: linear-gradient(to right, #ff3d00, #ff6d00);
-            width: 100%;
-            transition: width 0.3s;
+
+        .option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.1);
+            border-color: #ff7e5f;
         }
-        
-        .achievement {
+
+        .option.correct {
+            background: linear-gradient(to bottom, #4cd964, #2ecc71);
+            color: white;
+            border-color: #27ae60;
+        }
+
+        .option.incorrect {
+            background: linear-gradient(to bottom, #ff7e5f, #feb47b);
+            color: white;
+            border-color: #ff4757;
+        }
+
+        .option-number {
             position: absolute;
-            top: 20%;
+            top: 5px;
+            left: 10px;
+            font-weight: bold;
+            color: #6e8efb;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .next-btn {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+        }
+
+        .hint-btn {
+            background: linear-gradient(to right, #00b09b, #96c93d);
+            color: white;
+        }
+
+        .random-btn {
+            background: linear-gradient(to right, #ff5e62, #ff9966);
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .score-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .score, .hints {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .value {
+            font-size: 1.5rem;
+            color: #ff7e5f;
+        }
+
+        /* Animasi */
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .celebrate {
+            animation: celebrate 0.5s ease;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Responsivitas */
+        @media (max-width: 500px) {
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .question-container {
+                min-height: 120px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+            color: #ff7e5f;
+        }
+
+        .modal p {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .modal-btn {
+            padding: 12px 25px;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 15px;
+            height: 15px;
+            background-color: #ff7e5f;
+            opacity: 0;
+            z-index: 101;
+        }
+
+        /* Menu */
+        .menu-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        .menu {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            padding: 10px 0;
+            z-index: 10;
+            display: none;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.3s;
+        }
+
+        .menu-item:hover {
+            background: #f0f0f0;
+        }
+
+        /* Toast notifikasi */
+        .toast {
+            position: fixed;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            padding: 15px 25px;
-            border-radius: 10px;
-            z-index: 10;
-            text-align: center;
-            border-left: 5px solid #ffdd00;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            transition: opacity 0.5s;
-            backdrop-filter: blur(5px);
-        }
-        
-        .achievement.show {
-            opacity: 1;
-        }
-        
-        .upgrade-btn {
-            background: linear-gradient(to bottom, #00c853, #009624);
-            padding: 10px 20px;
-            border-radius: 30px;
+            background: #333;
             color: white;
-            font-weight: bold;
-            font-size: 1rem;
-            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* Level selection */
+        .level-selection {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 20px 0;
+            padding: 10px;
+        }
+
+        .level-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0f0f0;
+            border: 2px solid #ddd;
             cursor: pointer;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-            min-width: 100px;
+            font-weight: bold;
         }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            h2 {
-                font-size: 1.8rem;
-            }
-            
-            h3 {
-                font-size: 1.2rem;
-            }
-            
-            p {
-                font-size: 1rem;
-            }
-            
-            .btn {
-                font-size: 1rem;
-                padding: 14px 28px;
-                min-width: 200px;
-            }
-            
-            .d-pad {
-                width: 120px;
-                height: 120px;
-            }
-            
-            #shoot-btn {
-                width: 70px;
-                height: 70px;
-            }
-            
-            #special-btn {
-                width: 50px;
-                height: 50px;
-            }
+
+        .level-btn.current {
+            background: #6a11cb;
+            color: white;
+            border-color: #2575fc;
         }
-        
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
-            h2 {
-                font-size: 1.5rem;
-            }
-            
-            .btn {
-                font-size: 0.9rem;
-                padding: 12px 24px;
-                min-width: 180px;
-            }
-            
-            .d-pad {
-                width: 100px;
-                height: 100px;
-            }
-            
-            #shoot-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 1.2rem;
-            }
-            
-            #special-btn {
-                width: 45px;
-                height: 45px;
-                font-size: 1rem;
-            }
-            
-            .controls-container {
-                padding: 0 10px;
-                bottom: 10px;
-            }
-            
-            #game-ui {
-                flex-direction: column;
-                gap: 5px;
-                align-items: center;
-                padding: 8px;
-                top: 5px;
-            }
-            
-            #level-display {
-                top: 80px;
-                font-size: 1.2rem;
-            }
-        }
-        
-        /* Coin animation */
-        @keyframes coinSpin {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
-        }
-        
-        .coin {
-            display: inline-block;
-            animation: coinSpin 3s infinite linear;
+
+        .level-btn.completed {
+            background: #4cd964;
+            color: white;
+            border-color: #2ecc71;
         }
     </style>
 </head>
 <body>
-    <div id="game-container">
-        <canvas id="game-canvas"></canvas>
-        
-        <div id="game-ui">
-            <div id="score">Score: 0</div>
-            <div id="lives">Lives: 3</div>
-            <div id="coins">Coins: 0</div>
-            <div id="level-text">Level: 1</div>
-        </div>
-        
-        <div id="level-display">Level 1 - Mudah</div>
-        
-        <div class="controls-container">
-            <div class="d-pad">
-                <div class="control-btn" id="up-btn"><i class="fas fa-arrow-up"></i></div>
-                <div class="control-btn" id="left-btn"><i class="fas fa-arrow-left"></i></div>
-                <div class="control-btn center-btn"><i class="fas fa-crosshairs"></i></div>
-                <div class="control-btn" id="right-btn"><i class="fas fa-arrow-right"></i></div>
-                <div class="control-btn" id="down-btn"><i class="fas fa-arrow-down"></i></div>
+    <div class="game-container">
+        <div class="header">
+            <h1>Logika Lucu</h1>
+            <div class="level-info">Level <span id="current-level">1</span> dari 300</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
             </div>
             
-            <div id="action-buttons">
-                <div id="shoot-btn"><i class="fas fa-fire"></i></div>
-                <div id="special-btn"><i class="fas fa-bolt"></i></div>
-            </div>
-        </div>
-        
-        <div id="pause-btn"><i class="fas fa-pause"></i></div>
-        
-        <div id="start-screen" class="screen">
-            <h1>SPACE DEFENDER</h1>
-            <p>Pertahankan galaksi dari invasi alien! Kumpulkan koin dan upgrade pesawatmu.</p>
-            <div class="level-indicator">
-                <div class="level-progress" style="width: 2%;"></div>
-            </div>
-            <button id="start-btn" class="btn"><i class="fas fa-play"></i> MULAI PERMAINAN</button>
-            <button id="upgrade-btn" class="btn btn-secondary"><i class="fas fa-cogs"></i> UPGRADE PESAWAT</button>
-            <button id="stats-btn" class="btn btn-premium"><i class="fas fa-chart-line"></i> STATISTIK</button>
-            <div id="controls-info">
-                Gunakan tombol panah untuk bergerak dan tombol FIRE untuk menembak
+            <button class="menu-btn" id="menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="menu" id="menu">
+                <div class="menu-item" id="level-select-btn">
+                    <i class="fas fa-list"></i> Pilih Level
+                </div>
+                <div class="menu-item" id="restart-btn">
+                    <i class="fas fa-redo"></i> Mulai Ulang
+                </div>
+                <div class="menu-item" id="sound-btn">
+                    <i class="fas fa-volume-up"></i> Suara: On
+                </div>
+                <div class="menu-item" id="help-btn">
+                    <i class="fas fa-question-circle"></i> Bantuan
+                </div>
             </div>
         </div>
         
-        <div id="upgrade-screen" class="screen hidden">
-            <h2>UPGRADE PESAWAT</h2>
-            <p>Gunakan koin yang dikumpulkan untuk meningkatkan kemampuan pesawat</p>
-            
-            <div class="upgrade">
-                <div class="upgrade-info">
-                    <h3>Kecepatan Tembakan <span class="coin"><i class="fas fa-coins" style="color: #ffdd00;"></i></span></h3>
-                    <div class="stars">
-                        <span class="star">★</span>
-                        <span class="star">★</span>
-                        <span class="star">☆</span>
-                    </div>
-                </div>
-                <button class="upgrade-btn">250</button>
+        <div class="game-content">
+            <div class="question-container" id="question">
+                <div class="question-number">Pertanyaan</div>
+                <!-- Pertanyaan akan dimuat di sini -->
             </div>
             
-            <div class="upgrade">
-                <div class="upgrade-info">
-                    <h3>Kekuatan Peluru <span class="coin"><i class="fas fa-coins" style="color: #ffdd00;"></i></span></h3>
-                    <div class="stars">
-                        <span class="star">★</span>
-                        <span class="star">☆</span>
-                        <span class="star">☆</span>
-                    </div>
-                </div>
-                <button class="upgrade-btn">350</button>
+            <div class="options-container" id="options">
+                <!-- Opsi jawaban akan dimuat di sini -->
             </div>
             
-            <div class="upgrade">
-                <div class="upgrade-info">
-                    <h3>Kecepatan Pesawat <span class="coin"><i class="fas fa-coins" style="color: #ffdd00;"></i></span></h3>
-                    <div class="stars">
-                        <span class="star">★</span>
-                        <span class="star">★</span>
-                        <span class="star">★</span>
-                    </div>
-                </div>
-                <button class="upgrade-btn">200</button>
+            <div class="controls">
+                <button class="hint-btn" id="hint-btn">
+                    <i class="fas fa-lightbulb"></i> Petunjuk
+                </button>
+                <button class="random-btn" id="random-btn">
+                    <i class="fas fa-random"></i> Acak Level
+                </button>
+                <button class="next-btn" id="next-btn" disabled>
+                    <i class="fas fa-arrow-right"></i> Level Selanjutnya
+                </button>
             </div>
             
-            <div class="upgrade">
-                <div class="upgrade-info">
-                    <h3>Perisai Energi <span class="coin"><i class="fas fa-coins" style="color: #ffdd00;"></i></span></h3>
-                    <div class="stars">
-                        <span class="star">☆</span>
-                        <span class="star">☆</span>
-                        <span class="star">☆</span>
-                    </div>
+            <div class="score-container">
+                <div class="score">
+                    <div>SKOR</div>
+                    <div class="value" id="score-value">0</div>
                 </div>
-                <button class="upgrade-btn">500</button>
-            </div>
-            
-            <button id="back-btn" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> KEMBALI</button>
-        </div>
-        
-        <div id="stats-screen" class="screen hidden">
-            <h2>STATISTIK</h2>
-            
-            <div class="upgrade">
-                <div class="upgrade-info">
-                    <h3>Level Tertinggi</h3>
-                    <p>15 <span class="difficulty-badge easy">Mudah</span></p>
+                <div class="hints">
+                    <div>PETUNJUK</div>
+                    <div class="value" id="hints-value">3</div>
                 </div>
             </div>
-            
-            <div class="upgrade">
-                <div class="upgrade-info">
-                    <h3>Musuh Dihancurkan</h3>
-                    <p>1,245</p>
-                </div>
-            </div>
-            
-            <div class="upgrade">
-                <div class="upgrade-info">
-                    <h3>Skor Tertinggi</h3>
-                    <p>125,400</p>
-                </div>
-            </div>
-            
-            <div class="upgrade">
-                <div class="upgrade-info">
-                    <h3>Koin Dikumpulkan</h3>
-                    <p>5,750</p>
-                </div>
-            </div>
-            
-            <div class="upgrade">
-                <div class="upgrade-info">
-                    <h3>Waktu Bermain</h3>
-                    <p>5 jam 32 menit</p>
-                </div>
-            </div>
-            
-            <button id="stats-back-btn" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> KEMBALI</button>
-        </div>
-        
-        <div id="pause-screen" class="screen hidden">
-            <h2>GAME PAUSED</h2>
-            <button id="resume-btn" class="btn"><i class="fas fa-play"></i> LANJUTKAN</button>
-            <button id="restart-btn" class="btn btn-secondary"><i class="fas fa-redo"></i> MULAI ULANG</button>
-            <button id="menu-btn" class="btn btn-secondary"><i class="fas fa-home"></i> MENU UTAMA</button>
-        </div>
-        
-        <div id="gameover-screen" class="screen hidden">
-            <h2>GAME OVER</h2>
-            <p id="final-score">Skor Akhir: 0</p>
-            <p id="final-coins">Koin Dikumpulkan: 0</p>
-            <p id="level-reached">Level Tercapai: 1</p>
-            <button id="playagain-btn" class="btn"><i class="fas fa-play"></i> MAIN LAGI</button>
-            <button id="mainmenu-btn" class="btn btn-secondary"><i class="fas fa-home"></i> MENU UTAMA</button>
-        </div>
-        
-        <div id="level-up-screen" class="screen hidden">
-            <h2>LEVEL UP!</h2>
-            <p id="new-level">Level 2</p>
-            <p id="coins-earned">Koin Didapat: 50 <span class="coin"><i class="fas fa-coins" style="color: #ffdd00;"></i></span></p>
-            <p id="difficulty-change">Kesulitan: Mudah</p>
-            <button id="continue-btn" class="btn"><i class="fas fa-arrow-right"></i> LANJUTKAN</button>
         </div>
     </div>
 
+    <!-- Modal untuk hasil -->
+    <div class="modal" id="result-modal">
+        <div class="modal-content">
+            <button class="close-modal" id="close-result">&times;</button>
+            <h2 id="result-title">Selamat!</h2>
+            <p id="result-message">Jawaban Anda benar!</p>
+            <button class="modal-btn" id="result-btn">Lanjutkan</button>
+        </div>
+    </div>
+
+    <!-- Modal untuk petunjuk -->
+    <div class="modal" id="hint-modal">
+        <div class="modal-content">
+            <button class="close-modal" id="close-hint">&times;</button>
+            <h2>Petunjuk</h2>
+            <p id="hint-text"></p>
+            <button class="modal-btn" id="hint-close">Mengerti</button>
+        </div>
+    </div>
+
+    <!-- Modal untuk pilih level -->
+    <div class="modal" id="level-modal">
+        <div class="modal-content">
+            <button class="close-modal" id="close-level">&times;</button>
+            <h2>Pilih Level</h2>
+            <div class="level-selection" id="level-selection">
+                <!-- Tombol level akan dihasilkan di sini -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal bantuan -->
+    <div class="modal" id="help-modal">
+        <div class="modal-content">
+            <button class="close-modal" id="close-help">&times;</button>
+            <h2>Cara Bermain</h2>
+            <p>Jawab pertanyaan logika dengan memilih salah satu opsi jawaban yang tersedia. Setiap jawaban benar akan memberi Anda poin. Gunakan petunjuk jika Anda kesulitan menjawab.</p>
+            <p>Anda dapat beralih ke level acak atau memilih level tertentu melalui menu.</p>
+            <button class="modal-btn" id="help-close">Mengerti</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
     <script>
-        // Variabel game
-        let canvas, ctx;
-        let player;
-        let enemies = [];
-        let bullets = [];
-        let particles = [];
-        let powerups = [];
-        let bosses = [];
+        // Data game - 300 level
+        const gameLevels = [
+            {
+                question: "Apa yang selalu datang tetapi tidak pernah tiba?",
+                options: ["Besok", "Masa depan", "Hari esok", "Waktu"],
+                answer: 1,
+                hint: "Ini adalah konsep yang selalu kita nantikan tetapi tidak pernah benar-benar kita alami."
+            },
+            {
+                question: "Jika ayam betina separuh jalan menyeberang jalan, ke mana dia akan pergi?",
+                options: ["Ke seberang jalan", "Ke kandang", "Ke tepi jalan", "Pulang"],
+                answer: 2,
+                hint: "Pertimbangkan mengapa ayam menyeberang jalan dalam lelucon klasik."
+            },
+            {
+                question: "Apa yang punya kota tetapi tidak ada rumah, punya hutan tetapi tidak ada pohon, dan punya sungai tetapi tidak ada air?",
+                options: ["Peta", "Globe", "Imajinasi", "Buku cerita"],
+                answer: 0,
+                hint: "Ini adalah representasi visual dari suatu tempat."
+            },
+            {
+                question: "Apa yang naik tetapi tidak pernah turun?",
+                options: ["Usia", "Uang", "Panas", "Umur"],
+                answer: 0,
+                hint: "Ini terkait dengan perjalanan waktu dan kehidupan."
+            },
+            {
+                question: "Apa yang punya kaki tetapi tidak bisa berjalan?",
+                options: ["Kursi", "Meja", "Gunung", "Sungai"],
+                answer: 1,
+                hint: "Anda mungkin sedang duduk di atasnya sekarang."
+            },
+            // 295 level lainnya akan ditambahkan di sini...
+        ];
+
+        // Generate level tambahan untuk mencapai 300 level
+        for (let i = 6; i <= 300; i++) {
+            const types = [
+                {
+                    question: `Level ${i}: Jika ${i} apel dibagi kepada ${i % 5 + 2} orang, berapa apel yang didapat masing-masing?`,
+                    options: [`${Math.floor(i / (i % 5 + 2))}`, `${i % 5 + 2}`, `${i}`, `${i * 2}`],
+                    answer: 0,
+                    hint: `Gunakan pembagian sederhana: ${i} ÷ ${i % 5 + 2} = ${Math.floor(i / (i % 5 + 2))}`
+                },
+                {
+                    question: `Level ${i}: Hewan apa yang paling kuat di dunia?`,
+                    options: ["Gajah", "Semut", "Paus", "Beruang"],
+                    answer: 1,
+                    hint: "Hewan ini bisa mengangkat beban berkali-kali lipat berat tubuhnya."
+                },
+                {
+                    question: `Level ${i}: Jika hari ini adalah hari ${["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"][i % 7]}, hari apa 100 hari lagi?`,
+                    options: [
+                        `${["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"][(i + 100) % 7]}`,
+                        `${["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"][(i + 50) % 7]}`,
+                        `${["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"][(i + 10) % 7]}`,
+                        "Tidak bisa diprediksi"
+                    ],
+                    answer: 0,
+                    hint: "Setiap 7 hari, hari akan berulang. Cari sisa pembagian 100 dengan 7."
+                },
+                {
+                    question: `Level ${i}: Manakah dari berikut ini yang bukan bilangan prima?`,
+                    options: [`${i + 1}`, `${i + 3}`, `${i + 5}`, `${i + 7}`],
+                    answer: 0,
+                    hint: "Periksa setiap angka untuk melihat apakah memiliki faktor lain selain 1 dan dirinya sendiri."
+                }
+            ];
+            
+            gameLevels.push(types[i % 4]);
+        }
+
+        // Variabel game state
+        let currentLevel = 0;
         let score = 0;
-        let lives = 3;
-        let coins = 0;
-        let level = 1;
-        let maxLevel = 50;
-        let gameRunning = false;
-        let lastTime = 0;
-        
-        // Kontrol manual
-        let keys = {
-            up: false,
-            down: false,
-            left: false,
-            right: false
-        };
-        
-        // Ukuran game
-        let GAME_WIDTH = window.innerWidth;
-        let GAME_HEIGHT = window.innerHeight;
-        
-        // Konstanta level
-        const LEVEL_EASY_END = 15;
-        const LEVEL_MEDIUM_END = 30;
-        const LEVEL_HARD_END = 40;
-        const LEVEL_VERY_HARD_END = 50;
-        
-        // Player upgrades
-        let playerUpgrades = {
-            fireRate: 1,
-            bulletPower: 1,
-            speed: 1,
-            shield: 0
-        };
-        
-        // Kelas Player
-        class Player {
-            constructor() {
-                this.width = 50;
-                this.height = 60;
-                this.x = GAME_WIDTH / 2 - this.width / 2;
-                this.y = GAME_HEIGHT - this.height - 30;
-                this.speed = 5 + (playerUpgrades.speed * 0.5);
-                this.color = '#ffdd00';
-                this.shootCooldown = 0;
-                this.shootRate = 10 - (playerUpgrades.fireRate * 0.5);
-                this.bulletPower = playerUpgrades.bulletPower;
-                this.hasShield = playerUpgrades.shield > 0;
-                this.shieldStrength = playerUpgrades.shield * 20;
-            }
+        let hintsLeft = 3;
+        let usedHintThisLevel = false;
+        let completedLevels = [];
+        let soundEnabled = true;
+
+        // Elemen DOM
+        const questionElement = document.getElementById('question');
+        const optionsElement = document.getElementById('options');
+        const currentLevelElement = document.getElementById('current-level');
+        const scoreValueElement = document.getElementById('score-value');
+        const hintsValueElement = document.getElementById('hints-value');
+        const nextBtn = document.getElementById('next-btn');
+        const hintBtn = document.getElementById('hint-btn');
+        const randomBtn = document.getElementById('random-btn');
+        const resultModal = document.getElementById('result-modal');
+        const resultTitle = document.getElementById('result-title');
+        const resultMessage = document.getElementById('result-message');
+        const resultBtn = document.getElementById('result-btn');
+        const hintModal = document.getElementById('hint-modal');
+        const hintText = document.getElementById('hint-text');
+        const hintClose = document.getElementById('hint-close');
+        const progressBar = document.getElementById('progress-bar');
+        const menuBtn = document.getElementById('menu-btn');
+        const menu = document.getElementById('menu');
+        const levelModal = document.getElementById('level-modal');
+        const levelSelection = document.getElementById('level-selection');
+        const helpModal = document.getElementById('help-modal');
+        const toast = document.getElementById('toast');
+        const soundBtn = document.getElementById('sound-btn');
+
+        // Fungsi untuk memuat level
+        function loadLevel(levelIndex) {
+            const level = gameLevels[levelIndex];
+            currentLevel = levelIndex;
             
-            update(deltaTime) {
-                // Gerakan berdasarkan kontrol manual
-                if (keys.up) this.y -= this.speed;
-                if (keys.down) this.y += this.speed;
-                if (keys.left) this.x -= this.speed;
-                if (keys.right) this.x += this.speed;
-                
-                // Batasi player di dalam layar
-                if (this.x < 0) this.x = 0;
-                if (this.x > GAME_WIDTH - this.width) this.x = GAME_WIDTH - this.width;
-                if (this.y < 0) this.y = 0;
-                if (this.y > GAME_HEIGHT - this.height) this.y = GAME_HEIGHT - this.height;
-                
-                // Cooldown tembakan
-                if (this.shootCooldown > 0) {
-                    this.shootCooldown -= deltaTime;
-                }
-            }
+            // Update tampilan level
+            currentLevelElement.textContent = levelIndex + 1;
+            progressBar.style.width = `${((levelIndex + 1) / gameLevels.length) * 100}%`;
             
-            draw(ctx) {
-                // Gambar pesawat player yang lebih realistis
-                ctx.save();
-                ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
-                
-                // Body pesawat
-                ctx.fillStyle = '#ffdd00';
-                ctx.beginPath();
-                ctx.moveTo(0, -this.height / 2);
-                ctx.lineTo(this.width / 2, this.height / 2);
-                ctx.lineTo(-this.width / 2, this.height / 2);
-                ctx.closePath();
-                ctx.fill();
-                
-                // Detail pesawat
-                ctx.fillStyle = '#ffaa00';
-                ctx.beginPath();
-                ctx.moveTo(0, -this.height / 3);
-                ctx.lineTo(this.width / 3, this.height / 3);
-                ctx.lineTo(-this.width / 3, this.height / 3);
-                ctx.closePath();
-                ctx.fill();
-                
-                // Mesin
-                ctx.fillStyle = '#ff6600';
-                ctx.fillRect(-this.width / 4, this.height / 2, this.width / 2, this.height / 4);
-                
-                // Api mesin
-                ctx.fillStyle = '#ff3300';
-                ctx.beginPath();
-                ctx.moveTo(-this.width / 6, this.height / 2 + this.height / 4);
-                ctx.lineTo(0, this.height / 2 + this.height / 2);
-                ctx.lineTo(this.width / 6, this.height / 2 + this.height / 4);
-                ctx.closePath();
-                ctx.fill();
-                
-                // Gambar perisai jika ada
-                if (this.hasShield) {
-                    ctx.strokeStyle = `rgba(0, 150, 255, ${0.5 + (this.shieldStrength / 40) * 0.5})`;
-                    ctx.lineWidth = 3;
-                    ctx.beginPath();
-                    ctx.arc(0, 0, this.width * 0.7, 0, Math.PI * 2);
-                    ctx.stroke();
-                }
-                
-                ctx.restore();
-            }
+            // Tampilkan pertanyaan dengan animasi
+            questionElement.innerHTML = `<div class="question-number">Pertanyaan</div>${level.question}`;
+            questionElement.classList.add('fade-in');
+            setTimeout(() => questionElement.classList.remove('fade-in'), 500);
             
-            shoot() {
-                if (this.shootCooldown <= 0) {
-                    // Tembakan normal
-                    bullets.push(new Bullet(this.x + this.width / 2 - 5, this.y, 10, 20, '#00ff00', -10, this.bulletPower));
-                    
-                    // Tembakan tambahan jika sudah di-upgrade
-                    if (this.bulletPower >= 2) {
-                        bullets.push(new Bullet(this.x + this.width / 4 - 5, this.y + this.height / 2, 8, 15, '#00ff00', -10, 1));
-                        bullets.push(new Bullet(this.x + 3 * this.width / 4 - 5, this.y + this.height / 2, 8, 15, '#00ff00', -10, 1));
-                    }
-                    
-                    if (this.bulletPower >= 3) {
-                        bullets.push(new Bullet(this.x, this.y + this.height / 3, 8, 15, '#00ff00', -12, 1));
-                        bullets.push(new Bullet(this.x + this.width - 8, this.y + this.height / 3, 8, 15, '#00ff00', -12, 1));
-                    }
-                    
-                    this.shootCooldown = this.shootRate;
-                    return true;
-                }
-                return false;
-            }
+            // Kosongkan opsi
+            optionsElement.innerHTML = '';
             
-            takeDamage() {
-                if (this.hasShield) {
-                    this.shieldStrength -= 10;
-                    if (this.shieldStrength <= 0) {
-                        this.hasShield = false;
-                    }
-                    return false; // Tidak mengambil damage karena dilindungi perisai
-                }
-                return true; // Mengambil damage
-            }
-        }
-        
-        // Kelas Musuh
-        class Enemy {
-            constructor() {
-                this.width = 40;
-                this.height = 40;
-                this.x = Math.random() * (GAME_WIDTH - this.width);
-                this.y = -this.height;
-                this.speed = 2 + Math.random() * 2 + (level * 0.1);
-                this.color = `hsl(${Math.random() * 360}, 70%, 50%)`;
-                this.health = 1 + Math.floor(level / 5);
-                this.value = 10 * this.health;
-                this.coinValue = 5 + Math.floor(level / 2);
-            }
-            
-            update(deltaTime) {
-                this.y += this.speed;
+            // Tambahkan opsi jawaban
+            level.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('option', 'fade-in');
+                optionElement.innerHTML = `<div class="option-number">${index + 1}</div>${option}`;
+                optionElement.dataset.index = index;
                 
-                // Kembalikan jika keluar layar
-                if (this.y > GAME_HEIGHT) {
-                    this.y = -this.height;
-                    this.x = Math.random() * (GAME_WIDTH - this.width);
-                }
-            }
-            
-            draw(ctx) {
-                // Gambar musuh yang lebih realistis
-                ctx.save();
-                ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+                // Event listener untuk memeriksa jawaban
+                optionElement.addEventListener('click', checkAnswer);
                 
-                // Body musuh
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.moveTo(0, this.height / 2);
-                ctx.lineTo(this.width / 2, -this.height / 2);
-                ctx.lineTo(-this.width / 2, -this.height / 2);
-                ctx.closePath();
-                ctx.fill();
+                optionsElement.appendChild(optionElement);
                 
-                // Detail musuh
-                ctx.fillStyle = '#000';
-                ctx.beginPath();
-                ctx.arc(0, 0, this.width / 4, 0, Math.PI * 2);
-                ctx.fill();
-                
-                ctx.restore();
-                
-                // Gambar health bar untuk musuh dengan health lebih dari 1
-                if (this.health > 1) {
-                    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-                    ctx.fillRect(this.x, this.y - 10, this.width, 5);
-                    ctx.fillStyle = 'rgba(0, 255, 0, 0.8)';
-                    ctx.fillRect(this.x, this.y - 10, this.width * (this.health / (1 + Math.floor(level / 5))), 5);
-                }
-            }
-        }
-        
-        // Kelas Boss
-        class Boss {
-            constructor() {
-                this.width = 120;
-                this.height = 120;
-                this.x = GAME_WIDTH / 2 - this.width / 2;
-                this.y = -this.height;
-                this.speed = 1;
-                this.color = '#ff3d00';
-                this.health = 10 + (level * 2);
-                this.maxHealth = this.health;
-                this.value = 100 * this.health;
-                this.coinValue = 100 * level;
-                this.moveDirection = 1;
-                this.shootCooldown = 0;
-            }
-            
-            update(deltaTime) {
-                // Gerakan boss
-                if (this.y < 100) {
-                    this.y += this.speed;
-                } else {
-                    this.x += this.speed * this.moveDirection;
-                    if (this.x <= 0 || this.x >= GAME_WIDTH - this.width) {
-                        this.moveDirection *= -1;
-                    }
-                }
-                
-                // Tembakan boss
-                this.shootCooldown -= deltaTime;
-                if (this.shootCooldown <= 0) {
-                    bullets.push(new Bullet(this.x + this.width / 2 - 5, this.y + this.height, 10, 10, '#ff3d00', 5, 1));
-                    this.shootCooldown = 60;
-                }
-            }
-            
-            draw(ctx) {
-                // Gambar boss yang lebih realistis
-                ctx.save();
-                ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
-                
-                // Body boss
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(0, 0, this.width / 2, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Detail boss
-                ctx.fillStyle = '#000';
-                ctx.beginPath();
-                ctx.arc(0, 0, this.width / 4, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Senjata boss
-                ctx.fillStyle = '#ff6d00';
-                ctx.fillRect(-this.width / 3, -this.height / 2, this.width / 1.5, this.height / 10);
-                
-                ctx.restore();
-                
-                // Health bar
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-                ctx.fillRect(this.x, this.y - 20, this.width, 10);
-                ctx.fillStyle = 'rgba(255, 0, 0, 0.8)';
-                ctx.fillRect(this.x, this.y - 20, this.width * (this.health / this.maxHealth), 10);
-            }
-        }
-        
-        // Kelas Peluru
-        class Bullet {
-            constructor(x, y, width, height, color, speed, power) {
-                this.x = x;
-                this.y = y;
-                this.width = width;
-                this.height = height;
-                this.color = color;
-                this.speed = speed;
-                this.power = power;
-            }
-            
-            update(deltaTime) {
-                this.y += this.speed;
-            }
-            
-            draw(ctx) {
-                ctx.fillStyle = this.color;
-                ctx.fillRect(this.x, this.y, this.width, this.height);
-                
-                // Efek cahaya untuk peluru
-                ctx.fillStyle = this.speed < 0 ? 'rgba(200, 255, 200, 0.5)' : 'rgba(255, 100, 100, 0.5)';
-                ctx.fillRect(this.x - 2, this.y - 2, this.width + 4, this.height + 4);
-            }
-        }
-        
-        // Kelas Particle untuk efek visual
-        class Particle {
-            constructor(x, y, color, size, speedX, speedY, life) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                this.size = size;
-                this.speedX = speedX;
-                this.speedY = speedY;
-                this.life = life;
-                this.maxLife = life;
-            }
-            
-            update(deltaTime) {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.life--;
-            }
-            
-            draw(ctx) {
-                const alpha = this.life / this.maxLife;
-                ctx.fillStyle = `rgba(${this.color}, ${alpha})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-        
-        // Kelas Power-up
-        class PowerUp {
-            constructor(x, y, type) {
-                this.x = x;
-                this.y = y;
-                this.width = 30;
-                this.height = 30;
-                this.speed = 2;
-                this.type = type; // 'health', 'shield', 'fire', 'speed', 'coin'
-                
-                switch(type) {
-                    case 'health':
-                        this.color = '#ff0000';
-                        break;
-                    case 'shield':
-                        this.color = '#0095ff';
-                        break;
-                    case 'fire':
-                        this.color = '#ffaa00';
-                        break;
-                    case 'speed':
-                        this.color = '#00ff00';
-                        break;
-                    case 'coin':
-                        this.color = '#ffdd00';
-                        break;
-                }
-            }
-            
-            update(deltaTime) {
-                this.y += this.speed;
-            }
-            
-            draw(ctx) {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Gambar ikon sesuai jenis power-up
-                ctx.fillStyle = '#fff';
-                ctx.font = '20px Arial';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                
-                switch(this.type) {
-                    case 'health':
-                        ctx.fillText('♥', this.x + this.width / 2, this.y + this.height / 2);
-                        break;
-                    case 'shield':
-                        ctx.fillText('⛨', this.x + this.width / 2, this.y + this.height / 2);
-                        break;
-                    case 'fire':
-                        ctx.fillText('🔥', this.x + this.width / 2, this.y + this.height / 2);
-                        break;
-                    case 'speed':
-                        ctx.fillText('⚡', this.x + this.width / 2, this.y + this.height / 2);
-                        break;
-                    case 'coin':
-                        ctx.fillText('🪙', this.x + this.width / 2, this.y + this.height / 2);
-                        break;
-                }
-            }
-        }
-        
-        // Fungsi untuk mendapatkan tingkat kesulitan berdasarkan level
-        function getDifficultyForLevel(level) {
-            if (level <= LEVEL_EASY_END) return 'easy';
-            if (level <= LEVEL_MEDIUM_END) return 'medium';
-            if (level <= LEVEL_HARD_END) return 'hard';
-            return 'very-hard';
-        }
-        
-        // Fungsi untuk mendapatkan nama kesulitan
-        function getDifficultyName(level) {
-            if (level <= LEVEL_EASY_END) return 'Mudah';
-            if (level <= LEVEL_MEDIUM_END) return 'Sedang';
-            if (level <= LEVEL_HARD_END) return 'Sulit';
-            return 'Sangat Sulit';
-        }
-        
-        // Fungsi untuk inisialisasi game
-        function init() {
-            canvas = document.getElementById('game-canvas');
-            ctx = canvas.getContext('2d');
-            
-            // Atur ukuran canvas
-            resizeGame();
-            window.addEventListener('resize', resizeGame);
-            
-            // Setup event listeners
-            setupEventListeners();
-            
-            // Tampilkan layar mulai
-            showScreen('start-screen');
-        }
-        
-        // Fungsi untuk menyesuaikan ukuran game
-        function resizeGame() {
-            GAME_WIDTH = window.innerWidth;
-            GAME_HEIGHT = window.innerHeight;
-            
-            canvas.width = GAME_WIDTH;
-            canvas.height = GAME_HEIGHT;
-        }
-        
-        // Setup event listeners
-        function setupEventListeners() {
-            // Tombol layar mulai
-            document.getElementById('start-btn').addEventListener('click', startGame);
-            document.getElementById('upgrade-btn').addEventListener('click', () => showScreen('upgrade-screen'));
-            document.getElementById('stats-btn').addEventListener('click', () => showScreen('stats-screen'));
-            
-            // Tombol kembali
-            document.getElementById('back-btn').addEventListener('click', () => showScreen('start-screen'));
-            document.getElementById('stats-back-btn').addEventListener('click', () => showScreen('start-screen'));
-            
-            // Tombol pause screen
-            document.getElementById('resume-btn').addEventListener('click', resumeGame);
-            document.getElementById('restart-btn').addEventListener('click', restartGame);
-            document.getElementById('menu-btn').addEventListener('click', () => {
-                gameRunning = false;
-                showScreen('start-screen');
+                // Delay untuk animasi
+                optionElement.style.animationDelay = `${index * 0.1}s`;
             });
             
-            // Tombol game over screen
-            document.getElementById('playagain-btn').addEventListener('click', startGame);
-            document.getElementById('mainmenu-btn').addEventListener('click', () => showScreen('start-screen'));
+            // Reset status petunjuk untuk level ini
+            usedHintThisLevel = false;
             
-            // Tombol level up screen
-            document.getElementById('continue-btn').addEventListener('click', resumeGame);
+            // Nonaktifkan tombol next sampai dijawab
+            nextBtn.disabled = true;
             
-            // Tombol pause
-            document.getElementById('pause-btn').addEventListener('click', pauseGame);
+            // Perbarui menu level
+            updateLevelSelection();
+        }
+
+        // Fungsi untuk memeriksa jawaban
+        function checkAnswer(event) {
+            const selectedOption = event.currentTarget;
+            const selectedAnswer = parseInt(selectedOption.dataset.index);
+            const correctAnswer = gameLevels[currentLevel].answer;
             
-            // Kontrol manual
-            const upBtn = document.getElementById('up-btn');
-            const downBtn = document.getElementById('down-btn');
-            const leftBtn = document.getElementById('left-btn');
-            const rightBtn = document.getElementById('right-btn');
-            const shootBtn = document.getElementById('shoot-btn');
+            // Nonaktifkan semua opsi setelah memilih
+            const allOptions = document.querySelectorAll('.option');
+            allOptions.forEach(option => {
+                option.removeEventListener('click', checkAnswer);
+                option.style.cursor = 'default';
+            });
             
-            // Kontrol sentuh untuk tombol
-            const addButtonListeners = (element, key) => {
-                element.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    keys[key] = true;
+            if (selectedAnswer === correctAnswer) {
+                // Jawaban benar
+                selectedOption.classList.add('correct');
+                
+                // Tandai level sebagai selesai
+                if (!completedLevels.includes(currentLevel)) {
+                    completedLevels.push(currentLevel);
+                }
+                
+                // Tambah skor
+                const pointsEarned = usedHintThisLevel ? 5 : 10;
+                score += pointsEarned;
+                scoreValueElement.textContent = score;
+                
+                // Aktifkan tombol next
+                nextBtn.disabled = false;
+                
+                // Tampilkan konfeti
+                if (soundEnabled) createConfetti();
+                
+                // Tampilkan notifikasi
+                showToast(`Jawaban benar! +${pointsEarned} poin`);
+            } else {
+                // Jawaban salah
+                selectedOption.classList.add('incorrect');
+                
+                // Tandai jawaban yang benar
+                allOptions[correctAnswer].classList.add('correct');
+                
+                // Tampilkan notifikasi
+                showToast('Jawaban salah! Coba level lain atau gunakan petunjuk.');
+            }
+            
+            // Simpan progress
+            saveProgress();
+        }
+
+        // Fungsi untuk pindah ke level berikutnya
+        function nextLevel() {
+            if (currentLevel < gameLevels.length - 1) {
+                loadLevel(currentLevel + 1);
+            } else {
+                // Game selesai
+                resultTitle.textContent = 'Selamat!';
+                resultMessage.textContent = `Anda telah menyelesaikan semua level! Skor akhir Anda: ${score}`;
+                resultBtn.textContent = 'Main Lagi';
+                resultModal.style.display = 'flex';
+                
+                resultBtn.onclick = () => {
+                    resultModal.style.display = 'none';
+                    resetGame();
+                    loadLevel(0);
+                };
+            }
+        }
+
+        // Fungsi untuk menggunakan petunjuk
+        function useHint() {
+            if (hintsLeft > 0 && !usedHintThisLevel) {
+                hintsLeft--;
+                hintsValueElement.textContent = hintsLeft;
+                usedHintThisLevel = true;
+                
+                // Tampilkan petunjuk
+                hintText.textContent = gameLevels[currentLevel].hint;
+                hintModal.style.display = 'flex';
+                
+                // Simpan progress
+                saveProgress();
+            } else if (hintsLeft <= 0) {
+                showToast('Anda kehabisan petunjuk!');
+            } else {
+                showToast('Anda sudah menggunakan petunjuk untuk level ini');
+            }
+        }
+
+        // Fungsi untuk memilih level acak
+        function randomLevel() {
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * gameLevels.length);
+            } while (randomIndex === currentLevel && gameLevels.length > 1);
+            
+            loadLevel(randomIndex);
+        }
+
+        // Fungsi untuk menampilkan notifikasi toast
+        function showToast(message) {
+            toast.textContent = message;
+            toast.style.opacity = '1';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 3000);
+        }
+
+        // Fungsi untuk membuat efek konfeti
+        function createConfetti() {
+            const colors = ['#ff7e5f', '#feb47b', '#6a11cb', '#2575fc', '#4cd964', '#2ecc71'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animation = `confetti ${Math.random() * 3 + 2}s linear forwards`;
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Fungsi untuk memperbarui tampilan pemilihan level
+        function updateLevelSelection() {
+            levelSelection.innerHTML = '';
+            
+            for (let i = 0; i < gameLevels.length; i++) {
+                const levelBtn = document.createElement('div');
+                levelBtn.classList.add('level-btn');
+                if (i === currentLevel) levelBtn.classList.add('current');
+                if (completedLevels.includes(i)) levelBtn.classList.add('completed');
+                
+                levelBtn.textContent = i + 1;
+                levelBtn.addEventListener('click', () => {
+                    loadLevel(i);
+                    levelModal.style.display = 'none';
                 });
                 
-                element.addEventListener('touchend', (e) => {
-                    e.preventDefault();
-                    keys[key] = false;
-                });
-                
-                element.addEventListener('touchcancel', (e) => {
-                    e.preventDefault();
-                    keys[key] = false;
-                });
+                levelSelection.appendChild(levelBtn);
+            }
+        }
+
+        // Fungsi untuk menyimpan progress
+        function saveProgress() {
+            const progress = {
+                currentLevel,
+                score,
+                hintsLeft,
+                completedLevels
             };
             
-            addButtonListeners(upBtn, 'up');
-            addButtonListeners(downBtn, 'down');
-            addButtonListeners(leftBtn, 'left');
-            addButtonListeners(rightBtn, 'right');
-            
-            shootBtn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                if (gameRunning) player.shoot();
-            });
-            
-            // Kontrol keyboard untuk desktop
-            window.addEventListener('keydown', (e) => {
-                if (!gameRunning) return;
-                
-                switch(e.key) {
-                    case 'ArrowUp':
-                    case 'w':
-                    case 'W':
-                        keys.up = true;
-                        break;
-                    case 'ArrowDown':
-                    case 's':
-                    case 'S':
-                        keys.down = true;
-                        break;
-                    case 'ArrowLeft':
-                    case 'a':
-                    case 'A':
-                        keys.left = true;
-                        break;
-                    case 'ArrowRight':
-                    case 'd':
-                    case 'D':
-                        keys.right = true;
-                        break;
-                    case ' ':
-                        if (gameRunning) player.shoot();
-                        break;
-                    case 'Escape':
-                        if (gameRunning) pauseGame();
-                        break;
-                }
-            });
-            
-            window.addEventListener('keyup', (e) => {
-                switch(e.key) {
-                    case 'ArrowUp':
-                    case 'w':
-                    case 'W':
-                        keys.up = false;
-                        break;
-                    case 'ArrowDown':
-                    case 's':
-                    case 'S':
-                        keys.down = false;
-                        break;
-                    case 'ArrowLeft':
-                    case 'a':
-                    case 'A':
-                        keys.left = false;
-                        break;
-                    case 'ArrowRight':
-                    case 'd':
-                    case 'D':
-                        keys.right = false;
-                        break;
-                }
-            });
+            localStorage.setItem('logikaLucuProgress', JSON.stringify(progress));
         }
-        
-        // Fungsi untuk memulai game
-        function startGame() {
-            // Reset variabel game
+
+        // Fungsi untuk memuat progress
+        function loadProgress() {
+            const progress = JSON.parse(localStorage.getItem('logikaLucuProgress'));
+            
+            if (progress) {
+                currentLevel = progress.currentLevel || 0;
+                score = progress.score || 0;
+                hintsLeft = progress.hintsLeft || 3;
+                completedLevels = progress.completedLevels || [];
+                
+                scoreValueElement.textContent = score;
+                hintsValueElement.textContent = hintsLeft;
+            }
+        }
+
+        // Fungsi untuk mereset game
+        function resetGame() {
+            currentLevel = 0;
             score = 0;
-            lives = 3;
-            coins = 0;
-            level = 1;
-            enemies = [];
-            bullets = [];
-            particles = [];
-            powerups = [];
-            bosses = [];
+            hintsLeft = 3;
+            completedLevels = [];
             
-            // Buat player baru
-            player = new Player();
+            scoreValueElement.textContent = score;
+            hintsValueElement.textContent = hintsLeft;
             
-            // Update UI
-            updateUI();
+            localStorage.removeItem('logikaLucuProgress');
             
-            // Tampilkan level display
-            document.getElementById('level-display').textContent = `Level ${level} - ${getDifficultyName(level)}`;
-            
-            // Buat beberapa musuh awal
-            for (let i = 0; i < 5; i++) {
-                enemies.push(new Enemy());
-            }
-            
-            // Mulai game loop
-            gameRunning = true;
-            lastTime = performance.now();
-            
-            // Sembunyikan semua layar
-            hideAllScreens();
-            
-            // Mulai request animation frame
-            requestAnimationFrame(gameLoop);
+            showToast('Permainan telah direset');
         }
-        
-        // Fungsi untuk merestart game
-        function restartGame() {
-            // Reset variabel game
-            score = 0;
-            lives = 3;
-            coins = 0;
-            level = 1;
-            enemies = [];
-            bullets = [];
-            particles = [];
-            powerups = [];
-            bosses = [];
+
+        // Fungsi untuk mengaktifkan/menonaktifkan suara
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            soundBtn.innerHTML = `<i class="fas fa-volume-${soundEnabled ? 'up' : 'mute'}"></i> Suara: ${soundEnabled ? 'On' : 'Off'}`;
             
-            // Buat player baru
-            player = new Player();
-            
-            // Update UI
-            updateUI();
-            
-            // Tampilkan level display
-            document.getElementById('level-display').textContent = `Level ${level} - ${getDifficultyName(level)}`;
-            
-            // Buat beberapa musuh awal
-            for (let i = 0; i < 5; i++) {
-                enemies.push(new Enemy());
-            }
-            
-            // Mulai game loop
-            gameRunning = true;
-            lastTime = performance.now();
-            
-            // Sembunyikan semua layar
-            hideAllScreens();
-            
-            // Mulai request animation frame
-            requestAnimationFrame(gameLoop);
+            showToast(`Suara ${soundEnabled ? 'diaktifkan' : 'dimatikan'}`);
         }
-        
-        // Fungsi untuk menjalankan game loop
-        function gameLoop(timestamp) {
-            if (!gameRunning) return;
+
+        // Inisialisasi game
+        function initGame() {
+            loadProgress();
+            loadLevel(currentLevel);
             
-            // Hitung delta time
-            const deltaTime = (timestamp - lastTime) / 16.67; // Normalize to 60fps
-            lastTime = timestamp;
+            // Event listeners untuk tombol
+            nextBtn.addEventListener('click', nextLevel);
+            hintBtn.addEventListener('click', useHint);
+            randomBtn.addEventListener('click', randomLevel);
             
-            // Update game state
-            update(deltaTime);
+            // Event listeners untuk modal
+            resultBtn.addEventListener('click', () => {
+                resultModal.style.display = 'none';
+                nextLevel();
+            });
             
-            // Render game
-            render();
+            hintClose.addEventListener('click', () => {
+                hintModal.style.display = 'none';
+            });
             
-            // Request frame berikutnya
-            requestAnimationFrame(gameLoop);
-        }
-        
-        // Fungsi update game state
-        function update(deltaTime) {
-            // Update player
-            player.update(deltaTime);
+            document.getElementById('close-result').addEventListener('click', () => {
+                resultModal.style.display = 'none';
+            });
             
-            // Update enemies
-            for (let i = enemies.length - 1; i >= 0; i--) {
-                enemies[i].update(deltaTime);
-                
-                // Deteksi tabrakan dengan player
-                if (
-                    player.x < enemies[i].x + enemies[i].width &&
-                    player.x + player.width > enemies[i].x &&
-                    player.y < enemies[i].y + enemies[i].height &&
-                    player.y + player.height > enemies[i].y
-                ) {
-                    // Player kena damage
-                    if (player.takeDamage()) {
-                        lives--;
-                        updateUI();
-                        
-                        // Buat efek ledakan
-                        createExplosion(enemies[i].x + enemies[i].width / 2, enemies[i].y + enemies[i].height / 2, '#ff0000');
-                        
-                        // Hapus enemy
-                        enemies.splice(i, 1);
-                        
-                        // Cek game over
-                        if (lives <= 0) {
-                            gameOver();
-                            return;
-                        }
-                    }
+            document.getElementById('close-hint').addEventListener('click', () => {
+                hintModal.style.display = 'none';
+            });
+            
+            document.getElementById('close-level').addEventListener('click', () => {
+                levelModal.style.display = 'none';
+            });
+            
+            document.getElementById('close-help').addEventListener('click', () => {
+                helpModal.style.display = 'none';
+            });
+            
+            // Event listeners untuk menu
+            menuBtn.addEventListener('click', () => {
+                menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            });
+            
+            document.getElementById('level-select-btn').addEventListener('click', () => {
+                levelModal.style.display = 'flex';
+                menu.style.display = 'none';
+            });
+            
+            document.getElementById('restart-btn').addEventListener('click', () => {
+                resetGame();
+                loadLevel(0);
+                menu.style.display = 'none';
+            });
+            
+            soundBtn.addEventListener('click', toggleSound);
+            
+            document.getElementById('help-btn').addEventListener('click', () => {
+                helpModal.style.display = 'flex';
+                menu.style.display = 'none';
+            });
+            
+            document.getElementById('help-close').addEventListener('click', () => {
+                helpModal.style.display = 'none';
+            });
+            
+            // Tutup menu saat klik di luar
+            document.addEventListener('click', (e) => {
+                if (!menu.contains(e.target) && e.target !== menuBtn) {
+                    menu.style.display = 'none';
                 }
-            }
-            
-            // Update bullets
-            for (let i = bullets.length - 1; i >= 0; i--) {
-                bullets[i].update(deltaTime);
-                
-                // Hapus bullet jika keluar layar
-                if (bullets[i].y < -bullets[i].height || bullets[i].y > GAME_HEIGHT) {
-                    bullets.splice(i, 1);
-                    continue;
-                }
-                
-                // Deteksi tabrakan bullet player dengan enemy
-                if (bullets[i].speed < 0) { // Hanya bullet player yang speed-nya negatif
-                    for (let j = enemies.length - 1; j >= 0; j--) {
-                        if (
-                            bullets[i].x < enemies[j].x + enemies[j].width &&
-                            bullets[i].x + bullets[i].width > enemies[j].x &&
-                            bullets[i].y < enemies[j].y + enemies[j].height &&
-                            bullets[i].y + bullets[i].height > enemies[j].y
-                        ) {
-                            // Kurangi health enemy
-                            enemies[j].health -= bullets[i].power;
-                            
-                            // Hapus bullet
-                            bullets.splice(i, 1);
-                            
-                            // Jika health enemy habis
-                            if (enemies[j].health <= 0) {
-                                // Tambah score dan koin
-                                score += enemies[j].value;
-                                coins += enemies[j].coinValue;
-                                
-                                // Buat efek ledakan
-                                createExplosion(enemies[j].x + enemies[j].width / 2, enemies[j].y + enemies[j].height / 2, '#ffff00');
-                                
-                                // Random chance untuk spawn power-up
-                                if (Math.random() < 0.2) {
-                                    const types = ['health', 'shield', 'fire', 'speed', 'coin'];
-                                    const type = types[Math.floor(Math.random() * types.length)];
-                                    powerups.push(new PowerUp(enemies[j].x, enemies[j].y, type));
-                                }
-                                
-                                // Hapus enemy
-                                enemies.splice(j, 1);
-                                
-                                // Update UI
-                                updateUI();
-                            }
-                            break;
-                        }
-                    }
-                }
-                
-                // Deteksi tabrakan bullet boss dengan player
-                if (bullets[i].speed > 0) { // Hanya bullet boss yang speed-nya positif
-                    if (
-                        bullets[i].x < player.x + player.width &&
-                        bullets[i].x + bullets[i].width > player.x &&
-                        bullets[i].y < player.y + player.height &&
-                        bullets[i].y + bullets[i].height > player.y
-                    ) {
-                        // Player kena damage
-                        if (player.takeDamage()) {
-                            lives--;
-                            updateUI();
-                            
-                            // Buat efek ledakan
-                            createExplosion(bullets[i].x + bullets[i].width / 2, bullets[i].y + bullets[i].height / 2, '#ff0000');
-                            
-                            // Cek game over
-                            if (lives <= 0) {
-                                gameOver();
-                                return;
-                            }
-                        }
-                        
-                        // Hapus bullet
-                        bullets.splice(i, 1);
-                    }
-                }
-            }
-            
-            // Update particles
-            for (let i = particles.length - 1; i >= 0; i--) {
-                particles[i].update(deltaTime);
-                if (particles[i].life <= 0) {
-                    particles.splice(i, 1);
-                }
-            }
-            
-            // Update power-ups
-            for (let i = powerups.length - 1; i >= 0; i--) {
-                powerups[i].update(deltaTime);
-                
-                // Hapus jika keluar layar
-                if (powerups[i].y > GAME_HEIGHT) {
-                    powerups.splice(i, 1);
-                    continue;
-                }
-                
-                // Deteksi tabrakan dengan player
-                if (
-                    player.x < powerups[i].x + powerups[i].width &&
-                    player.x + player.width > powerups[i].x &&
-                    player.y < powerups[i].y + powerups[i].height &&
-                    player.y + player.height > powerups[i].y
-                ) {
-                    // Terapkan power-up
-                    applyPowerUp(powerups[i].type);
-                    
-                    // Hapus power-up
-                    powerups.splice(i, 1);
-                }
-            }
-            
-            // Update bosses
-            for (let i = bosses.length - 1; i >= 0; i--) {
-                bosses[i].update(deltaTime);
-                
-                // Deteksi tabrakan bullet player dengan boss
-                for (let j = bullets.length - 1; j >= 0; j--) {
-                    if (bullets[j].speed < 0) { // Hanya bullet player
-                        if (
-                            bullets[j].x < bosses[i].x + bosses[i].width &&
-                            bullets[j].x + bullets[j].width > bosses[i].x &&
-                            bullets[j].y < bosses[i].y + bosses[i].height &&
-                            bullets[j].y + bullets[j].height > bosses[i].y
-                        ) {
-                            // Kurangi health boss
-                            bosses[i].health -= bullets[j].power;
-                            
-                            // Hapus bullet
-                            bullets.splice(j, 1);
-                            
-                            // Jika health boss habis
-                            if (bosses[i].health <= 0) {
-                                // Tambah score dan koin
-                                score += bosses[i].value;
-                                coins += bosses[i].coinValue;
-                                
-                                // Buat efek ledakan besar
-                                for (let k = 0; k < 50; k++) {
-                                    const angle = Math.random() * Math.PI * 2;
-                                    const speed = Math.random() * 5;
-                                    particles.push(new Particle(
-                                        bosses[i].x + bosses[i].width / 2,
-                                        bosses[i].y + bosses[i].height / 2,
-                                        '255, 100, 0',
-                                        Math.random() * 5 + 2,
-                                        Math.cos(angle) * speed,
-                                        Math.sin(angle) * speed,
-                                        Math.random() * 50 + 30
-                                    ));
-                                }
-                                
-                                // Spawn beberapa power-up
-                                for (let k = 0; k < 5; k++) {
-                                    const types = ['health', 'shield', 'fire', 'speed', 'coin'];
-                                    const type = types[Math.floor(Math.random() * types.length)];
-                                    powerups.push(new PowerUp(
-                                        bosses[i].x + Math.random() * bosses[i].width,
-                                        bosses[i].y + Math.random() * bosses[i].height,
-                                        type
-                                    ));
-                                }
-                                
-                                // Hapus boss
-                                bosses.splice(i, 1);
-                                
-                                // Update UI
-                                updateUI();
-                                
-                                // Level up
-                                levelUp();
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-            
-            // Spawn enemy berdasarkan level
-            const enemySpawnRate = 0.05 + (level * 0.01);
-            if (Math.random() < enemySpawnRate && enemies.length < 10 + level) {
-                enemies.push(new Enemy());
-            }
-            
-            // Spawn boss setiap 5 level
-            if (level % 5 === 0 && bosses.length === 0 && enemies.length < 5) {
-                bosses.push(new Boss());
-            }
-            
-            // Jika semua musuh dan boss dikalahkan, level up
-            if (enemies.length === 0 && bosses.length === 0) {
-                levelUp();
-            }
-        }
-        
-        // Fungsi render game
-        function render() {
-            // Clear canvas
-            ctx.fillStyle = 'rgba(10, 15, 30, 0.2)';
-            ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-            
-            // Gambar particles
-            for (const particle of particles) {
-                particle.draw(ctx);
-            }
-            
-            // Gambar power-ups
-            for (const powerup of powerups) {
-                powerup.draw(ctx);
-            }
-            
-            // Gambar bullets
-            for (const bullet of bullets) {
-                bullet.draw(ctx);
-            }
-            
-            // Gambar enemies
-            for (const enemy of enemies) {
-                enemy.draw(ctx);
-            }
-            
-            // Gambar bosses
-            for (const boss of bosses) {
-                boss.draw(ctx);
-            }
-            
-            // Gambar player
-            player.draw(ctx);
-        }
-        
-        // Fungsi untuk membuat efek ledakan
-        function createExplosion(x, y, color) {
-            for (let i = 0; i < 20; i++) {
-                const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 3;
-                particles.push(new Particle(
-                    x, y, 
-                    color === '#ff0000' ? '255, 0, 0' : '255, 255, 0',
-                    Math.random() * 3 + 1,
-                    Math.cos(angle) * speed,
-                    Math.sin(angle) * speed,
-                    Math.random() * 30 + 20
-                ));
-            }
-        }
-        
-        // Fungsi untuk menerapkan power-up
-        function applyPowerUp(type) {
-            switch(type) {
-                case 'health':
-                    lives = Math.min(lives + 1, 5);
-                    break;
-                case 'shield':
-                    player.hasShield = true;
-                    player.shieldStrength = 20;
-                    break;
-                case 'fire':
-                    playerUpgrades.fireRate = Math.min(playerUpgrades.fireRate + 1, 5);
-                    player.shootRate = 10 - (playerUpgrades.fireRate * 0.5);
-                    break;
-                case 'speed':
-                    playerUpgrades.speed = Math.min(playerUpgrades.speed + 1, 5);
-                    player.speed = 5 + (playerUpgrades.speed * 0.5);
-                    break;
-                case 'coin':
-                    coins += 50;
-                    break;
-            }
-            updateUI();
-        }
-        
-        // Fungsi untuk level up
-        function levelUp() {
-            // Tambah koin berdasarkan level
-            const coinsEarned = level * 10;
-            coins += coinsEarned;
-            
-            level++;
-            
-            // Update level display
-            document.getElementById('level-display').textContent = `Level ${level} - ${getDifficultyName(level)}`;
-            
-            // Update progress bar
-            const progressPercent = (level / maxLevel) * 100;
-            document.querySelector('.level-progress').style.width = `${progressPercent}%`;
-            
-            // Tampilkan level up screen setiap 5 level
-            if (level % 5 === 0 || level === 2) {
-                pauseGame();
-                document.getElementById('new-level').textContent = `Level ${level}`;
-                document.getElementById('coins-earned').textContent = `Koin Didapat: ${coinsEarned} 🪙`;
-                document.getElementById('difficulty-change').textContent = `Kesulitan: ${getDifficultyName(level)}`;
-                showScreen('level-up-screen');
-            }
-            
-            updateUI();
-        }
-        
-        // Fungsi untuk game over
-        function gameOver() {
-            gameRunning = false;
-            document.getElementById('final-score').textContent = `Skor Akhir: ${score}`;
-            document.getElementById('final-coins').textContent = `Koin Dikumpulkan: ${coins}`;
-            document.getElementById('level-reached').textContent = `Level Tercapai: ${level}`;
-            showScreen('gameover-screen');
-        }
-        
-        // Fungsi untuk pause game
-        function pauseGame() {
-            gameRunning = false;
-            showScreen('pause-screen');
-        }
-        
-        // Fungsi untuk resume game
-        function resumeGame() {
-            gameRunning = true;
-            lastTime = performance.now();
-            hideAllScreens();
-            requestAnimationFrame(gameLoop);
-        }
-        
-        // Fungsi untuk update UI
-        function updateUI() {
-            document.getElementById('score').textContent = `Score: ${score}`;
-            document.getElementById('lives').textContent = `Lives: ${lives}`;
-            document.getElementById('coins').textContent = `Coins: ${coins}`;
-            document.getElementById('level-text').textContent = `Level: ${level}`;
-        }
-        
-        // Fungsi untuk menampilkan screen tertentu
-        function showScreen(screenId) {
-            // Sembunyikan semua screen
-            hideAllScreens();
-            
-            // Tampilkan screen yang diminta
-            document.getElementById(screenId).classList.remove('hidden');
-        }
-        
-        // Fungsi untuk menyembunyikan semua screen
-        function hideAllScreens() {
-            const screens = document.querySelectorAll('.screen');
-            screens.forEach(screen => {
-                screen.classList.add('hidden');
             });
         }
-        
-        // Inisialisasi game saat halaman dimuat
-        window.addEventListener('load', init);
+
+        // Mulai game
+        initGame();
     </script>
 </body>
 </html>
