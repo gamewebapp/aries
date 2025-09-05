@@ -15,14 +15,13 @@
         }
         
         body {
-            font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a0f2e, #142c4d, #1d3b63);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a1929, #142c4d, #1d3b63);
             color: white;
             height: 100vh;
             overflow: hidden;
             position: fixed;
             width: 100%;
-            text-shadow: 0 0 5px rgba(0, 247, 255, 0.7);
         }
         
         #game-container {
@@ -50,10 +49,9 @@
             justify-content: center;
             align-items: center;
             z-index: 2;
-            background: radial-gradient(circle at center, rgba(10, 20, 50, 0.95) 0%, rgba(5, 10, 30, 0.98) 100%);
+            background: rgba(0, 10, 30, 0.85);
             transition: opacity 0.5s;
             padding: 20px;
-            text-align: center;
         }
         
         .hidden {
@@ -61,53 +59,35 @@
         }
         
         h1 {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-size: 3rem;
             margin-bottom: 1.5rem;
             text-align: center;
-            background: linear-gradient(to right, #ffdd00, #ffaa00, #ffdd00);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            text-shadow: 0 0 15px #00f7ff, 0 0 25px #00f7ff;
+            color: #fff;
             font-weight: 800;
             letter-spacing: 2px;
-            text-transform: uppercase;
-            padding: 0.5rem;
-            text-shadow: 0 0 15px rgba(255, 221, 0, 0.5);
-            animation: glow 2s infinite alternate;
-        }
-        
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 10px #ffdd00, 0 0 20px #ffdd00;
-            }
-            to {
-                text-shadow: 0 0 15px #ffaa00, 0 0 30px #ffaa00, 0 0 40px #ffaa00;
-            }
         }
         
         h2 {
-            font-size: clamp(1.8rem, 6vw, 3rem);
+            font-size: 2.2rem;
             margin-bottom: 1.5rem;
             text-align: center;
             color: #ffdd00;
             text-shadow: 0 0 10px #ffdd00;
-            font-weight: 700;
         }
         
         h3 {
-            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            font-size: 1.5rem;
             margin-bottom: 1rem;
             color: #ffdd00;
-            font-weight: 600;
         }
         
         p {
-            font-size: clamp(1rem, 3vw, 1.3rem);
+            font-size: 1.2rem;
             margin-bottom: 1.5rem;
             text-align: center;
             max-width: 90%;
             line-height: 1.6;
-            color: #aaccff;
         }
         
         .btn {
@@ -115,20 +95,18 @@
             color: #000;
             border: none;
             padding: 16px 32px;
-            font-size: clamp(1rem, 4vw, 1.3rem);
+            font-size: 1.2rem;
             border-radius: 50px;
             margin: 12px;
             cursor: pointer;
             font-weight: bold;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 221, 0, 0.5);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
             transition: all 0.2s;
             outline: none;
             min-width: 220px;
-            max-width: 90%;
             text-align: center;
             position: relative;
             overflow: hidden;
-            font-family: 'Orbitron', sans-serif;
         }
         
         .btn:active {
@@ -150,25 +128,19 @@
         .btn-secondary {
             background: linear-gradient(to bottom, #555, #333);
             color: white;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
         }
         
         .btn-premium {
             background: linear-gradient(to bottom, #9d50bb, #6e48aa);
             color: white;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(157, 80, 187, 0.5);
         }
         
         #controls-info {
             margin-top: 25px;
-            font-size: clamp(0.8rem, 3vw, 1rem);
+            font-size: 1rem;
             color: #aaccff;
             text-align: center;
             max-width: 80%;
-            background: rgba(0, 20, 40, 0.6);
-            padding: 10px 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 247, 255, 0.3);
         }
         
         #game-ui {
@@ -178,16 +150,14 @@
             right: 15px;
             z-index: 3;
             color: white;
-            font-size: clamp(1rem, 3vw, 1.3rem);
+            font-size: 1.2rem;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
             pointer-events: none;
             display: flex;
             justify-content: space-between;
             padding: 10px 15px;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.4);
             border-radius: 10px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         #level-display {
@@ -198,13 +168,10 @@
             text-align: center;
             z-index: 3;
             color: #ffdd00;
-            font-size: clamp(1rem, 3vw, 1.4rem);
+            font-size: 1.4rem;
             font-weight: bold;
             text-shadow: 0 0 10px #ffdd00;
             pointer-events: none;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 5px 0;
-            backdrop-filter: blur(5px);
         }
         
         .controls-container {
@@ -491,6 +458,28 @@
         
         /* Responsive adjustments */
         @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            h3 {
+                font-size: 1.2rem;
+            }
+            
+            p {
+                font-size: 1rem;
+            }
+            
+            .btn {
+                font-size: 1rem;
+                padding: 14px 28px;
+                min-width: 200px;
+            }
+            
             .d-pad {
                 width: 120px;
                 height: 120px;
@@ -505,14 +494,23 @@
                 width: 50px;
                 height: 50px;
             }
-            
-            .btn {
-                min-width: 200px;
-                padding: 14px 28px;
-            }
         }
         
         @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .btn {
+                font-size: 0.9rem;
+                padding: 12px 24px;
+                min-width: 180px;
+            }
+            
             .d-pad {
                 width: 100px;
                 height: 100px;
@@ -535,12 +533,6 @@
                 bottom: 10px;
             }
             
-            .btn {
-                min-width: 180px;
-                padding: 12px 24px;
-                font-size: 1rem;
-            }
-            
             #game-ui {
                 flex-direction: column;
                 gap: 5px;
@@ -551,30 +543,8 @@
             
             #level-display {
                 top: 80px;
+                font-size: 1.2rem;
             }
-        }
-        
-        /* Background stars animation */
-        .stars-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-        
-        .star-particle {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            animation: twinkle 5s infinite ease-in-out;
-        }
-        
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
         }
         
         /* Coin animation */
@@ -587,102 +557,9 @@
             display: inline-block;
             animation: coinSpin 3s infinite linear;
         }
-        
-        /* Player ship styles */
-        .player-ship {
-            position: relative;
-            width: 50px;
-            height: 60px;
-        }
-        
-        .ship-body {
-            position: absolute;
-            width: 100%;
-            height: 70%;
-            bottom: 0;
-            background: linear-gradient(to bottom, #ffdd00, #ffaa00);
-            border-radius: 50% 50% 40% 40%;
-            overflow: hidden;
-        }
-        
-        .ship-cockpit {
-            position: absolute;
-            width: 40%;
-            height: 40%;
-            top: 15%;
-            left: 30%;
-            background: linear-gradient(to bottom, #00f7ff, #0095ff);
-            border-radius: 50%;
-            border: 2px solid #0066ff;
-        }
-        
-        .ship-wing-left, .ship-wing-right {
-            position: absolute;
-            width: 30%;
-            height: 30%;
-            bottom: 30%;
-            background: linear-gradient(to bottom, #ffdd00, #ff8800);
-        }
-        
-        .ship-wing-left {
-            left: -20%;
-            border-radius: 50% 0 0 50%;
-            transform: skewY(-30deg);
-        }
-        
-        .ship-wing-right {
-            right: -20%;
-            border-radius: 0 50% 50% 0;
-            transform: skewY(30deg);
-        }
-        
-        .ship-engine {
-            position: absolute;
-            width: 20%;
-            height: 20%;
-            bottom: -10%;
-            background: #ff5500;
-            border-radius: 50%;
-        }
-        
-        .ship-engine-left {
-            left: 20%;
-        }
-        
-        .ship-engine-right {
-            right: 20%;
-        }
-        
-        /* Enemy ship styles */
-        .enemy-ship {
-            position: relative;
-            width: 40px;
-            height: 40px;
-        }
-        
-        .enemy-body {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, #ff3d00, #ff6d00);
-            border-radius: 50% 50% 30% 30%;
-            transform: rotate(180deg);
-        }
-        
-        .enemy-detail {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-            bottom: 10%;
-            left: 25%;
-            background: #000;
-            border-radius: 50%;
-        }
     </style>
 </head>
 <body>
-    <div class="stars-background" id="stars-bg"></div>
-    
     <div id="game-container">
         <canvas id="game-canvas"></canvas>
         
@@ -854,7 +731,6 @@
         let enemies = [];
         let bullets = [];
         let particles = [];
-        let stars = [];
         let powerups = [];
         let bosses = [];
         let score = 0;
@@ -874,8 +750,8 @@
         };
         
         // Ukuran game
-        const GAME_WIDTH = window.innerWidth;
-        const GAME_HEIGHT = window.innerHeight;
+        let GAME_WIDTH = window.innerWidth;
+        let GAME_HEIGHT = window.innerHeight;
         
         // Konstanta level
         const LEVEL_EASY_END = 15;
@@ -977,17 +853,17 @@
             shoot() {
                 if (this.shootCooldown <= 0) {
                     // Tembakan normal
-                    bullets.push(new Bullet(this.x + this.width / 2 - 5, this.y, 10, 20, '#00ff00', 10, this.bulletPower));
+                    bullets.push(new Bullet(this.x + this.width / 2 - 5, this.y, 10, 20, '#00ff00', -10, this.bulletPower));
                     
                     // Tembakan tambahan jika sudah di-upgrade
                     if (this.bulletPower >= 2) {
-                        bullets.push(new Bullet(this.x + this.width / 4 - 5, this.y + this.height / 2, 8, 15, '#00ff00', 10, 1));
-                        bullets.push(new Bullet(this.x + 3 * this.width / 4 - 5, this.y + this.height / 2, 8, 15, '#00ff00', 10, 1));
+                        bullets.push(new Bullet(this.x + this.width / 4 - 5, this.y + this.height / 2, 8, 15, '#00ff00', -10, 1));
+                        bullets.push(new Bullet(this.x + 3 * this.width / 4 - 5, this.y + this.height / 2, 8, 15, '#00ff00', -10, 1));
                     }
                     
                     if (this.bulletPower >= 3) {
-                        bullets.push(new Bullet(this.x, this.y + this.height / 3, 8, 15, '#00ff00', 12, 1));
-                        bullets.push(new Bullet(this.x + this.width - 8, this.y + this.height / 3, 8, 15, '#00ff00', 12, 1));
+                        bullets.push(new Bullet(this.x, this.y + this.height / 3, 8, 15, '#00ff00', -12, 1));
+                        bullets.push(new Bullet(this.x + this.width - 8, this.y + this.height / 3, 8, 15, '#00ff00', -12, 1));
                     }
                     
                     this.shootCooldown = this.shootRate;
@@ -1011,9 +887,8 @@
         // Kelas Musuh
         class Enemy {
             constructor() {
-                const difficulty = getDifficultyForLevel(level);
-                this.width = 30 + (level * 0.5);
-                this.height = 30 + (level * 0.5);
+                this.width = 40;
+                this.height = 40;
                 this.x = Math.random() * (GAME_WIDTH - this.width);
                 this.y = -this.height;
                 this.speed = 2 + Math.random() * 2 + (level * 0.1);
@@ -1096,7 +971,7 @@
                 // Tembakan boss
                 this.shootCooldown -= deltaTime;
                 if (this.shootCooldown <= 0) {
-                    bullets.push(new Bullet(this.x + this.width / 2 - 5, this.y + this.height, 10, 10, '#ff3d00', -5, 1));
+                    bullets.push(new Bullet(this.x + this.width / 2 - 5, this.y + this.height, 10, 10, '#ff3d00', 5, 1));
                     this.shootCooldown = 60;
                 }
             }
@@ -1153,8 +1028,8 @@
                 ctx.fillRect(this.x, this.y, this.width, this.height);
                 
                 // Efek cahaya untuk peluru
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-                ctx.fillRect(this.x - 2, this.y - 2, this.width + 4, 2);
+                ctx.fillStyle = this.speed < 0 ? 'rgba(200, 255, 200, 0.5)' : 'rgba(255, 100, 100, 0.5)';
+                ctx.fillRect(this.x - 2, this.y - 2, this.width + 4, this.height + 4);
             }
         }
         
@@ -1267,34 +1142,6 @@
             return 'Sangat Sulit';
         }
         
-        // Fungsi untuk membuat bintang latar belakang
-        function createStars() {
-            stars = [];
-            for (let i = 0; i < 200; i++) {
-                stars.push({
-                    x: Math.random() * GAME_WIDTH,
-                    y: Math.random() * GAME_HEIGHT,
-                    size: Math.random() * 3,
-                    speed: 0.1 + Math.random() * 0.5,
-                    opacity: 0.2 + Math.random() * 0.8
-                });
-            }
-            
-            // Juga buat bintang di elemen stars background
-            const starsBg = document.getElementById('stars-bg');
-            starsBg.innerHTML = '';
-            for (let i = 0; i < 100; i++) {
-                const star = document.createElement('div');
-                star.className = 'star-particle';
-                star.style.width = Math.random() * 3 + 'px';
-                star.style.height = star.style.width;
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 5 + 's';
-                starsBg.appendChild(star);
-            }
-        }
-        
         // Fungsi untuk inisialisasi game
         function init() {
             canvas = document.getElementById('game-canvas');
@@ -1303,9 +1150,6 @@
             // Atur ukuran canvas
             resizeGame();
             window.addEventListener('resize', resizeGame);
-            
-            // Buat bintang latar belakang
-            createStars();
             
             // Setup event listeners
             setupEventListeners();
@@ -1321,25 +1165,6 @@
             
             canvas.width = GAME_WIDTH;
             canvas.height = GAME_HEIGHT;
-            
-            // Sesuaikan posisi kontrol untuk perangkat mobile
-            if (GAME_WIDTH < 768) {
-                document.querySelector('.controls-container').style.bottom = '10px';
-                document.querySelector('.d-pad').style.width = '100px';
-                document.querySelector('.d-pad').style.height = '100px';
-                document.getElementById('shoot-btn').style.width = '60px';
-                document.getElementById('shoot-btn').style.height = '60px';
-                document.getElementById('special-btn').style.width = '45px';
-                document.getElementById('special-btn').style.height = '45px';
-            } else {
-                document.querySelector('.controls-container').style.bottom = '20px';
-                document.querySelector('.d-pad').style.width = '150px';
-                document.querySelector('.d-pad').style.height = '150px';
-                document.getElementById('shoot-btn').style.width = '80px';
-                document.getElementById('shoot-btn').style.height = '80px';
-                document.getElementById('special-btn').style.width = '60px';
-                document.getElementById('special-btn').style.height = '60px';
-            }
         }
         
         // Setup event listeners
@@ -1488,6 +1313,11 @@
             // Tampilkan level display
             document.getElementById('level-display').textContent = `Level ${level} - ${getDifficultyName(level)}`;
             
+            // Buat beberapa musuh awal
+            for (let i = 0; i < 5; i++) {
+                enemies.push(new Enemy());
+            }
+            
             // Mulai game loop
             gameRunning = true;
             lastTime = performance.now();
@@ -1520,6 +1350,11 @@
             
             // Tampilkan level display
             document.getElementById('level-display').textContent = `Level ${level} - ${getDifficultyName(level)}`;
+            
+            // Buat beberapa musuh awal
+            for (let i = 0; i < 5; i++) {
+                enemies.push(new Enemy());
+            }
             
             // Mulai game loop
             gameRunning = true;
@@ -1635,6 +1470,34 @@
                             }
                             break;
                         }
+                    }
+                }
+                
+                // Deteksi tabrakan bullet boss dengan player
+                if (bullets[i].speed > 0) { // Hanya bullet boss yang speed-nya positif
+                    if (
+                        bullets[i].x < player.x + player.width &&
+                        bullets[i].x + bullets[i].width > player.x &&
+                        bullets[i].y < player.y + player.height &&
+                        bullets[i].y + bullets[i].height > player.y
+                    ) {
+                        // Player kena damage
+                        if (player.takeDamage()) {
+                            lives--;
+                            updateUI();
+                            
+                            // Buat efek ledakan
+                            createExplosion(bullets[i].x + bullets[i].width / 2, bullets[i].y + bullets[i].height / 2, '#ff0000');
+                            
+                            // Cek game over
+                            if (lives <= 0) {
+                                gameOver();
+                                return;
+                            }
+                        }
+                        
+                        // Hapus bullet
+                        bullets.splice(i, 1);
                     }
                 }
             }
@@ -1760,23 +1623,6 @@
             // Clear canvas
             ctx.fillStyle = 'rgba(10, 15, 30, 0.2)';
             ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-            
-            // Gambar bintang latar belakang
-            ctx.fillStyle = '#ffffff';
-            for (const star of stars) {
-                ctx.globalAlpha = star.opacity;
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Update posisi bintang untuk efek parallax
-                star.y += star.speed;
-                if (star.y > GAME_HEIGHT) {
-                    star.y = 0;
-                    star.x = Math.random() * GAME_WIDTH;
-                }
-            }
-            ctx.globalAlpha = 1;
             
             // Gambar particles
             for (const particle of particles) {
