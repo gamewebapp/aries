@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logika Lucu - GAME AMIABI</title>
+    <title>GAME AMIABI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -75,9 +75,14 @@
             font-size: 1rem;
         }
 
-        .login-btn:hover {
+        .login-btn:hover:not(:disabled) {
             transform: translateY(-3px);
             box-shadow: 0 7px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
         }
 
         .login-message {
@@ -580,6 +585,12 @@
             background: linear-gradient(to right, #25D366, #128C7E);
             color: white;
         }
+
+        .countdown {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #ff4757;
+        }
     </style>
 </head>
 <body>
@@ -589,15 +600,16 @@
         <form class="login-form" id="login-form">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="VIRGO" placeholder="Masukkan username" required>
+                <input type="text" id="username" placeholder="Masukkan username" required autocomplete="off">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="AbiLoveAmi" placeholder="Masukkan password" required>
+                <input type="password" id="password" placeholder="Masukkan password" required autocomplete="off">
             </div>
-            <button type="submit" class="login-btn">Login</button>
+            <button type="submit" class="login-btn" id="login-btn">Login</button>
         </form>
         <div class="login-message" id="login-message"></div>
+        <div class="countdown" id="countdown"></div>
     </div>
 
     <!-- Game Container -->
@@ -708,7 +720,7 @@
             <button class="close-modal" id="close-help">&times;</button>
             <h2>Cara Bermain</h2>
             <p>Jawab pertanyaan logika dengan memilih salah satu opsi jawaban yang tersedia. Setiap jawaban benar akan memberi Anda poin. Gunakan petunjuk jika Anda kesulitan menjawab.</p>
-            <p>Anda dapat beralih ke level acak atau memilih level tertentu melalui menu.</p>
+            <p>You can switch to random levels or select specific levels through the menu.</p>
             <button class="modal-btn" id="help-close">Mengerti</button>
         </div>
     </div>
@@ -723,6 +735,10 @@
         <p id="achievement-desc">Anda telah membuka pencapaian baru</p>
     </div>
 
+    <!-- Audio untuk alarm -->
+    <audio id="alarm-sound">
+        <source src="https://github.com/gamewebapp/aries/blob/main/nada_dering_panggilan_versi_sound_ambulans.mp3?raw=true" type="audio/mpeg">
+    </audio>
 
     <script>
         // Data game - 300 level
@@ -2693,11 +2709,16 @@
         let soundEnabled = true;
         let autoNextTimer = null;
         let isLoggedIn = false;
+        let failedAttempts = 0;
+        let isLoginBlocked = false;
+        let blockTimer = null;
 
         // Elemen DOM
         const loginContainer = document.getElementById('login-container');
         const loginForm = document.getElementById('login-form');
         const loginMessage = document.getElementById('login-message');
+        const loginBtn = document.getElementById('login-btn');
+        const countdownElement = document.getElementById('countdown');
         const gameContainer = document.getElementById('game-container');
         const questionElement = document.getElementById('question');
         const optionsElement = document.getElementById('options');
@@ -2719,23 +2740,80 @@
         const achievementBadge = document.getElementById('achievement-badge');
         const levelSelectionElement = document.getElementById('level-selection');
         const logoutBtn = document.getElementById('logout-btn');
+        const alarmSound = document.getElementById('alarm-sound');
 
         // Fungsi untuk login
         function handleLogin(event) {
             event.preventDefault();
             
+            if (isLoginBlocked) {
+                loginMessage.textContent = 'Login dibekukan. Silakan coba lagi setelah 5 menit.';
+                return;
+            }
+            
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
-            // Validasi sederhana
-            if (username === 'user' && password === 'password') {
+            // Validasi login
+            if (username === 'MYLOVE' && password === '19880912') {
                 isLoggedIn = true;
+                failedAttempts = 0;
+                
+                // Hapus jejak input
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                
                 loginContainer.style.display = 'none';
                 gameContainer.style.display = 'block';
                 loadLevel(currentLevel);
+                
+                loginMessage.textContent = '';
+                loginMessage.style.color = '#ff4757';
             } else {
-                loginMessage.textContent = 'Username atau password salah!';
+                failedAttempts++;
+                loginMessage.textContent = 'Username atau password salah! Percobaan ' + failedAttempts + '/3';
+                
+                if (failedAttempts >= 3) {
+                    blockLogin();
+                }
             }
+        }
+
+        // Fungsi untuk memblokir login
+        function blockLogin() {
+            isLoginBlocked = true;
+            loginBtn.disabled = true;
+            loginMessage.textContent = 'Login dibekukan selama 5 menit!';
+            
+            // Putar suara alarm
+            if (soundEnabled) {
+                alarmSound.play().catch(e => console.log("Autoplay prevented: ", e));
+            }
+            
+            // Hitung mundur 5 menit
+            let timeLeft = 300; // 5 menit dalam detik
+            countdownElement.textContent = `Coba lagi dalam: ${formatTime(timeLeft)}`;
+            
+            const countdownInterval = setInterval(() => {
+                timeLeft--;
+                countdownElement.textContent = `Coba lagi dalam: ${formatTime(timeLeft)}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    isLoginBlocked = false;
+                    loginBtn.disabled = false;
+                    failedAttempts = 0;
+                    loginMessage.textContent = '';
+                    countdownElement.textContent = '';
+                }
+            }, 1000);
+        }
+
+        // Fungsi untuk memformat waktu
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
         }
 
         // Fungsi untuk logout
@@ -2979,67 +3057,63 @@
         function checkAchievements() {
             if (!isLoggedIn) return;
             
-            const achievementTitle = document.getElementById('achievement-title');
-            const achievementDesc = document.getElementById('achievement-desc');
+            let achievement = null;
             
+            // Achievement berdasarkan skor
+            if (score === 100) {
+                achievement = {
+                    title: "Pemula Hebat!",
+                    desc: "Telah mencapai 100 poin"
+                };
+            } else if (score === 500) {
+                achievement = {
+                    title: "Ahli Logika!",
+                    desc: "Telah mencapai 500 poin"
+                };
+            } else if (score === 1000) {
+                achievement = {
+                    title: "Master Logika!",
+                    desc: "Telah mencapai 1000 poin"
+                };
+            }
+            
+            // Achievement berdasarkan level
             if (completedLevels.size === 10) {
-                achievementTitle.textContent = 'Pemula';
-                achievementDesc.textContent = 'Selesaikan 10 level!';
-                achievementBadge.classList.add('show');
-                setTimeout(() => {
-                    achievementBadge.classList.remove('show');
-                }, 5000);
+                achievement = {
+                    title: "Eksplorator!",
+                    desc: "Telah menyelesaikan 10 level"
+                };
             } else if (completedLevels.size === 50) {
-                achievementTitle.textContent = 'Ahli';
-                achievementDesc.textContent = 'Selesaikan 50 level!';
-                achievementBadge.classList.add('show');
-                setTimeout(() => {
-                    achievementBadge.classList.remove('show');
-                }, 5000);
+                achievement = {
+                    title: "Petualang!",
+                    desc: "Telah menyelesaikan 50 level"
+                };
             } else if (completedLevels.size === 100) {
-                achievementTitle.textContent = 'Master';
-                achievementDesc.textContent = 'Selesaikan 100 level!';
+                achievement = {
+                    title: "Penakluk!",
+                    desc: "Telah menyelesaikan 100 level"
+                };
+            } else if (completedLevels.size === gameLevels.length) {
+                achievement = {
+                    title: "LEGEND!",
+                    desc: "Telah menyelesaikan semua level"
+                };
+            }
+            
+            // Tampilkan achievement jika ada
+            if (achievement) {
+                const achievementTitle = document.getElementById('achievement-title');
+                const achievementDesc = document.getElementById('achievement-desc');
+                
+                achievementTitle.textContent = achievement.title;
+                achievementDesc.textContent = achievement.desc;
+                
                 achievementBadge.classList.add('show');
-                setTimeout(() => {
-                    achievementBadge.classList.remove('show');
-                }, 5000);
-            } else if (completedLevels.size === 150) {
-                achievementTitle.textContent = 'Legenda';
-                achievementDesc.textContent = 'Selesaikan 150 level!';
-                achievementBadge.classList.add('show');
-                setTimeout(() => {
-                    achievementBadge.classList.remove('show');
-                }, 5000);
-            } else if (completedLevels.size === 200) {
-                achievementTitle.textContent = 'Grand Master';
-                achievementDesc.textContent = 'Selesaikan 200 level!';
-                achievementBadge.classList.add('show');
-                setTimeout(() => {
-                    achievementBadge.classList.remove('show');
-                }, 5000);
-            } else if (completedLevels.size === 250) {
-                achievementTitle.textContent = 'Philosopher';
-                achievementDesc.textContent = 'Selesaikan 250 level!';
-                achievementBadge.classList.add('show');
-                setTimeout(() => {
-                    achievementBadge.classList.remove('show');
-                }, 5000);
-            } else if (completedLevels.size === 300) {
-                achievementTitle.textContent = 'Enigma Master';
-                achievementDesc.textContent = 'Selesaikan semua 300 level!';
-                achievementBadge.classList.add('show');
+                
                 setTimeout(() => {
                     achievementBadge.classList.remove('show');
                 }, 5000);
             }
-        }
-
-        // Fungsi untuk membuka WhatsApp - DIPERBAIKI
-        function openWhatsApp() {
-            const message = "Hai, saya butuh bantuan dengan game Logika Lucu!";
-            const phoneNumber = "6285647709114"; // Format internasional tanpa tanda +
-            const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappURL, '_blank');
         }
 
         // Event listeners
@@ -3047,11 +3121,35 @@
         nextBtn.addEventListener('click', nextLevel);
         hintBtn.addEventListener('click', useHint);
         randomBtn.addEventListener('click', jumpToRandomLevel);
-        whatsappBtn.addEventListener('click', openWhatsApp);
         menuBtn.addEventListener('click', toggleMenu);
         logoutBtn.addEventListener('click', handleLogout);
-
+        
+        // Event untuk tombol WhatsApp
+        whatsappBtn.addEventListener('click', () => {
+            const message = "Halo, saya butuh bantuan dengan game Logika Lucu!";
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        });
+        
+        // Event untuk menutup modal
+        document.getElementById('close-result').addEventListener('click', () => {
+            resultModal.style.display = 'none';
+        });
+        
+        document.getElementById('close-hint').addEventListener('click', () => {
+            hintModal.style.display = 'none';
+        });
+        
+        document.getElementById('hint-close').addEventListener('click', () => {
+            hintModal.style.display = 'none';
+        });
+        
+        document.getElementById('close-level').addEventListener('click', () => {
+            levelModal.style.display = 'none';
+        });
+        
         document.getElementById('level-select-btn').addEventListener('click', showLevelMenu);
+        
         document.getElementById('restart-btn').addEventListener('click', () => {
             currentLevel = 0;
             score = 0;
@@ -3064,49 +3162,42 @@
         
         document.getElementById('sound-btn').addEventListener('click', function() {
             soundEnabled = !soundEnabled;
-            this.innerHTML = soundEnabled ? 
-                '<i class="fas fa-volume-up"></i> Suara: On' : 
-                '<i class="fas fa-volume-mute"></i> Suara: Off';
-            menu.style.display = 'none';
-            showToast(soundEnabled ? 'Suara diaktifkan' : 'Suara dimatikan', 'info');
+            this.innerHTML = `<i class="fas fa-volume-${soundEnabled ? 'up' : 'mute'}"></i> Suara: ${soundEnabled ? 'On' : 'Off'}`;
+            showToast(`Suara ${soundEnabled ? 'diaktifkan' : 'dimatikan'}!`, 'info');
         });
         
         document.getElementById('help-btn').addEventListener('click', showHelp);
-
-        // Event listener untuk menutup modal
-        document.querySelectorAll('.close-modal').forEach(btn => {
-            btn.addEventListener('click', function() {
-                this.parentElement.parentElement.style.display = 'none';
-            });
+        
+        document.getElementById('close-help').addEventListener('click', () => {
+            helpModal.style.display = 'none';
         });
-
-        document.getElementById('hint-close').addEventListener('click', () => {
-            hintModal.style.display = 'none';
-        });
-
+        
         document.getElementById('help-close').addEventListener('click', () => {
             helpModal.style.display = 'none';
         });
-
-        // Tutup modal jika klik di luar konten modal
-        window.addEventListener('click', function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
+        
+        // Tutup modal saat klik di luar konten modal
+        window.addEventListener('click', (event) => {
+            if (event.target === resultModal) {
+                resultModal.style.display = 'none';
+            }
+            if (event.target === hintModal) {
+                hintModal.style.display = 'none';
+            }
+            if (event.target === levelModal) {
+                levelModal.style.display = 'none';
+            }
+            if (event.target === helpModal) {
+                helpModal.style.display = 'none';
             }
         });
-
-        // Tutup menu jika klik di luar menu
-        window.addEventListener('click', function(event) {
-            if (!event.target.matches('.menu-btn') && !event.target.closest('.menu')) {
+        
+        // Tutup menu saat klik di luar menu
+        window.addEventListener('click', (event) => {
+            if (!event.target.closest('.menu') && !event.target.closest('.menu-btn')) {
                 menu.style.display = 'none';
             }
         });
-
-        // Inisialisasi game
-        if (!isLoggedIn) {
-            loginContainer.style.display = 'block';
-            gameContainer.style.display = 'none';
-        }
     </script>
 </body>
 </html>
