@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAME AMIABI</title>
+    <title>GAME AMIABI/title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <style>
@@ -39,9 +39,9 @@
 
         /* Login Form Styles */
         .login-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
             width: 100%;
@@ -51,6 +51,12 @@
             color: white;
             position: relative;
             overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
         }
 
         .login-container::before {
@@ -89,6 +95,7 @@
             font-size: 40px;
             color: #ff7e5f;
             text-shadow: 0 0 20px rgba(255, 126, 95, 0.7);
+            animation: pulse 2s infinite;
         }
 
         .login-form {
@@ -123,6 +130,7 @@
             outline: none;
             border-color: #ff7e5f;
             box-shadow: 0 0 15px rgba(255, 126, 95, 0.5);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .form-group input::placeholder {
@@ -172,6 +180,7 @@
             position: relative;
             display: none;
             border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: fadeIn 0.5s ease;
         }
 
         .header {
@@ -412,6 +421,12 @@
             60% { transform: translateY(-10px); }
         }
 
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
         .celebrate {
             animation: celebrate 0.5s ease;
         }
@@ -478,6 +493,18 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             position: relative;
             border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .modal h2 {
@@ -522,10 +549,17 @@
             cursor: pointer;
             color: #999;
             transition: color 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
 
         .close-modal:hover {
             color: #ff7e5f;
+            background: rgba(0, 0, 0, 0.05);
         }
 
         .confetti {
@@ -548,10 +582,17 @@
             color: white;
             cursor: pointer;
             transition: transform 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
 
         .menu-btn:hover {
             transform: rotate(90deg);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .menu {
@@ -566,6 +607,7 @@
             display: none;
             min-width: 200px;
             border: 1px solid #f0f0f0;
+            animation: fadeIn 0.2s ease;
         }
 
         .menu-item {
@@ -646,6 +688,7 @@
 
         .level-btn:hover {
             transform: scale(1.1);
+            border-color: #6a11cb;
         }
 
         .level-btn.current {
@@ -739,12 +782,6 @@
             animation: pulse 2s infinite;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
         /* WhatsApp button */
         .whatsapp-btn {
             background: linear-gradient(to right, #25D366, #128C7E);
@@ -787,12 +824,42 @@
             }
         }
 
-        /* Security modal */
+        /* Security modal - IMPROVED DESIGN */
+        .security-input-container {
+            position: relative;
+            margin: 20px 0;
+        }
+
         .security-input {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             text-align: center;
-            letter-spacing: 5px;
+            letter-spacing: 10px;
             font-weight: bold;
+            padding: 15px;
+            width: 100%;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+        }
+
+        .security-input:focus {
+            outline: none;
+            border-color: #6a11cb;
+            box-shadow: 0 0 15px rgba(106, 17, 203, 0.3);
+            background: white;
+        }
+
+        .security-input::placeholder {
+            letter-spacing: normal;
+            color: #aaa;
+        }
+
+        .security-label {
+            display: block;
+            margin-bottom: 10px;
+            color: #666;
+            font-weight: 500;
         }
 
         /* Add question form */
@@ -808,6 +875,13 @@
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .add-question-form input:focus, .add-question-form textarea:focus {
+            outline: none;
+            border-color: #6a11cb;
+            box-shadow: 0 0 10px rgba(106, 17, 203, 0.2);
         }
 
         .add-question-form textarea {
@@ -830,10 +904,24 @@
         .option-input input[type="radio"] {
             width: 20px;
             height: 20px;
+            accent-color: #6a11cb;
         }
 
         .option-input input[type="text"] {
             flex: 1;
+        }
+
+        /* Exit confirmation modal */
+        .exit-confirmation-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .cancel-btn {
+            background: linear-gradient(to right, #9e9e9e, #757575);
+            color: white;
         }
     </style>
 </head>
@@ -849,11 +937,11 @@
         <form class="login-form" id="login-form">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" placeholder="Masukkan username" required autocomplete="off">
+                <input type="text" id="abi" placeholder="Masukkan username" required autocomplete="off">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Masukkan password" required autocomplete="off">
+                <input type="password" id="19880912" placeholder="Masukkan password" required autocomplete="off">
             </div>
             <button type="submit" class="login-btn" id="login-btn">Login</button>
         </form>
@@ -975,20 +1063,34 @@
             <button class="close-modal" id="close-help">&times;</button>
             <h2>Cara Bermain</h2>
             <p>Jawab pertanyaan logika dengan memilih salah satu opsi jawaban yang tersedia. Setiap jawaban benar akan memberi Anda 10 poin. Gunakan petunjuk jika Anda kesulitan menjawab.</p>
-            <p>Anda dapat beralih ke level acak atau memilih level tertentu melalui menu. Fitur premium memungkinkan Anda menambahkan pertanyaan sendiri tanpa batas.</p>
+            <p>Anda dapat beralih ke level acak atau memilih level tertentu melalui menu. Fitur premium memberikan akses ke lebih banyak level dan pertanyaan.</p>
             <button class="modal-btn" id="help-close">Mengerti</button>
         </div>
     </div>
 
-    <!-- Modal keamanan WhatsApp -->
+    <!-- Modal verifikasi keamanan -->
     <div class="modal" id="security-modal">
         <div class="modal-content">
             <button class="close-modal" id="close-security">&times;</button>
             <h2>Verifikasi Keamanan</h2>
-            <p>Masukkan kode keamanan untuk mengakses bantuan WhatsApp:</p>
-            <input type="password" class="security-input" id="security-code" placeholder="Kode keamanan" maxlength="8">
-            <div class="login-message" id="security-message"></div>
-            <button class="modal-btn" id="security-btn" style="margin-top: 20px;">Verifikasi</button>
+            <p>Masukkan kode keamanan yang terlihat di bawah ini untuk melanjutkan:</p>
+            <div class="security-code" id="security-code" style="font-size: 2rem; letter-spacing: 10px; font-weight: bold; margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 10px; text-align: center;"></div>
+            <div class="security-input-container">
+                <input type="text" class="security-input" id="security-input" maxlength="6" placeholder="Masukkan kode" autocomplete="off">
+            </div>
+            <button class="modal-btn" id="verify-btn">Verifikasi</button>
+        </div>
+    </div>
+
+    <!-- Modal konfirmasi keluar -->
+    <div class="modal" id="exit-modal">
+        <div class="modal-content">
+            <h2>Konfirmasi Keluar</h2>
+            <p>Apakah Anda yakin ingin keluar dari game? Semua progress yang belum disimpan akan hilang.</p>
+            <div class="exit-confirmation-buttons">
+                <button class="modal-btn cancel-btn" id="cancel-exit">Batal</button>
+                <button class="modal-btn" id="confirm-exit">Ya, Keluar</button>
+            </div>
         </div>
     </div>
 
@@ -997,78 +1099,63 @@
         <div class="modal-content">
             <button class="close-modal" id="close-add-question">&times;</button>
             <h2>Tambah Pertanyaan Baru</h2>
-            <div class="add-question-form">
-                <textarea id="new-question" placeholder="Masukkan pertanyaan baru" required></textarea>
-                
+            <form class="add-question-form" id="add-question-form">
+                <input type="text" placeholder="Masukkan pertanyaan" required>
                 <div class="option-inputs">
                     <div class="option-input">
-                        <input type="radio" name="correct-answer" value="0" checked>
-                        <input type="text" id="option-0" placeholder="Opsi jawaban 1" required>
+                        <input type="radio" name="correct-answer" value="0" required>
+                        <input type="text" placeholder="Opsi A" required>
                     </div>
                     <div class="option-input">
-                        <input type="radio" name="correct-answer" value="1">
-                        <input type="text" id="option-1" placeholder="Opsi jawaban 2" required>
+                        <input type="radio" name="correct-answer" value="1" required>
+                        <input type="text" placeholder="Opsi B" required>
                     </div>
                     <div class="option-input">
-                        <input type="radio" name="correct-answer" value="2">
-                        <input type="text" id="option-2" placeholder="Opsi jawaban 3" required>
+                        <input type="radio" name="correct-answer" value="2" required>
+                        <input type="text" placeholder="Opsi C" required>
                     </div>
                     <div class="option-input">
-                        <input type="radio" name="correct-answer" value="3">
-                        <input type="text" id="option-3" placeholder="Opsi jawaban 4" required>
+                        <input type="radio" name="correct-answer" value="3" required>
+                        <input type="text" placeholder="Opsi D" required>
                     </div>
                 </div>
-                
-                <textarea id="new-hint" placeholder="Masukkan petunjuk untuk pertanyaan ini" required></textarea>
-                
-                <button class="modal-btn" id="add-question-btn">Tambah Pertanyaan</button>
-            </div>
+                <input type="text" placeholder="Petunjuk (opsional)">
+                <button type="submit" class="modal-btn">Tambah Pertanyaan</button>
+            </form>
         </div>
     </div>
 
+    <!-- Toast notifikasi -->
     <div class="toast" id="toast"></div>
 
+    <!-- Message container -->
     <div class="message-container" id="message-container"></div>
 
+    <!-- Achievement badge -->
     <div class="achievement-badge" id="achievement-badge">
-        <div class="achievement-icon"><i class="fas fa-trophy"></i></div>
-        <h3 id="achievement-title">Pencapaian!</h3>
-        <p id="achievement-desc">Anda telah membuka pencapaian baru</p>
+        <div class="achievement-icon">
+            <i class="fas fa-trophy"></i>
+        </div>
+        <h3 id="achievement-title">Pencapaian Terbuka!</h3>
+        <p id="achievement-desc">Anda telah menyelesaikan level 5!</p>
     </div>
-
-    <!-- Audio untuk alarm -->
-    <audio id="alarm-sound">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg">
-    </audio>
 
     <script>
         // Data pertanyaan
         const questions = [
             {
-                question: "Apa yang selalu datang tetapi tidak pernah sampai?",
-                options: ["Besok", "Hari esok", "Masa depan", "Kematian"],
+                question: "Apa yang selalu datang tetapi tidak pernah tiba?",
+                options: ["Besok", "Masa depan", "Hari esok", "Waktu"],
                 correctAnswer: 0,
-                hint: "Ini adalah sesuatu yang selalu kita nantikan tetapi tidak pernah benar-benar dialami."
+                hint: "Ini adalah sesuatu yang selalu dinantikan tetapi tidak pernah benar-benar terjadi."
             },
             {
                 question: "Jika dibutuhkan 5 mesin 5 menit untuk membuat 5 produk, berapa lama waktu yang dibutuhkan 100 mesin untuk membuat 100 produk?",
-                options: ["100 menit", "50 menit", "10 menit", "5 menit"],
-                correctAnswer: 3,
-                hint: "Setiap mesin membutuhkan 5 menit untuk membuat satu produk."
+                options: ["100 menit", "5 menit", "20 menit", "1 menit"],
+                correctAnswer: 1,
+                hint: "Setiap mesin membutuhkan waktu 5 menit untuk membuat satu produk."
             },
-            {
-                question: "Di mana letak suatu tempat yang selalu berada di antara Amerika dan Australia?",
-                options: ["Indonesia", "Samudra Pasifik", "Hawaii", "Pada peta dunia"],
-                correctAnswer: 3,
-                hint: "Ini bukanlah tempat fisik, melainkan representasi."
-            },
-            {
-                question: "Apa yang bisa dibeli tapi tidak pernah bisa dijual?",
-                options: ["Ilmu", "Pengalaman", "Masa lalu", "Uang"],
-                correctAnswer: 2,
-                hint: "Ini adalah sesuatu yang sudah terjadi dan tidak bisa diubah."
-            },
-              	    {
+             	    {
                 question: "Jika ayam betina separuh jalan menyeberang jalan, ke mana dia akan pergi?",
                 options: ["Ke seberang jalan", "Ke kandang", "Ke tepi jalan", "Pulang"],
                 answer: 2,
@@ -6187,23 +6274,65 @@
                 hint: "Ketiganya tidak memiliki berat dan bisa membuat barel 'lebih ringan'."
             },
             {
-                question: "Apa yang memiliki kota, tetapi tidak ada rumah; memiliki sungai, tetapi tidak ada air; memiliki hutan, tetapi tidak ada pohon?",
-                options: ["Lautan", "Gurun", "Peta", "Imajinasi"],
+                question: "Di mana seseorang bisa menemukan kota tanpa rumah, sungai tanpa air, dan hutan tanpa pohon?",
+                options: ["Di peta", "Di mimpi", "Di gurun", "Di lautan"],
+                correctAnswer: 0,
+                hint: "Ini adalah representasi dari sesuatu yang nyata."
+            },
+            {
+                question: "Apa yang memiliki satu mata tetapi tidak bisa melihat?",
+                options: ["Orang buta", "Angin topan", "Jarum", "Kentang"],
                 correctAnswer: 2,
-                hint: "Ini adalah representasi dari dunia nyata."
+                hint: "Ini adalah benda yang digunakan untuk menjahit."
+            },
+            {
+                question: "Apa yang menjadi lebih basah saat dikeringkan?",
+                options: ["Handuk", "Pakaian", "Rambut", "Lantai"],
+                correctAnswer: 0,
+                hint: "Ini adalah benda yang digunakan setelah mandi."
+            },
+            {
+                question: "Apa yang punya kota tapi tidak ada rumah, punya gunung tapi tidak ada tanah, punya air tapi tidak ada ikan?",
+                options: ["Peta", "Globe", "Puzzle", "Layar komputer"],
+                correctAnswer: 0,
+                hint: "Ini adalah representasi visual dari suatu wilayah."
+            },
+            {
+                question: "Apa yang bisa dilewati di depan cahaya tanpa membuat bayangan?",
+                options: ["Angin", "Udara", "Cahaya", "Suara"],
+                correctAnswer: 2,
+                hint: "Ini adalah sumber dari bayangan itu sendiri."
+            },
+            {
+                question: "Apa yang memiliki tangan tetapi tidak bisa bertepuk tangan?",
+                options: ["Robot", "Jam", "Boneka", "Manusia tanpa lengan"],
+                correctAnswer: 1,
+                hint: "Ini adalah benda yang menunjukkan waktu."
+            },
+            {
+                question: "Apa yang punya kepala dan ekor tetapi tidak punya tubuh?",
+                options: ["Uang koin", "Ular", "Cacing", "Hantu"],
+                correctAnswer: 0,
+                hint: "Ini adalah benda yang digunakan sebagai alat pembayaran."
+            },
+            {
+                question: "Apa yang selalu naik tetapi tidak pernah turun?",
+                options: ["Usia", "Harga", "Umur", "Angka"],
+                correctAnswer: 0,
+                hint: "Ini terkait dengan bertambahnya waktu."
             }
         ];
 
-        // Variabel game
+        // Variabel game state
         let currentLevel = 0;
         let score = 0;
-        let hints = 3;
-        let answered = false;
-        let userAnswers = [];
-        let addedQuestions = [];
-        let soundEnabled = true;
+        let hintsAvailable = 3;
+        let answeredQuestions = new Set();
+        let isGameActive = false;
         let loginAttempts = 0;
-        let blockedUntil = 0;
+        let isSoundOn = true;
+        let userQuestions = JSON.parse(localStorage.getItem('userQuestions')) || [];
+        let completedLevels = JSON.parse(localStorage.getItem('completedLevels')) || [];
 
         // Elemen DOM
         const loginContainer = document.getElementById('login-container');
@@ -6211,18 +6340,17 @@
         const loginForm = document.getElementById('login-form');
         const loginBtn = document.getElementById('login-btn');
         const loginMessage = document.getElementById('login-message');
-        const countdownEl = document.getElementById('countdown');
-        const questionEl = document.getElementById('question');
-        const optionsEl = document.getElementById('options');
+        const questionElement = document.getElementById('question');
+        const optionsContainer = document.getElementById('options');
+        const scoreValue = document.getElementById('score-value');
+        const hintsValue = document.getElementById('hints-value');
         const nextBtn = document.getElementById('next-btn');
         const hintBtn = document.getElementById('hint-btn');
         const randomBtn = document.getElementById('random-btn');
         const exitBtn = document.getElementById('exit-btn');
         const whatsappBtn = document.getElementById('whatsapp-btn');
-        const scoreValue = document.getElementById('score-value');
-        const hintsValue = document.getElementById('hints-value');
-        const currentLevelEl = document.getElementById('current-level');
         const progressBar = document.getElementById('progress-bar');
+        const currentLevelElement = document.getElementById('current-level');
         const resultModal = document.getElementById('result-modal');
         const resultTitle = document.getElementById('result-title');
         const resultMessage = document.getElementById('result-message');
@@ -6233,59 +6361,59 @@
         const hintClose = document.getElementById('hint-close');
         const levelModal = document.getElementById('level-modal');
         const levelSelection = document.getElementById('level-selection');
-        const helpModal = document.getElementById('help-modal');
         const securityModal = document.getElementById('security-modal');
         const securityCode = document.getElementById('security-code');
-        const securityMessage = document.getElementById('security-message');
-        const securityBtn = document.getElementById('security-btn');
+        const securityInput = document.getElementById('security-input');
+        const verifyBtn = document.getElementById('verify-btn');
+        const exitModal = document.getElementById('exit-modal');
+        const cancelExit = document.getElementById('cancel-exit');
+        const confirmExit = document.getElementById('confirm-exit');
         const menuBtn = document.getElementById('menu-btn');
         const menu = document.getElementById('menu');
         const levelSelectBtn = document.getElementById('level-select-btn');
-        const addQuestionBtn = document.getElementById('add-question-btn');
         const restartBtn = document.getElementById('restart-btn');
         const soundBtn = document.getElementById('sound-btn');
         const helpBtn = document.getElementById('help-btn');
         const logoutBtn = document.getElementById('logout-btn');
+        const addQuestionBtn = document.getElementById('add-question-btn');
         const addQuestionModal = document.getElementById('add-question-modal');
-        const newQuestion = document.getElementById('new-question');
-        const newHint = document.getElementById('new-hint');
-        const addQuestionSubmitBtn = document.getElementById('add-question-btn');
+        const addQuestionForm = document.getElementById('add-question-form');
         const toast = document.getElementById('toast');
+        const messageContainer = document.getElementById('message-container');
         const achievementBadge = document.getElementById('achievement-badge');
         const achievementTitle = document.getElementById('achievement-title');
         const achievementDesc = document.getElementById('achievement-desc');
-        const alarmSound = document.getElementById('alarm-sound');
+        const countdownElement = document.getElementById('countdown');
 
         // Event Listeners
         loginForm.addEventListener('submit', handleLogin);
-        nextBtn.addEventListener('click', loadNextLevel);
+        nextBtn.addEventListener('click', loadNextQuestion);
         hintBtn.addEventListener('click', showHint);
-        randomBtn.addEventListener('click', loadRandomLevel);
+        randomBtn.addEventListener('click', loadRandomQuestion);
         exitBtn.addEventListener('click', showExitConfirmation);
-        whatsappBtn.addEventListener('click', showSecurityModal);
+        whatsappBtn.addEventListener('click', openWhatsApp);
         resultBtn.addEventListener('click', closeResultModal);
         hintClose.addEventListener('click', closeHintModal);
-        securityBtn.addEventListener('click', verifySecurityCode);
+        verifyBtn.addEventListener('click', verifySecurityCode);
+        cancelExit.addEventListener('click', closeExitModal);
+        confirmExit.addEventListener('click', exitGame);
         menuBtn.addEventListener('click', toggleMenu);
         levelSelectBtn.addEventListener('click', showLevelSelection);
-        addQuestionBtn.addEventListener('click', showAddQuestionModal);
         restartBtn.addEventListener('click', restartGame);
         soundBtn.addEventListener('click', toggleSound);
         helpBtn.addEventListener('click', showHelp);
         logoutBtn.addEventListener('click', logout);
-        addQuestionSubmitBtn.addEventListener('click', addNewQuestion);
+        addQuestionBtn.addEventListener('click', showAddQuestionForm);
+        addQuestionForm.addEventListener('submit', handleAddQuestion);
 
-        // Tutup modal saat klik di luar konten
+        // Tutup modal saat klik di luar konten modal
         document.addEventListener('click', (e) => {
-            if (e.target === resultModal) closeResultModal();
-            if (e.target === hintModal) closeHintModal();
-            if (e.target === levelModal) closeLevelModal();
-            if (e.target === helpModal) closeHelpModal();
-            if (e.target === securityModal) closeSecurityModal();
-            if (e.target === addQuestionModal) closeAddQuestionModal();
+            if (e.target.classList.contains('modal')) {
+                closeAllModals();
+            }
         });
 
-        // Tutup menu saat klik di luar
+        // Tutup menu saat klik di luar menu
         document.addEventListener('click', (e) => {
             if (!menu.contains(e.target) && e.target !== menuBtn) {
                 menu.style.display = 'none';
@@ -6295,538 +6423,582 @@
         // Inisialisasi game
         function init() {
             createParticles();
-            loadLevel(currentLevel);
-            updateScore();
-            updateHints();
+            updateHintsDisplay();
             generateLevelSelection();
         }
 
         // Handle login
         function handleLogin(e) {
             e.preventDefault();
-            
-            // Cek jika akun diblokir sementara
-            if (blockedUntil > Date.now()) {
-                const remainingTime = Math.ceil((blockedUntil - Date.now()) / 1000);
-                showToast(`Terlalu banyak percobaan. Coba lagi dalam ${remainingTime} detik.`, 'error');
-                startCountdown(remainingTime);
-                return;
-            }
-            
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
-            // Kode keamanan untuk login: 19880912
-            if (username && password === "19880912") {
-                loginMessage.textContent = "Login berhasil!";
-                loginMessage.style.color = "#4cd964";
-                
-                // Simpan status login
-                localStorage.setItem('isLoggedIn', 'true');
-                
-                // Transisi ke game
-                setTimeout(() => {
-                    loginContainer.style.display = "none";
-                    gameContainer.style.display = "block";
-                    init();
-                    showToast("Selamat datang di Logika Lucu Premium!", "success");
-                }, 1000);
-            } else {
-                loginAttempts++;
-                loginMessage.textContent = `Username atau password salah. Percobaan ${loginAttempts}/3.`;
-                loginMessage.style.color = "#ff7e5f";
-                
-                // Blokir setelah 3 percobaan gagal
-                if (loginAttempts >= 3) {
-                    blockedUntil = Date.now() + 30000; // Blokir selama 30 detik
-                    loginBtn.disabled = true;
-                    showToast("Terlalu banyak percobaan. Tunggu 30 detik.", "error");
-                    startCountdown(30);
+            if (loginAttempts >= 2) {
+                showSecurityVerification();
+                return;
+            }
+            
+            if (username && password) {
+                if (username === "user" && password === "password") {
+                    loginSuccess();
+                } else {
+                    loginAttempts++;
+                    showMessage("Username atau password salah!", "error");
+                    if (loginAttempts >= 2) {
+                        showCountdown();
+                    }
                 }
+            } else {
+                showMessage("Harap isi semua field!", "error");
+            }
+        }
+
+        // Tampilkan verifikasi keamanan
+        function showSecurityVerification() {
+            const code = generateSecurityCode();
+            securityCode.textContent = code;
+            securityInput.value = "";
+            showModal(securityModal);
+            
+            // Simpan kode untuk verifikasi
+            securityModal.dataset.code = code;
+        }
+
+        // Generate kode keamanan
+        function generateSecurityCode() {
+            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            let code = "";
+            for (let i = 0; i < 6; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        // Verifikasi kode keamanan
+        function verifySecurityCode() {
+            const enteredCode = securityInput.value.toUpperCase();
+            const expectedCode = securityModal.dataset.code;
+            
+            if (enteredCode === expectedCode) {
+                loginSuccess();
+                closeModal(securityModal);
+            } else {
+                showMessage("Kode keamanan salah!", "error");
+                securityInput.value = "";
+                securityInput.focus();
             }
         }
 
         // Countdown untuk login
-        function startCountdown(seconds) {
-            let counter = seconds;
-            countdownEl.textContent = `Coba lagi dalam: ${counter} detik`;
+        function showCountdown() {
+            let timeLeft = 30;
+            countdownElement.textContent = `Coba lagi dalam: ${timeLeft} detik`;
+            countdownElement.style.display = 'block';
+            loginBtn.disabled = true;
             
-            const interval = setInterval(() => {
-                counter--;
-                countdownEl.textContent = `Coba lagi dalam: ${counter} detik`;
+            const countdownInterval = setInterval(() => {
+                timeLeft--;
+                countdownElement.textContent = `Coba lagi dalam: ${timeLeft} detik`;
                 
-                if (counter <= 0) {
-                    clearInterval(interval);
-                    countdownEl.textContent = "";
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.style.display = 'none';
                     loginBtn.disabled = false;
                     loginAttempts = 0;
                 }
             }, 1000);
         }
 
-        // Load level
-        function loadLevel(level) {
-            const allQuestions = [...questions, ...addedQuestions];
-            
-            if (level >= allQuestions.length) {
-                // Jika level melebihi pertanyaan yang ada, ulang dari awal
-                currentLevel = 0;
-                level = 0;
-            }
-            
-            const currentQuestion = allQuestions[level];
-            
-            if (!currentQuestion) {
-                showToast("Tidak ada pertanyaan untuk level ini.", "error");
-                return;
-            }
-            
-            currentLevelEl.textContent = level + 1;
-            questionEl.innerHTML = `<div class="question-number">Pertanyaan ${level + 1}</div>${currentQuestion.question}`;
-            
-            // Update progress bar
-            const progress = ((level + 1) / allQuestions.length) * 100;
-            progressBar.style.width = `${progress}%`;
-            
-            // Kosongkan opsi
-            optionsEl.innerHTML = '';
-            
-            // Tambahkan opsi
-            currentQuestion.options.forEach((option, index) => {
-                const optionElement = document.createElement('div');
-                optionElement.classList.add('option', 'fade-in');
-                optionElement.innerHTML = `
-                    <div class="option-number">${index + 1}</div>
-                    ${option}
-                `;
-                optionElement.addEventListener('click', () => selectOption(index));
-                optionsEl.appendChild(optionElement);
-            });
-            
-            answered = false;
-            nextBtn.disabled = true;
-            
-            // Animasi pertanyaan
-            questionEl.classList.add('bounce');
-            setTimeout(() => questionEl.classList.remove('bounce'), 1000);
+        // Login berhasil
+        function loginSuccess() {
+            showMessage("Login berhasil! Memuat game...", "success");
+            setTimeout(() => {
+                loginContainer.style.display = 'none';
+                gameContainer.style.display = 'block';
+                isGameActive = true;
+                loadQuestion(currentLevel);
+                playSound('success');
+            }, 1500);
         }
 
-        // Pilih opsi
-        function selectOption(selectedIndex) {
-            if (answered) return;
+        // Muat pertanyaan
+        function loadQuestion(levelIndex) {
+            if (!isGameActive) return;
             
-            answered = true;
-            const allQuestions = [...questions, ...addedQuestions];
-            const currentQuestion = allQuestions[currentLevel];
-            const options = document.querySelectorAll('.option');
+            const allQuestions = [...questions, ...userQuestions];
             
-            // Tandai jawaban yang benar dan salah
-            options[currentQuestion.correctAnswer].classList.add('correct');
-            
-            if (selectedIndex !== currentQuestion.correctAnswer) {
-                options[selectedIndex].classList.add('incorrect');
-                
-                // Kurangi skor jika salah
-                score = Math.max(0, score - 5);
-                updateScore();
-                showToast("Jawaban salah! -5 poin", "error");
-                
-                if (soundEnabled) {
-                    try {
-                        alarmSound.currentTime = 0;
-                        alarmSound.play();
-                    } catch (e) {
-                        console.log("Error memutar suara:", e);
-                    }
-                }
-            } else {
-                // Tambah skor jika benar
-                score += 10;
-                updateScore();
-                showToast("Jawaban benar! +10 poin", "success");
-                
-                // Tampilkan animasi konfeti
-                createConfetti();
+            if (levelIndex >= allQuestions.length) {
+                levelIndex = 0;
+                currentLevel = 0;
             }
             
-            // Simpan jawaban pengguna
-            userAnswers[currentLevel] = selectedIndex;
+            const question = allQuestions[levelIndex];
+            currentLevel = levelIndex;
+            
+            // Update tampilan level
+            currentLevelElement.textContent = levelIndex + 1;
+            
+            // Update progress bar
+            const progress = ((levelIndex + 1) / allQuestions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            // Tampilkan pertanyaan
+            questionElement.innerHTML = `<p>${question.question}</p>`;
+            
+            // Tampilkan opsi jawaban
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.innerHTML = `
+                    <div class="option-number">${String.fromCharCode(65 + index)}</div>
+                    <div class="option-text">${option}</div>
+                `;
+                optionElement.addEventListener('click', () => checkAnswer(index));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Reset tombol next
+            nextBtn.disabled = true;
+            
+            // Tandai pertanyaan ini sebagai telah ditampilkan
+            answeredQuestions.add(levelIndex);
+        }
+
+        // Cek jawaban
+        function checkAnswer(selectedIndex) {
+            const allQuestions = [...questions, ...userQuestions];
+            const correctIndex = allQuestions[currentLevel].correctAnswer;
+            const options = document.querySelectorAll('.option');
+            
+            // Nonaktifkan semua opsi setelah memilih
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+            
+            // Tandai jawaban yang benar dan salah
+            options[correctIndex].classList.add('correct');
+            if (selectedIndex !== correctIndex) {
+                options[selectedIndex].classList.add('incorrect');
+                playSound('error');
+                showMessage("Jawaban salah! Coba lagi.", "error");
+            } else {
+                score += 10;
+                scoreValue.textContent = score;
+                playSound('success');
+                showMessage("Jawaban benar! +10 poin", "success");
+                
+                // Tandai level sebagai selesai
+                if (!completedLevels.includes(currentLevel)) {
+                    completedLevels.push(currentLevel);
+                    localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
+                    
+                    // Cek achievement
+                    checkAchievements();
+                }
+            }
             
             // Aktifkan tombol next
             nextBtn.disabled = false;
-            
-            // Cek pencapaian
-            checkAchievements();
         }
 
-        // Load level selanjutnya
-        function loadNextLevel() {
-            currentLevel++;
-            loadLevel(currentLevel);
+        // Muat pertanyaan berikutnya
+        function loadNextQuestion() {
+            const allQuestions = [...questions, ...userQuestions];
+            let nextLevel = currentLevel + 1;
+            
+            if (nextLevel >= allQuestions.length) {
+                // Game selesai
+                showResultModal(true);
+                return;
+            }
+            
+            loadQuestion(nextLevel);
+            playSound('click');
         }
 
         // Tampilkan petunjuk
         function showHint() {
-            if (hints <= 0) {
-                showToast("Anda kehabisan petunjuk!", "error");
+            if (hintsAvailable <= 0) {
+                showMessage("Anda kehabisan petunjuk!", "error");
                 return;
             }
             
-            const allQuestions = [...questions, ...addedQuestions];
-            hintText.textContent = allQuestions[currentLevel].hint;
-            hintModal.style.display = 'flex';
-            hints--;
-            updateHints();
+            const allQuestions = [...questions, ...userQuestions];
+            hintText.textContent = allQuestions[currentLevel].hint || "Tidak ada petunjuk tersedia untuk pertanyaan ini.";
+            showModal(hintModal);
+            hintsAvailable--;
+            updateHintsDisplay();
+            playSound('click');
         }
 
-        // Tutup modal petunjuk
-        function closeHintModal() {
-            hintModal.style.display = 'none';
-        }
-
-        // Load level acak
-        function loadRandomLevel() {
-            const allQuestions = [...questions, ...addedQuestions];
-            const randomLevel = Math.floor(Math.random() * allQuestions.length);
-            currentLevel = randomLevel;
-            loadLevel(currentLevel);
-            showToast(`Memuat level ${currentLevel + 1}`, "info");
+        // Muat pertanyaan acak
+        function loadRandomQuestion() {
+            const allQuestions = [...questions, ...userQuestions];
+            let randomLevel;
+            
+            do {
+                randomLevel = Math.floor(Math.random() * allQuestions.length);
+            } while (randomLevel === currentLevel && allQuestions.length > 1);
+            
+            loadQuestion(randomLevel);
+            playSound('click');
+            showMessage("Memuat level acak...", "info");
         }
 
         // Tampilkan konfirmasi keluar
         function showExitConfirmation() {
-            resultTitle.textContent = "Keluar Game?";
-            resultMessage.textContent = "Apakah Anda yakin ingin keluar? Semua progress akan disimpan.";
-            finalScore.textContent = score;
-            resultBtn.textContent = "Keluar";
-            
-            // Ubah event listener untuk keluar
-            resultBtn.onclick = exitGame;
-            
-            resultModal.style.display = 'flex';
+            showModal(exitModal);
+            playSound('click');
         }
 
         // Keluar dari game
         function exitGame() {
-            // Simpan progress
-            localStorage.setItem('gameProgress', JSON.stringify({
-                level: currentLevel,
-                score: score,
-                hints: hints,
-                answers: userAnswers
-            }));
-            
-            // Kembali ke login
+            isGameActive = false;
+            closeModal(exitModal);
             gameContainer.style.display = 'none';
             loginContainer.style.display = 'flex';
-            document.getElementById('password').value = '';
+            resetGame();
+            showMessage("Anda telah keluar dari game.", "info");
+            playSound('click');
+        }
+
+        // Buka WhatsApp untuk bantuan
+        function openWhatsApp() {
+            const phoneNumber = "6285647709114";
+            const message = "Haaiii.. suamiku sayank";
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+            playSound('click');
+        }
+
+        // Tampilkan modal hasil
+        function showResultModal(isGameComplete = false) {
+            if (isGameComplete) {
+                resultTitle.textContent = "Selamat!";
+                resultMessage.textContent = "Anda telah menyelesaikan semua level!";
+            } else {
+                resultTitle.textContent = "Permainan Dihentikan";
+                resultMessage.textContent = "Anda telah keluar dari game.";
+            }
             
-            closeResultModal();
-            showToast("Progress disimpan. Sampai jumpa!", "info");
+            finalScore.textContent = score;
+            showModal(resultModal);
+            playSound('success');
         }
 
         // Tutup modal hasil
         function closeResultModal() {
-            resultModal.style.display = 'none';
-            
-            // Kembalikan event listener ke default
-            resultBtn.onclick = loadNextLevel;
-            resultBtn.textContent = "Lanjutkan";
-            resultTitle.textContent = "Selamat!";
-            resultMessage.textContent = "Jawaban Anda benar!";
+            closeModal(resultModal);
+            resetGame();
+            loadQuestion(0);
+            playSound('click');
         }
 
-        // Update skor
-        function updateScore() {
-            scoreValue.textContent = score;
+        // Tutup modal petunjuk
+        function closeHintModal() {
+            closeModal(hintModal);
+            playSound('click');
         }
 
-        // Update petunjuk
-        function updateHints() {
-            hintsValue.textContent = hints;
-        }
-
-        // Tampilkan modal keamanan WhatsApp
-        function showSecurityModal() {
-            securityModal.style.display = 'flex';
-            securityCode.value = '';
-            securityMessage.textContent = '';
-        }
-
-        // Tutup modal keamanan
-        function closeSecurityModal() {
-            securityModal.style.display = 'none';
-        }
-
-        // Verifikasi kode keamanan
-        function verifySecurityCode() {
-            if (securityCode.value === "19880912") {
-                // Redirect ke WhatsApp
-                window.open("https://wa.me/628123456789?text=Halo,%20saya%20membutuhkan%20bantuan%20untuk%20game%20Logika%20Lucu", "_blank");
-                closeSecurityModal();
-                showToast("Berhasil terverifikasi. Mengarahkan ke WhatsApp...", "success");
-            } else {
-                securityMessage.textContent = "Kode keamanan salah!";
-                securityMessage.style.color = "#ff7e5f";
-            }
+        // Tutup modal keluar
+        function closeExitModal() {
+            closeModal(exitModal);
+            playSound('click');
         }
 
         // Toggle menu
         function toggleMenu() {
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            if (menu.style.display === 'block') {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'block';
+            }
+            playSound('click');
         }
 
         // Tampilkan pemilihan level
         function showLevelSelection() {
             generateLevelSelection();
-            levelModal.style.display = 'flex';
-            menu.style.display = 'none';
+            showModal(levelModal);
+            playSound('click');
         }
 
         // Generate tombol level
         function generateLevelSelection() {
+            const allQuestions = [...questions, ...userQuestions];
             levelSelection.innerHTML = '';
-            const allQuestions = [...questions, ...addedQuestions];
             
             for (let i = 0; i < allQuestions.length; i++) {
-                const levelBtn = document.createElement('div');
-                levelBtn.classList.add('level-btn');
-                if (i === currentLevel) levelBtn.classList.add('current');
-                if (userAnswers[i] !== undefined) levelBtn.classList.add('completed');
+                const levelBtn = document.createElement('button');
+                levelBtn.className = 'level-btn';
                 levelBtn.textContent = i + 1;
+                
+                if (i === currentLevel) {
+                    levelBtn.classList.add('current');
+                }
+                
+                if (completedLevels.includes(i)) {
+                    levelBtn.classList.add('completed');
+                }
+                
                 levelBtn.addEventListener('click', () => {
-                    currentLevel = i;
-                    loadLevel(currentLevel);
-                    closeLevelModal();
-                    showToast(`Memuat level ${i + 1}`, "info");
+                    loadQuestion(i);
+                    closeModal(levelModal);
+                    playSound('click');
                 });
+                
                 levelSelection.appendChild(levelBtn);
             }
         }
 
-        // Tutup modal level
-        function closeLevelModal() {
-            levelModal.style.display = 'none';
-        }
-
-        // Tampilkan modal tambah pertanyaan
-        function showAddQuestionModal() {
-            addQuestionModal.style.display = 'flex';
-            menu.style.display = 'none';
-        }
-
-        // Tutup modal tambah pertanyaan
-        function closeAddQuestionModal() {
-            addQuestionModal.style.display = 'none';
-        }
-
-        // Tambah pertanyaan baru
-        function addNewQuestion() {
-            const questionText = newQuestion.value;
-            const hintText = newHint.value;
-            const options = [
-                document.getElementById('option-0').value,
-                document.getElementById('option-1').value,
-                document.getElementById('option-2').value,
-                document.getElementById('option-3').value
-            ];
-            
-            // Dapatkan jawaban yang benar
-            const correctAnswer = parseInt(document.querySelector('input[name="correct-answer"]:checked').value);
-            
-            // Validasi
-            if (!questionText || options.some(opt => !opt) || !hintText) {
-                showToast("Harap isi semua field!", "error");
-                return;
-            }
-            
-            // Tambah pertanyaan
-            addedQuestions.push({
-                question: questionText,
-                options: options,
-                correctAnswer: correctAnswer,
-                hint: hintText
-            });
-            
-            // Simpan ke localStorage
-            localStorage.setItem('addedQuestions', JSON.stringify(addedQuestions));
-            
-            // Reset form
-            newQuestion.value = '';
-            newHint.value = '';
-            document.getElementById('option-0').value = '';
-            document.getElementById('option-1').value = '';
-            document.getElementById('option-2').value = '';
-            document.getElementById('option-3').value = '';
-            document.querySelector('input[name="correct-answer"]').checked = true;
-            
-            closeAddQuestionModal();
-            showToast("Pertanyaan berhasil ditambahkan!", "success");
-            
-            // Refresh level selection
-            generateLevelSelection();
-        }
-
         // Mulai ulang game
         function restartGame() {
-            if (confirm("Apakah Anda yakin ingin memulai ulang? Semua progress akan dihapus.")) {
-                currentLevel = 0;
-                score = 0;
-                hints = 3;
-                userAnswers = [];
-                updateScore();
-                updateHints();
-                loadLevel(currentLevel);
-                menu.style.display = 'none';
-                showToast("Game dimulai ulang!", "info");
+            if (confirm("Apakah Anda yakin ingin memulai ulang game? Semua progress akan direset.")) {
+                resetGame();
+                loadQuestion(0);
+                showMessage("Game telah direset!", "info");
+                playSound('click');
             }
+            menu.style.display = 'none';
         }
 
         // Toggle suara
         function toggleSound() {
-            soundEnabled = !soundEnabled;
-            soundBtn.innerHTML = soundEnabled ? 
+            isSoundOn = !isSoundOn;
+            soundBtn.innerHTML = isSoundOn ? 
                 '<i class="fas fa-volume-up"></i> Suara: On' : 
                 '<i class="fas fa-volume-mute"></i> Suara: Off';
-            menu.style.display = 'none';
-            showToast(soundEnabled ? "Suara diaktifkan" : "Suara dimatikan", "info");
+            playSound('click');
         }
 
         // Tampilkan bantuan
         function showHelp() {
-            helpModal.style.display = 'flex';
-            menu.style.display = 'none';
-        }
-
-        // Tutup modal bantuan
-        function closeHelpModal() {
-            helpModal.style.display = 'none';
+            showModal(helpModal);
+            playSound('click');
         }
 
         // Logout
         function logout() {
-            localStorage.removeItem('isLoggedIn');
+            isGameActive = false;
             gameContainer.style.display = 'none';
             loginContainer.style.display = 'flex';
-            document.getElementById('password').value = '';
+            resetGame();
+            showMessage("Anda telah logout.", "info");
             menu.style.display = 'none';
-            showToast("Anda telah logout", "info");
+            playSound('click');
         }
 
-        // Tampilkan notifikasi toast
-        function showToast(message, type) {
-            toast.textContent = message;
-            toast.className = 'toast ' + type;
+        // Tampilkan form tambah pertanyaan
+        function showAddQuestionForm() {
+            showModal(addQuestionModal);
+            playSound('click');
+        }
+
+        // Handle tambah pertanyaan
+        function handleAddQuestion(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const question = e.target[0].value;
+            const options = [
+                e.target[1].value,
+                e.target[3].value,
+                e.target[5].value,
+                e.target[7].value
+            ];
+            const correctAnswer = parseInt(e.target[2].value);
+            const hint = e.target[8].value;
+            
+            const newQuestion = {
+                question,
+                options,
+                correctAnswer,
+                hint: hint || "Tidak ada petunjuk tersedia."
+            };
+            
+            userQuestions.push(newQuestion);
+            localStorage.setItem('userQuestions', JSON.stringify(userQuestions));
+            
+            closeModal(addQuestionModal);
+            showMessage("Pertanyaan berhasil ditambahkan!", "success");
+            playSound('success');
+            
+            // Reset form
+            e.target.reset();
+        }
+
+        // Reset game
+        function resetGame() {
+            score = 0;
+            hintsAvailable = 3;
+            currentLevel = 0;
+            answeredQuestions.clear();
+            scoreValue.textContent = score;
+            updateHintsDisplay();
+            progressBar.style.width = '0%';
+        }
+
+        // Update tampilan petunjuk
+        function updateHintsDisplay() {
+            hintsValue.textContent = hintsAvailable;
+            hintBtn.disabled = hintsAvailable <= 0;
+        }
+
+        // Tampilkan modal
+        function showModal(modal) {
+            modal.style.display = 'flex';
+        }
+
+        // Tutup modal
+        function closeModal(modal) {
+            modal.style.display = 'none';
+        }
+
+        // Tutup semua modal
+        function closeAllModals() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+
+        // Tampilkan pesan
+        function showMessage(text, type = "info") {
+            // Hapus toast sebelumnya
+            toast.className = 'toast';
+            toast.textContent = '';
+            
+            // Buat toast baru
+            toast.textContent = text;
+            toast.classList.add(type);
+            
+            // Tampilkan toast
             toast.style.opacity = '1';
             
+            // Sembunyikan setelah 3 detik
             setTimeout(() => {
                 toast.style.opacity = '0';
             }, 3000);
-        }
-
-        // Buat efek konfeti
-        function createConfetti() {
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.classList.add('confetti');
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-                confetti.style.animation = `confetti ${Math.random() * 3 + 2}s linear forwards`;
-                document.body.appendChild(confetti);
-                
-                setTimeout(() => {
-                    confetti.remove();
-                }, 5000);
-            }
-        }
-
-        // Buat partikel latar belakang
-        function createParticles() {
-            const particlesEl = document.getElementById('particles');
             
-            for (let i = 0; i < 30; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                
-                // Ukuran acak
-                const size = Math.random() * 20 + 5;
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-                
-                // Posisi acak
-                particle.style.left = Math.random() * 100 + 'vw';
-                particle.style.top = Math.random() * 100 + 'vh';
-                
-                // Warna acak dengan transparansi
-                const hue = Math.random() * 360;
-                particle.style.backgroundColor = `hsla(${hue}, 100%, 70%, 0.2)`;
-                
-                // Animasi dengan durasi acak
-                const duration = Math.random() * 10 + 10;
-                particle.style.animation = `float ${duration}s linear infinite`;
-                
-                particlesEl.appendChild(particle);
+            // Tambahkan icon berdasarkan type
+            const icon = document.createElement('i');
+            switch(type) {
+                case 'success':
+                    icon.className = 'fas fa-check-circle';
+                    break;
+                case 'error':
+                    icon.className = 'fas fa-exclamation-circle';
+                    break;
+                case 'info':
+                    icon.className = 'fas fa-info-circle';
+                    break;
             }
+            toast.prepend(icon);
         }
 
-        // Cek pencapaian
+        // Cek achievement
         function checkAchievements() {
-            // Pencapaian skor 50
-            if (score >= 50 && !localStorage.getItem('achievement50')) {
-                showAchievement("Pemula Hebat", "Raih skor 50 poin!");
-                localStorage.setItem('achievement50', 'true');
-            }
-            
-            // Pencapaian skor 100
-            if (score >= 100 && !localStorage.getItem('achievement100')) {
-                showAchievement("Ahli Logika", "Raih skor 100 poin!");
-                localStorage.setItem('achievement100', 'true');
-            }
-            
-            // Pencapaian menyelesaikan semua level
-            const allQuestions = [...questions, ...addedQuestions];
-            if (userAnswers.length >= allQuestions.length && !localStorage.getItem('achievementComplete')) {
-                showAchievement("Penyelesai Ulung", "Selesaikan semua level!");
-                localStorage.setItem('achievementComplete', 'true');
+            if (completedLevels.length === 5) {
+                showAchievement("Ahli Logika", "Menyelesaikan 5 level pertama!");
+            } else if (completedLevels.length === 10) {
+                showAchievement("Master Logika", "Menyelesaikan semua 10 level!");
+            } else if (score >= 50) {
+                showAchievement("Pencetak Skor", "Mencapai 50 poin!");
             }
         }
 
-        // Tampilkan pencapaian
+        // Tampilkan achievement
         function showAchievement(title, description) {
             achievementTitle.textContent = title;
             achievementDesc.textContent = description;
             achievementBadge.classList.add('show');
+            
+            playSound('achievement');
             
             setTimeout(() => {
                 achievementBadge.classList.remove('show');
             }, 5000);
         }
 
-        // Cek apakah pengguna sudah login
-        window.addEventListener('DOMContentLoaded', () => {
-            // Load pertanyaan yang ditambahkan
-            const savedQuestions = localStorage.getItem('addedQuestions');
-            if (savedQuestions) {
-                addedQuestions = JSON.parse(savedQuestions);
-            }
+        // Mainkan suara
+        function playSound(type) {
+            if (!isSoundOn) return;
             
-            // Load progress game
-            const savedProgress = localStorage.getItem('gameProgress');
-            if (savedProgress) {
-                const progress = JSON.parse(savedProgress);
-                currentLevel = progress.level;
-                score = progress.score;
-                hints = progress.hints;
-                userAnswers = progress.answers || [];
+            // Implementasi suara sederhana menggunakan AudioContext
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                switch(type) {
+                    case 'click':
+                        oscillator.frequency.value = 800;
+                        gainNode.gain.value = 0.1;
+                        oscillator.start();
+                        setTimeout(() => oscillator.stop(), 100);
+                        break;
+                    case 'success':
+                        oscillator.frequency.value = 1000;
+                        gainNode.gain.value = 0.1;
+                        oscillator.start();
+                        setTimeout(() => oscillator.stop(), 300);
+                        break;
+                    case 'error':
+                        oscillator.frequency.value = 400;
+                        gainNode.gain.value = 0.1;
+                        oscillator.start();
+                        setTimeout(() => oscillator.stop(), 300);
+                        break;
+                    case 'achievement':
+                        // Mainkan beberapa nada untuk achievement
+                        oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+                        oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+                        oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
+                        gainNode.gain.value = 0.1;
+                        oscillator.start();
+                        setTimeout(() => oscillator.stop(), 500);
+                        break;
+                }
+            } catch (e) {
+                console.log("Browser tidak mendukung AudioContext");
             }
+        }
+
+        // Buat partikel latar belakang
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
             
-            // Cek status login
-            if (localStorage.getItem('isLoggedIn') === 'true') {
-                loginContainer.style.display = 'none';
-                gameContainer.style.display = 'block';
-                init();
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Ukuran acak
+                const size = Math.random() * 20 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Posisi acak
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Warna acak
+                const colors = ['rgba(255, 126, 95, 0.5)', 'rgba(106, 17, 203, 0.5)', 'rgba(37, 117, 252, 0.5)'];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Animasi dengan durasi acak
+                const duration = Math.random() * 20 + 10;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particlesContainer.appendChild(particle);
             }
-        });
+        }
+
+        // Inisialisasi
+        init();
     </script>
 </body>
 </html>
