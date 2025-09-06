@@ -556,6 +556,9 @@
                 <button class="next-btn" id="next-btn" disabled>
                     <i class="fas fa-arrow-right"></i> Level Selanjutnya
                 </button>
+                <button class="whatsapp-btn" id="whatsapp-btn">
+                    <i class="fab fa-whatsapp"></i> Bantuan WhatsApp
+                </button>
             </div>
             
             <div class="score-container">
@@ -577,6 +580,7 @@
             <button class="close-modal" id="close-result">&times;</button>
             <h2 id="result-title">Selamat!</h2>
             <p id="result-message">Jawaban Anda benar!</p>
+            <p>Skor Akhir: <span id="final-score">0</span></p>
             <button class="modal-btn" id="result-btn">Lanjutkan</button>
         </div>
     </div>
@@ -2590,6 +2594,7 @@
         let hints = 3;
         let completedLevels = new Set();
         let soundEnabled = true;
+        let autoNextTimer = null;
 
         // Elemen DOM
         const questionElement = document.getElementById('question');
@@ -2601,6 +2606,7 @@
         const nextBtn = document.getElementById('next-btn');
         const hintBtn = document.getElementById('hint-btn');
         const randomBtn = document.getElementById('random-btn');
+        const whatsappBtn = document.getElementById('whatsapp-btn');
         const menuBtn = document.getElementById('menu-btn');
         const menu = document.getElementById('menu');
         const resultModal = document.getElementById('result-modal');
@@ -2609,6 +2615,7 @@
         const helpModal = document.getElementById('help-modal');
         const toast = document.getElementById('toast');
         const achievementBadge = document.getElementById('achievement-badge');
+        const levelSelectionElement = document.getElementById('level-selection');
 
         // Fungsi untuk memuat level
         function loadLevel(levelIndex) {
@@ -2625,18 +2632,18 @@
             progressBarElement.style.width = ((levelIndex + 1) / gameLevels.length * 100) + '%';
             
             // Tampilkan pertanyaan
-            questionElement.textContent = level.question;
+            questionElement.innerHTML = `<div class="question-number">Pertanyaan</div>${level.question}`;
             
             // Kosongkan opsi sebelumnya
             optionsElement.innerHTML = '';
             
             // Tambahkan opsi jawaban
             level.options.forEach((option, index) => {
-                const button = document.createElement('button');
-                button.textContent = option;
-                button.className = 'option-btn';
-                button.onclick = () => checkAnswer(index);
-                optionsElement.appendChild(button);
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.innerHTML = `<span class="option-number">${index + 1}</span>${option}`;
+                optionDiv.onclick = () => checkAnswer(index);
+                optionsElement.appendChild(optionDiv);
             });
             
             // Perbarui skor dan hint
@@ -2644,17 +2651,23 @@
             hintsValueElement.textContent = hints;
             
             // Sembunyikan tombol next
-            nextBtn.style.display = 'none';
+            nextBtn.disabled = true;
+            
+            // Reset timer auto next jika ada
+            if (autoNextTimer) {
+                clearTimeout(autoNextTimer);
+                autoNextTimer = null;
+            }
         }
 
         // Fungsi untuk memeriksa jawaban
         function checkAnswer(selectedIndex) {
             const level = gameLevels[currentLevel];
-            const options = document.querySelectorAll('.option-btn');
+            const options = document.querySelectorAll('.option');
             
             // Nonaktifkan semua opsi setelah memilih
             options.forEach(option => {
-                option.disabled = true;
+                option.onclick = null;
             });
             
             // Periksa apakah jawaban benar
@@ -2662,6 +2675,7 @@
                 // Jawaban benar
                 options[selectedIndex].classList.add('correct');
                 score += 10;
+                scoreValueElement.textContent = score;
                 
                 // Tandai level sebagai selesai
                 completedLevels.add(currentLevel);
@@ -2673,15 +2687,20 @@
                 checkAchievements();
             } else {
                 // Jawaban salah
-                options[selectedIndex].classList.add('wrong');
+                options[selectedIndex].classList.add('incorrect');
                 options[level.answer].classList.add('correct');
                 
                 // Tampilkan toast error
                 showToast('Jawaban salah! Coba lagi.', 'error');
             }
             
-            // Tampilkan tombol next
-            nextBtn.style.display = 'block';
+            // Aktifkan tombol next
+            nextBtn.disabled = false;
+            
+            // Set timer untuk pindah otomatis ke pertanyaan berikutnya setelah 3 detik
+            autoNextTimer = setTimeout(() => {
+                nextLevel();
+            }, 3000);
         }
 
         // Fungsi untuk beralih ke level berikutnya
@@ -2698,7 +2717,7 @@
             const resultTitle = document.getElementById('result-title');
             const resultMessage = document.getElementById('result-message');
             const finalScore = document.getElementById('final-score');
-            const restartBtn = document.getElementById('restart-btn');
+            const resultBtn = document.getElementById('result-btn');
             
             if (isWin) {
                 resultTitle.textContent = 'Selamat!';
@@ -2709,8 +2728,8 @@
             }
             
             finalScore.textContent = score;
-            
-            restartBtn.onclick = () => {
+            resultBtn.textContent = 'Main Lagi';
+            resultBtn.onclick = () => {
                 // Reset permainan
                 currentLevel = 0;
                 score = 0;
@@ -2762,25 +2781,24 @@
 
         // Fungsi untuk menampilkan menu level
         function showLevelMenu() {
-            const levelList = document.getElementById('level-list');
-            levelList.innerHTML = '';
+            levelSelectionElement.innerHTML = '';
             
             // Buat daftar level
             for (let i = 0; i < gameLevels.length; i++) {
-                const levelItem = document.createElement('div');
-                levelItem.className = 'level-item';
+                const levelBtn = document.createElement('div');
+                levelBtn.className = 'level-btn';
                 if (completedLevels.has(i)) {
-                    levelItem.classList.add('completed');
+                    levelBtn.classList.add('completed');
                 }
                 if (i === currentLevel) {
-                    levelItem.classList.add('current');
+                    levelBtn.classList.add('current');
                 }
-                levelItem.textContent = 'Level ' + (i + 1);
-                levelItem.onclick = () => {
+                levelBtn.textContent = i + 1;
+                levelBtn.onclick = () => {
                     loadLevel(i);
                     levelModal.style.display = 'none';
                 };
-                levelList.appendChild(levelItem);
+                levelSelectionElement.appendChild(levelBtn);
             }
             
             levelModal.style.display = 'flex';
@@ -2800,74 +2818,103 @@
         function showToast(message, type) {
             toast.textContent = message;
             toast.className = 'toast ' + type;
-            toast.style.display = 'block';
+            toast.style.opacity = '1';
             
             setTimeout(() => {
-                toast.style.display = 'none';
+                toast.style.opacity = '0';
             }, 3000);
         }
 
         // Fungsi untuk memeriksa achievement
         function checkAchievements() {
-            const achievementText = document.getElementById('achievement-text');
+            const achievementTitle = document.getElementById('achievement-title');
+            const achievementDesc = document.getElementById('achievement-desc');
             
             if (completedLevels.size === 10) {
-                achievementText.textContent = 'Pemula: Selesaikan 10 level!';
-                achievementBadge.style.display = 'flex';
+                achievementTitle.textContent = 'Pemula';
+                achievementDesc.textContent = 'Selesaikan 10 level!';
+                achievementBadge.classList.add('show');
                 setTimeout(() => {
-                    achievementBadge.style.display = 'none';
+                    achievementBadge.classList.remove('show');
                 }, 5000);
             } else if (completedLevels.size === 50) {
-                achievementText.textContent = 'Ahli: Selesaikan 50 level!';
-                achievementBadge.style.display = 'flex';
+                achievementTitle.textContent = 'Ahli';
+                achievementDesc.textContent = 'Selesaikan 50 level!';
+                achievementBadge.classList.add('show');
                 setTimeout(() => {
-                    achievementBadge.style.display = 'none';
+                    achievementBadge.classList.remove('show');
                 }, 5000);
             } else if (completedLevels.size === 100) {
-                achievementText.textContent = 'Master: Selesaikan 100 level!';
-                achievementBadge.style.display = 'flex';
+                achievementTitle.textContent = 'Master';
+                achievementDesc.textContent = 'Selesaikan 100 level!';
+                achievementBadge.classList.add('show');
                 setTimeout(() => {
-                    achievementBadge.style.display = 'none';
+                    achievementBadge.classList.remove('show');
                 }, 5000);
             } else if (completedLevels.size === 150) {
-                achievementText.textContent = 'Legenda: Selesaikan 150 level!';
-                achievementBadge.style.display = 'flex';
+                achievementTitle.textContent = 'Legenda';
+                achievementDesc.textContent = 'Selesaikan 150 level!';
+                achievementBadge.classList.add('show');
                 setTimeout(() => {
-                    achievementBadge.style.display = 'none';
+                    achievementBadge.classList.remove('show');
                 }, 5000);
             } else if (completedLevels.size === 200) {
-                achievementText.textContent = 'Grand Master: Selesaikan 200 level!';
-                achievementBadge.style.display = 'flex';
+                achievementTitle.textContent = 'Grand Master';
+                achievementDesc.textContent = 'Selesaikan 200 level!';
+                achievementBadge.classList.add('show');
                 setTimeout(() => {
-                    achievementBadge.style.display = 'none';
+                    achievementBadge.classList.remove('show');
                 }, 5000);
             } else if (completedLevels.size === 250) {
-                achievementText.textContent = 'Philosopher: Selesaikan 250 level!';
-                achievementBadge.style.display = 'flex';
+                achievementTitle.textContent = 'Philosopher';
+                achievementDesc.textContent = 'Selesaikan 250 level!';
+                achievementBadge.classList.add('show');
                 setTimeout(() => {
-                    achievementBadge.style.display = 'none';
+                    achievementBadge.classList.remove('show');
                 }, 5000);
             } else if (completedLevels.size === 300) {
-                achievementText.textContent = 'Enigma Master: Selesaikan semua 300 level!';
-                achievementBadge.style.display = 'flex';
+                achievementTitle.textContent = 'Enigma Master';
+                achievementDesc.textContent = 'Selesaikan semua 300 level!';
+                achievementBadge.classList.add('show');
                 setTimeout(() => {
-                    achievementBadge.style.display = 'none';
+                    achievementBadge.classList.remove('show');
                 }, 5000);
             }
+        }
+
+        // Fungsi untuk membuka WhatsApp
+        function openWhatsApp() {
+            const message = "Haiii suamiku sayaaank.....";
+            const phoneNumber = "085647709114";
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
         }
 
         // Event listeners untuk tombol
         nextBtn.addEventListener('click', nextLevel);
         hintBtn.addEventListener('click', useHint);
         randomBtn.addEventListener('click', jumpToRandomLevel);
+        whatsappBtn.addEventListener('click', openWhatsApp);
         menuBtn.addEventListener('click', toggleMenu);
 
         // Event listeners untuk modal
+        document.getElementById('close-result').addEventListener('click', () => {
+            resultModal.style.display = 'none';
+        });
+
+        document.getElementById('result-btn').addEventListener('click', () => {
+            resultModal.style.display = 'none';
+        });
+
         document.getElementById('close-hint').addEventListener('click', () => {
             hintModal.style.display = 'none';
         });
 
-        document.getElementById('close-levels').addEventListener('click', () => {
+        document.getElementById('hint-close').addEventListener('click', () => {
+            hintModal.style.display = 'none';
+        });
+
+        document.getElementById('close-level').addEventListener('click', () => {
             levelModal.style.display = 'none';
         });
 
@@ -2875,9 +2922,28 @@
             helpModal.style.display = 'none';
         });
 
-        document.getElementById('help-btn').addEventListener('click', showHelp);
+        document.getElementById('help-close').addEventListener('click', () => {
+            helpModal.style.display = 'none';
+        });
 
+        document.getElementById('help-btn').addEventListener('click', showHelp);
         document.getElementById('level-select-btn').addEventListener('click', showLevelMenu);
+        document.getElementById('restart-btn').addEventListener('click', () => {
+            currentLevel = 0;
+            score = 0;
+            hints = 3;
+            completedLevels.clear();
+            loadLevel(currentLevel);
+            menu.style.display = 'none';
+        });
+
+        document.getElementById('sound-btn').addEventListener('click', function() {
+            soundEnabled = !soundEnabled;
+            this.innerHTML = soundEnabled ? 
+                '<i class="fas fa-volume-up"></i> Suara: On' : 
+                '<i class="fas fa-volume-mute"></i> Suara: Off';
+            menu.style.display = 'none';
+        });
 
         // Mulai game
         loadLevel(currentLevel);
