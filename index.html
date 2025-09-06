@@ -23,6 +23,70 @@
             color: #333;
         }
 
+        /* Login Form Styles */
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: #ff7e5f;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .login-btn {
+            padding: 12px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-message {
+            margin-top: 15px;
+            color: #ff4757;
+            font-weight: bold;
+        }
+
+        /* Game Container Styles */
         .game-container {
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -31,6 +95,7 @@
             max-width: 500px;
             overflow: hidden;
             position: relative;
+            display: none;
         }
 
         .header {
@@ -373,6 +438,10 @@
             align-items: center;
             gap: 10px;
             transition: background 0.3s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
         }
 
         .menu-item:hover {
@@ -505,10 +574,34 @@
             font-size: 0.8rem;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
         }
+
+        /* WhatsApp button */
+        .whatsapp-btn {
+            background: linear-gradient(to right, #25D366, #128C7E);
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <div class="game-container">
+    <!-- Login Form -->
+    <div class="login-container" id="login-container">
+        <h2>Login untuk Bermain</h2>
+        <form class="login-form" id="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="VIRGO" placeholder="Masukkan username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="AbiLoveAmi" placeholder="Masukkan password" required>
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+        <div class="login-message" id="login-message"></div>
+    </div>
+
+    <!-- Game Container -->
+    <div class="game-container" id="game-container">
         <div class="header">
             <h1>Logika Lucu <span class="premium-badge"><i class="fas fa-crown"></i></span></h1>
             <div class="level-info">Level <span id="current-level">1</span> dari 300</div>
@@ -532,6 +625,9 @@
                 </div>
                 <div class="menu-item" id="help-btn">
                     <i class="fas fa-question-circle"></i> Bantuan
+                </div>
+                <div class="menu-item" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
                 </div>
             </div>
         </div>
@@ -626,6 +722,7 @@
         <h3 id="achievement-title">Pencapaian!</h3>
         <p id="achievement-desc">Anda telah membuka pencapaian baru</p>
     </div>
+
 
     <script>
         // Data game - 300 level
@@ -2588,15 +2685,20 @@
             }
         ];
 
-        // Inisialisasi variabel game
+         // Inisialisasi variabel game
         let currentLevel = 0;
         let score = 0;
         let hints = 3;
         let completedLevels = new Set();
         let soundEnabled = true;
         let autoNextTimer = null;
+        let isLoggedIn = false;
 
         // Elemen DOM
+        const loginContainer = document.getElementById('login-container');
+        const loginForm = document.getElementById('login-form');
+        const loginMessage = document.getElementById('login-message');
+        const gameContainer = document.getElementById('game-container');
         const questionElement = document.getElementById('question');
         const optionsElement = document.getElementById('options');
         const currentLevelElement = document.getElementById('current-level');
@@ -2616,9 +2718,41 @@
         const toast = document.getElementById('toast');
         const achievementBadge = document.getElementById('achievement-badge');
         const levelSelectionElement = document.getElementById('level-selection');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        // Fungsi untuk login
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Validasi sederhana
+            if (username === 'user' && password === 'password') {
+                isLoggedIn = true;
+                loginContainer.style.display = 'none';
+                gameContainer.style.display = 'block';
+                loadLevel(currentLevel);
+            } else {
+                loginMessage.textContent = 'Username atau password salah!';
+            }
+        }
+
+        // Fungsi untuk logout
+        function handleLogout() {
+            isLoggedIn = false;
+            gameContainer.style.display = 'none';
+            loginContainer.style.display = 'block';
+            loginMessage.textContent = '';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            menu.style.display = 'none';
+        }
 
         // Fungsi untuk memuat level
         function loadLevel(levelIndex) {
+            if (!isLoggedIn) return;
+            
             if (levelIndex >= gameLevels.length) {
                 showResult(true);
                 return;
@@ -2662,6 +2796,8 @@
 
         // Fungsi untuk memeriksa jawaban
         function checkAnswer(selectedIndex) {
+            if (!isLoggedIn) return;
+            
             const level = gameLevels[currentLevel];
             const options = document.querySelectorAll('.option');
             
@@ -2705,6 +2841,8 @@
 
         // Fungsi untuk beralih ke level berikutnya
         function nextLevel() {
+            if (!isLoggedIn) return;
+            
             if (currentLevel < gameLevels.length - 1) {
                 loadLevel(currentLevel + 1);
             } else {
@@ -2714,6 +2852,8 @@
 
         // Fungsi untuk menampilkan hasil akhir
         function showResult(isWin) {
+            if (!isLoggedIn) return;
+            
             const resultTitle = document.getElementById('result-title');
             const resultMessage = document.getElementById('result-message');
             const finalScore = document.getElementById('final-score');
@@ -2744,6 +2884,8 @@
 
         // Fungsi untuk menggunakan hint
         function useHint() {
+            if (!isLoggedIn) return;
+            
             if (hints > 0) {
                 hints--;
                 hintsValueElement.textContent = hints;
@@ -2762,6 +2904,8 @@
 
         // Fungsi untuk melompat ke level acak
         function jumpToRandomLevel() {
+            if (!isLoggedIn) return;
+            
             // Cari level yang belum diselesaikan
             const unfinishedLevels = [];
             for (let i = 0; i < gameLevels.length; i++) {
@@ -2781,6 +2925,8 @@
 
         // Fungsi untuk menampilkan menu level
         function showLevelMenu() {
+            if (!isLoggedIn) return;
+            
             levelSelectionElement.innerHTML = '';
             
             // Buat daftar level
@@ -2806,11 +2952,15 @@
 
         // Fungsi untuk menampilkan menu utama
         function toggleMenu() {
+            if (!isLoggedIn) return;
+            
             menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
         }
 
         // Fungsi untuk menampilkan bantuan
         function showHelp() {
+            if (!isLoggedIn) return;
+            
             helpModal.style.display = 'flex';
         }
 
@@ -2827,6 +2977,8 @@
 
         // Fungsi untuk memeriksa achievement
         function checkAchievements() {
+            if (!isLoggedIn) return;
+            
             const achievementTitle = document.getElementById('achievement-title');
             const achievementDesc = document.getElementById('achievement-desc');
             
@@ -2882,51 +3034,23 @@
             }
         }
 
-        // Fungsi untuk membuka WhatsApp
+        // Fungsi untuk membuka WhatsApp - DIPERBAIKI
         function openWhatsApp() {
-            const message = "Haiii suamiku sayaaank.....";
-            const phoneNumber = "085647709114";
-            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
+            const message = "Hai, saya butuh bantuan dengan game Logika Lucu!";
+            const phoneNumber = "6285647709114"; // Format internasional tanpa tanda +
+            const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
         }
 
-        // Event listeners untuk tombol
+        // Event listeners
+        loginForm.addEventListener('submit', handleLogin);
         nextBtn.addEventListener('click', nextLevel);
         hintBtn.addEventListener('click', useHint);
         randomBtn.addEventListener('click', jumpToRandomLevel);
         whatsappBtn.addEventListener('click', openWhatsApp);
         menuBtn.addEventListener('click', toggleMenu);
+        logoutBtn.addEventListener('click', handleLogout);
 
-        // Event listeners untuk modal
-        document.getElementById('close-result').addEventListener('click', () => {
-            resultModal.style.display = 'none';
-        });
-
-        document.getElementById('result-btn').addEventListener('click', () => {
-            resultModal.style.display = 'none';
-        });
-
-        document.getElementById('close-hint').addEventListener('click', () => {
-            hintModal.style.display = 'none';
-        });
-
-        document.getElementById('hint-close').addEventListener('click', () => {
-            hintModal.style.display = 'none';
-        });
-
-        document.getElementById('close-level').addEventListener('click', () => {
-            levelModal.style.display = 'none';
-        });
-
-        document.getElementById('close-help').addEventListener('click', () => {
-            helpModal.style.display = 'none';
-        });
-
-        document.getElementById('help-close').addEventListener('click', () => {
-            helpModal.style.display = 'none';
-        });
-
-        document.getElementById('help-btn').addEventListener('click', showHelp);
         document.getElementById('level-select-btn').addEventListener('click', showLevelMenu);
         document.getElementById('restart-btn').addEventListener('click', () => {
             currentLevel = 0;
@@ -2935,18 +3059,54 @@
             completedLevels.clear();
             loadLevel(currentLevel);
             menu.style.display = 'none';
+            showToast('Permainan dimulai ulang!', 'info');
         });
-
+        
         document.getElementById('sound-btn').addEventListener('click', function() {
             soundEnabled = !soundEnabled;
             this.innerHTML = soundEnabled ? 
                 '<i class="fas fa-volume-up"></i> Suara: On' : 
                 '<i class="fas fa-volume-mute"></i> Suara: Off';
             menu.style.display = 'none';
+            showToast(soundEnabled ? 'Suara diaktifkan' : 'Suara dimatikan', 'info');
+        });
+        
+        document.getElementById('help-btn').addEventListener('click', showHelp);
+
+        // Event listener untuk menutup modal
+        document.querySelectorAll('.close-modal').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.parentElement.style.display = 'none';
+            });
         });
 
-        // Mulai game
-        loadLevel(currentLevel);
+        document.getElementById('hint-close').addEventListener('click', () => {
+            hintModal.style.display = 'none';
+        });
+
+        document.getElementById('help-close').addEventListener('click', () => {
+            helpModal.style.display = 'none';
+        });
+
+        // Tutup modal jika klik di luar konten modal
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+
+        // Tutup menu jika klik di luar menu
+        window.addEventListener('click', function(event) {
+            if (!event.target.matches('.menu-btn') && !event.target.closest('.menu')) {
+                menu.style.display = 'none';
+            }
+        });
+
+        // Inisialisasi game
+        if (!isLoggedIn) {
+            loginContainer.style.display = 'block';
+            gameContainer.style.display = 'none';
+        }
     </script>
 </body>
 </html>
