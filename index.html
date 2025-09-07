@@ -932,6 +932,24 @@
             background: linear-gradient(to right, #9e9e9e, #757575);
             color: white;
         }
+
+        /* Alarm indicator */
+        .alarm-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ff4757;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            animation: pulse 1s infinite;
+            box-shadow: 0 0 10px rgba(255, 71, 87, 0.7);
+        }
     </style>
 </head>
 <body>
@@ -1051,78 +1069,71 @@
             <button class="close-modal" id="close-hint">&times;</button>
             <h2>Petunjuk</h2>
             <p id="hint-text"></p>
-            <button class="modal-btn" id="hint-close">Mengerti</button>
+            <button class="modal-btn" id="hint-ok-btn">Mengerti</button>
         </div>
     </div>
 
-    <!-- Modal untuk pilih level -->
+    <!-- Modal untuk level selection -->
     <div class="modal" id="level-modal">
         <div class="modal-content">
             <button class="close-modal" id="close-level">&times;</button>
             <h2>Pilih Level</h2>
             <div class="level-selection" id="level-selection">
-                <!-- Tombol level akan dihasilkan di sini -->
+                <!-- Level buttons will be generated here -->
             </div>
         </div>
     </div>
 
-    <!-- Modal bantuan -->
-    <div class="modal" id="help-modal">
+    <!-- Modal untuk WhatsApp security -->
+    <div class="modal" id="whatsapp-modal">
         <div class="modal-content">
-            <button class="close-modal" id="close-help">&times;</button>
-            <h2>Cara Bermain</h2>
-            <p>Pilih jawaban yang menurut Anda paling tepat untuk pertanyaan yang diberikan.</p>
-            <p>Gunakan petunjuk jika Anda kesulitan menjawab (tersedia 3 petunjuk).</p>
-            <p>Setiap jawaban benar memberikan 10 poin.</p>
-            <p>Jawaban salah tidak mengurangi poin.</p>
-            <p>Selamat bermain dan asah logika Anda!</p>
-            <button class="modal-btn" id="help-close">Mengerti</button>
+            <button class="close-modal" id="close-whatsapp">&times;</button>
+            <h2>Verifikasi WhatsApp</h2>
+            <p>Masukkan kode keamanan WhatsApp untuk melanjutkan:</p>
+            <div class="security-input-container">
+                <input type="password" class="security-input" id="whatsapp-code" placeholder="Masukkan kode keamanan" maxlength="8">
+            </div>
+            <div class="security-message" id="whatsapp-message"></div>
+            <button class="modal-btn" id="verify-whatsapp-btn">Verifikasi</button>
         </div>
     </div>
 
-    <!-- Modal tambah pertanyaan -->
+    <!-- Modal untuk tambah pertanyaan -->
     <div class="modal" id="add-question-modal">
         <div class="modal-content">
             <button class="close-modal" id="close-add-question">&times;</button>
             <h2>Tambah Pertanyaan Baru</h2>
             <form class="add-question-form" id="add-question-form">
-                <div>
-                    <label class="security-label" for="new-question">Pertanyaan</label>
-                    <textarea id="new-question" placeholder="Masukkan pertanyaan baru" required></textarea>
-                </div>
+                <input type="text" placeholder="Pertanyaan" required>
                 <div class="option-inputs">
-                    <label class="security-label">Opsi Jawaban</label>
                     <div class="option-input">
-                        <input type="radio" name="correct-option" value="0" required>
+                        <input type="radio" name="correct-answer" value="0" required>
                         <input type="text" placeholder="Opsi A" required>
                     </div>
                     <div class="option-input">
-                        <input type="radio" name="correct-option" value="1" required>
+                        <input type="radio" name="correct-answer" value="1" required>
                         <input type="text" placeholder="Opsi B" required>
                     </div>
                     <div class="option-input">
-                        <input type="radio" name="correct-option" value="2" required>
+                        <input type="radio" name="correct-answer" value="2" required>
                         <input type="text" placeholder="Opsi C" required>
                     </div>
                     <div class="option-input">
-                        <input type="radio" name="correct-option" value="3" required>
+                        <input type="radio" name="correct-answer" value="3" required>
                         <input type="text" placeholder="Opsi D" required>
                     </div>
                 </div>
-                <div>
-                    <label class="security-label" for="question-hint">Petunjuk</label>
-                    <input type="text" id="question-hint" placeholder="Masukkan petunjuk untuk pertanyaan ini" required>
-                </div>
+                <input type="text" placeholder="Petunjuk (opsional)">
                 <button type="submit" class="modal-btn">Tambah Pertanyaan</button>
             </form>
         </div>
     </div>
 
-    <!-- Modal konfirmasi keluar -->
+    <!-- Modal untuk konfirmasi keluar -->
     <div class="modal" id="exit-modal">
         <div class="modal-content">
             <h2>Konfirmasi Keluar</h2>
-            <p>Apakah Anda yakin ingin keluar? Progress Anda akan disimpan.</p>
+            <p>Apakah Anda yakin ingin keluar dari game? Semua progress akan disimpan.</p>
             <div class="exit-confirmation-buttons">
                 <button class="modal-btn cancel-btn" id="exit-cancel">Batal</button>
                 <button class="modal-btn" id="exit-confirm">Keluar</button>
@@ -1130,114 +1141,101 @@
         </div>
     </div>
 
-    <!-- Modal kode keamanan WhatsApp -->
-    <div class="modal" id="security-modal">
-        <div class="modal-content">
-            <button class="close-modal" id="close-security">&times;</button>
-            <h2>Kode Keamanan</h2>
-            <p>Untuk mengakses chat bantuan WhatsApp, masukkan kode keamanan:</p>
-            <div class="security-input-container">
-                <input type="password" class="security-input" id="security-code" placeholder="Masukkan kode" maxlength="8" required>
-            </div>
-            <div class="security-message" id="security-message"></div>
-            <button class="modal-btn" id="security-submit">Verifikasi</button>
-        </div>
+    <!-- Alarm indicator -->
+    <div class="alarm-indicator" id="alarm-indicator" style="display: none;">
+        <i class="fas fa-exclamation"></i>
     </div>
 
-    <!-- Container untuk pesan -->
-    <div class="message-container" id="message-container"></div>
-
-    <!-- Achievement badge -->
-    <div class="achievement-badge" id="achievement-badge">
-        <div class="achievement-icon">
-            <i class="fas fa-trophy"></i>
-        </div>
-        <h2 id="achievement-title">Pencapaian Terbuka!</h2>
-        <p id="achievement-description">Anda telah menyelesaikan level 5!</p>
-    </div>
+    <!-- Audio untuk alarm -->
+    <audio id="alarm-sound" preload="auto">
+        <source src="https://github.com/gamewebapp/aries/blob/main/nada_dering_panggilan_versi_sound_ambulans.mp3?raw=true" type="audio/mp3">
+    </audio>
 
     <script>
         // Data pertanyaan
         const questions = [
             {
                 question: "Apa yang selalu datang tetapi tidak pernah tiba?",
-                options: ["Hari Esok", "Masa Lalu", "Masa Depan", "Hari Ini"],
-                correctIndex: 0,
-                hint: "Ini adalah sesuatu yang selalu dinantikan tetapi tidak pernah benar-benar terjadi."
+                options: ["Besok", "Masa depan", "Hari esok", "Kematian"],
+                correctAnswer: 0,
+                hint: "Ini adalah sesuatu yang selalu dijanjikan tetapi tidak pernah terjadi."
             },
             {
-                question: "Jika dibeli warnanya hitam, ketika dipakai warnanya merah, dan ketika dibuang warnanya coklat. Apakah itu?",
-                options: ["Batu Bara", "Korek Api", "Daun", "Kopi"],
-                correctIndex: 1,
-                hint: "Ini adalah benda kecil yang digunakan untuk menyalakan api."
+                question: "Jika ada 3 apel dan kamu mengambil 2, berapa banyak yang kamu punya?",
+                options: ["1", "2", "3", "0"],
+                correctAnswer: 1,
+                hint: "Kamu mengambil 2, jadi yang kamu punya adalah 2."
             },
             {
-                question: "Apa yang punya kota tetapi tidak punya rumah, punya sungai tetapi tidak punya air, punya hutan tetapi tidak punya pohon?",
-                options: ["Peta", "Globe", "Imajinasi", "Mimpi"],
-                correctIndex: 0,
-                hint: "Ini adalah representasi visual dari suatu area."
+                question: "Apa yang punya kota tetapi tidak ada rumah, punya hutan tetapi tidak ada pohon, dan punya sungai tetapi tidak ada air?",
+                options: ["Peta", "Gambar", "Mimpi", "Lukisan"],
+                correctAnswer: 0,
+                hint: "Ini adalah representasi visual dari suatu tempat."
+            },
+            {
+                question: "Apa yang menjadi lebih basah saat dikeringkan?",
+                options: ["Handuk", "Pakaian", "Tubuh", "Lantai"],
+                correctAnswer: 0,
+                hint: "Ini digunakan untuk mengeringkan sesuatu yang basah."
             },
             {
                 question: "Apa yang bisa dibuka tetapi tidak bisa ditutup?",
-                options: ["Pintu", "Telur", "Janji", "Payung"],
-                correctIndex: 2,
-                hint: "Ini adalah sesuatu yang Anda berikan kepada orang lain."
+                options: ["Telur", "Pintu", "Mata", "Telapak tangan"],
+                correctAnswer: 2,
+                hint: "Ini adalah bagian dari tubuh yang digunakan untuk melihat."
             },
             {
-                question: "Apa yang penuh dengan lubang tetapi masih bisa menampung air?",
-                options: ["Baskom", "Spons", "Jaring", "Ember"],
-                correctIndex: 1,
-                hint: "Ini adalah benda yang digunakan untuk membersihkan dan menyerap cairan."
+                question: "Apa yang punya kaki tetapi tidak bisa berjalan?",
+                options: ["Kursi", "Meja", "Jam", "Gunung"],
+                correctAnswer: 1,
+                hint: "Ini adalah furniture yang biasanya memiliki 4 kaki."
             },
             {
-                question: "Apa yang memiliki satu mata tetapi tidak bisa melihat?",
-                options: ["Jarum", "Toples", "Kentang", "Tornado"],
-                correctIndex: 0,
-                hint: "Ini adalah benda kecil yang digunakan untuk menjahit."
+                question: "Apa yang selalu di depanmu tetapi tidak bisa dilihat?",
+                options: ["Masa depan", "Udara", "Cahaya", "Angin"],
+                correctAnswer: 0,
+                hint: "Ini adalah sesuatu yang belum terjadi."
             },
             {
-                question: "Semakin banyak Anda mengambil, semakin banyak Anda meninggalkan. Apakah itu?",
-                options: ["Kekayaan", "Langkah", "Keputusan", "Kenangan"],
-                correctIndex: 1,
-                hint: "Ini adalah sesuatu yang Anda lakukan ketika berjalan."
+                question: "Apa yang punya tangan tetapi tidak bisa bertepuk tangan?",
+                options: ["Jam", "Baju", "Tangan palsu", "Boneka"],
+                correctAnswer: 0,
+                hint: "Ini memiliki jarum yang menunjukkan waktu."
             },
             {
-                question: "Apa yang memiliki leher tetapi tidak memiliki kepala?",
-                options: ["Gitar", "Botol", "Baju", "Taman"],
-                correctIndex: 1,
-                hint: "Ini adalah wadah yang digunakan untuk menyimpan cairan."
+                question: "Apa yang memiliki wajah tetapi tidak bisa tersenyum?",
+                options: ["Topeng", "Cermin", "Ponsel", "Bulan"],
+                correctAnswer: 3,
+                hint: "Ini adalah satelit alami bumi yang memiliki fase-fase seperti wajah."
             },
             {
-                question: "Apa yang selalu berlari tetapi tidak pernah berjalan, memiliki mulut tetapi tidak pernah berbicara, memiliki tempat tidur tetapi tidak pernah tidur?",
-                options: ["Manusia", "Jam", "Sungai", "Angin"],
-                correctIndex: 2,
-                hint: "Ini adalah aliran air alami yang besar."
-            },
-            {
-                question: "Apa yang bisa berbicara semua bahasa?",
-                options: ["Manusia", "Echo", "Terjemahan", "Buku"],
-                correctIndex: 1,
-                hint: "Ini adalah suara yang memantul kembali kepada Anda."
+                question: "Apa yang bisa menembus kaca tanpa memecahkannya?",
+                options: ["Cahaya", "Suara", "Air", "Angin"],
+                correctAnswer: 0,
+                hint: "Ini membuat kita bisa melihat melalui kaca."
             }
         ];
 
-        // Variabel game state
+        // Variabel global
         let currentLevel = 0;
         let score = 0;
         let hints = 3;
-        let answered = false;
-        let completedLevels = new Set();
-        let isSoundOn = true;
-        let isLoggedIn = false;
-        let securityVerified = false;
+        let soundEnabled = true;
+        let loginAttempts = 0;
+        let whatsappAttempts = 0;
+        let loginBlocked = false;
+        let whatsappBlocked = false;
+        let loginBlockTimeout;
+        let whatsappBlockTimeout;
+        let alarmPlaying = false;
 
         // Elemen DOM
         const loginContainer = document.getElementById('login-container');
+        const gameContainer = document.getElementById('game-container');
         const loginForm = document.getElementById('login-form');
         const loginBtn = document.getElementById('login-btn');
         const loginMessage = document.getElementById('login-message');
         const countdownEl = document.getElementById('countdown');
-        const gameContainer = document.getElementById('game-container');
         const questionEl = document.getElementById('question');
         const optionsEl = document.getElementById('options');
         const nextBtn = document.getElementById('next-btn');
@@ -1249,8 +1247,6 @@
         const hintsValue = document.getElementById('hints-value');
         const currentLevelEl = document.getElementById('current-level');
         const progressBar = document.getElementById('progress-bar');
-        const menuBtn = document.getElementById('menu-btn');
-        const menu = document.getElementById('menu');
         const resultModal = document.getElementById('result-modal');
         const resultTitle = document.getElementById('result-title');
         const resultMessage = document.getElementById('result-message');
@@ -1258,457 +1254,623 @@
         const resultBtn = document.getElementById('result-btn');
         const hintModal = document.getElementById('hint-modal');
         const hintText = document.getElementById('hint-text');
-        const hintClose = document.getElementById('hint-close');
+        const hintOkBtn = document.getElementById('hint-ok-btn');
         const levelModal = document.getElementById('level-modal');
         const levelSelection = document.getElementById('level-selection');
-        const helpModal = document.getElementById('help-modal');
-        const helpClose = document.getElementById('help-close');
+        const closeLevel = document.getElementById('close-level');
+        const whatsappModal = document.getElementById('whatsapp-modal');
+        const whatsappCode = document.getElementById('whatsapp-code');
+        const whatsappMessage = document.getElementById('whatsapp-message');
+        const verifyWhatsappBtn = document.getElementById('verify-whatsapp-btn');
+        const closeWhatsapp = document.getElementById('close-whatsapp');
         const addQuestionModal = document.getElementById('add-question-modal');
         const addQuestionForm = document.getElementById('add-question-form');
+        const closeAddQuestion = document.getElementById('close-add-question');
         const exitModal = document.getElementById('exit-modal');
         const exitCancel = document.getElementById('exit-cancel');
         const exitConfirm = document.getElementById('exit-confirm');
-        const securityModal = document.getElementById('security-modal');
-        const securityCode = document.getElementById('security-code');
-        const securityMessage = document.getElementById('security-message');
-        const securitySubmit = document.getElementById('security-submit');
-        const achievementBadge = document.getElementById('achievement-badge');
-        const achievementTitle = document.getElementById('achievement-title');
-        const achievementDescription = document.getElementById('achievement-description');
+        const menuBtn = document.getElementById('menu-btn');
+        const menu = document.getElementById('menu');
+        const levelSelectBtn = document.getElementById('level-select-btn');
+        const addQuestionBtn = document.getElementById('add-question-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const soundBtn = document.getElementById('sound-btn');
+        const helpBtn = document.getElementById('help-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const alarmSound = document.getElementById('alarm-sound');
+        const alarmIndicator = document.getElementById('alarm-indicator');
 
-        // Event Listeners
-        loginForm.addEventListener('submit', handleLogin);
-        nextBtn.addEventListener('click', nextLevel);
-        hintBtn.addEventListener('click', showHint);
-        randomBtn.addEventListener('click', randomLevel);
-        exitBtn.addEventListener('click', showExitConfirmation);
-        whatsappBtn.addEventListener('click', showSecurityModal);
-        menuBtn.addEventListener('click', toggleMenu);
-        resultBtn.addEventListener('click', closeResultModal);
-        hintClose.addEventListener('click', closeHintModal);
-        helpClose.addEventListener('click', closeHelpModal);
-        exitCancel.addEventListener('click', closeExitModal);
-        exitConfirm.addEventListener('click', confirmExit);
-        securitySubmit.addEventListener('click', verifySecurityCode);
-        securityCode.addEventListener('input', formatSecurityCode);
-        document.getElementById('level-select-btn').addEventListener('click', showLevelSelection);
-        document.getElementById('add-question-btn').addEventListener('click', showAddQuestionForm);
-        document.getElementById('restart-btn').addEventListener('click', restartGame);
-        document.getElementById('sound-btn').addEventListener('click', toggleSound);
-        document.getElementById('help-btn').addEventListener('click', showHelp);
-        document.getElementById('logout-btn').addEventListener('click', logout);
-        document.getElementById('close-result').addEventListener('click', closeResultModal);
-        document.getElementById('close-hint').addEventListener('click', closeHintModal);
-        document.getElementById('close-level').addEventListener('click', closeLevelModal);
-        document.getElementById('close-help').addEventListener('click', closeHelpModal);
-        document.getElementById('close-add-question').addEventListener('click', closeAddQuestionModal);
-        document.getElementById('close-security').addEventListener('click', closeSecurityModal);
-        addQuestionForm.addEventListener('submit', addNewQuestion);
-
-        // Tutup menu ketika klik di luar menu
-        document.addEventListener('click', (e) => {
-            if (!menu.contains(e.target) && e.target !== menuBtn) {
-                menu.style.display = 'none';
-            }
-        });
+        // Kredensial default
+        const DEFAULT_USERNAME = "abi";
+        const DEFAULT_PASSWORD = "19990401";
+        const WHATSAPP_CODE = "19880912";
 
         // Inisialisasi game
         function init() {
+            // Cek status pembekuan login
+            checkLoginBlockStatus();
+            
+            // Event listeners untuk login
+            loginForm.addEventListener('submit', handleLogin);
+            
+            // Event listeners untuk game
+            nextBtn.addEventListener('click', nextLevel);
+            hintBtn.addEventListener('click', showHint);
+            randomBtn.addEventListener('click', randomLevel);
+            exitBtn.addEventListener('click', showExitModal);
+            whatsappBtn.addEventListener('click', showWhatsappModal);
+            
+            // Event listeners untuk modal
+            resultBtn.addEventListener('click', closeResultModal);
+            hintOkBtn.addEventListener('click', closeHintModal);
+            closeLevel.addEventListener('click', closeLevelModal);
+            verifyWhatsappBtn.addEventListener('click', verifyWhatsappCode);
+            closeWhatsapp.addEventListener('click', closeWhatsappModal);
+            addQuestionForm.addEventListener('submit', addNewQuestion);
+            closeAddQuestion.addEventListener('click', closeAddQuestionModal);
+            exitCancel.addEventListener('click', closeExitModal);
+            exitConfirm.addEventListener('click', confirmExit);
+            
+            // Event listeners untuk menu
+            menuBtn.addEventListener('click', toggleMenu);
+            levelSelectBtn.addEventListener('click', showLevelModal);
+            addQuestionBtn.addEventListener('click', showAddQuestionModal);
+            restartBtn.addEventListener('click', restartGame);
+            soundBtn.addEventListener('click', toggleSound);
+            helpBtn.addEventListener('click', showHelp);
+            logoutBtn.addEventListener('click', logout);
+            
+            // Event listener untuk klik di luar menu
+            document.addEventListener('click', (e) => {
+                if (!menu.contains(e.target) && e.target !== menuBtn) {
+                    menu.style.display = 'none';
+                }
+            });
+            
+            // Event listener untuk input kode WhatsApp
+            whatsappCode.addEventListener('input', () => {
+                whatsappMessage.textContent = '';
+            });
+            
+            // Event listener untuk tekan Enter di input kode WhatsApp
+            whatsappCode.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    verifyWhatsappCode();
+                }
+            });
+            
+            // Buat partikel latar belakang
             createParticles();
-            loadGameState();
-            updateUI();
         }
 
-        // Handle login
+        // Fungsi untuk menangani login
         function handleLogin(e) {
             e.preventDefault();
+            
+            // Cek jika login diblokir
+            if (loginBlocked) {
+                loginMessage.textContent = "Login dibekukan. Silakan coba lagi nanti.";
+                return;
+            }
+            
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
-            // Validasi sederhana
-            if (username.length < 3) {
-                showLoginMessage('Username harus minimal 3 karakter!', 'error');
-                return;
-            }
-            
-            if (password.length < 4) {
-                showLoginMessage('Password harus minimal 4 karakter!', 'error');
-                return;
-            }
-            
-            // Simulasi login berhasil
-            showLoginMessage('Login berhasil! Memuat game...', 'success');
-            loginBtn.disabled = true;
-            
-            // Simulasi loading
-            setTimeout(() => {
-                isLoggedIn = true;
-                loginContainer.style.display = 'none';
-                gameContainer.style.display = 'block';
-                loadLevel(currentLevel);
-                saveGameState();
-            }, 2000);
-        }
-
-        // Tampilkan pesan login
-        function showLoginMessage(message, type) {
-            loginMessage.textContent = message;
-            loginMessage.style.color = type === 'error' ? '#ff7e5f' : '#4cd964';
-            
-            if (type === 'error') {
-                loginMessage.classList.add('shake');
+            if (username === DEFAULT_USERNAME && password === DEFAULT_PASSWORD) {
+                // Login berhasil
+                loginMessage.textContent = "Login berhasil!";
+                loginMessage.style.color = "#4cd964";
+                
+                // Reset percobaan login
+                loginAttempts = 0;
+                localStorage.removeItem('loginBlockedUntil');
+                localStorage.removeItem('loginAttempts');
+                
+                // Tampilkan game setelah login berhasil
                 setTimeout(() => {
-                    loginMessage.classList.remove('shake');
-                }, 500);
+                    loginContainer.style.display = 'none';
+                    gameContainer.style.display = 'block';
+                    loadLevel(currentLevel);
+                }, 1000);
+            } else {
+                // Login gagal
+                loginAttempts++;
+                localStorage.setItem('loginAttempts', loginAttempts);
+                
+                if (loginAttempts >= 3) {
+                    // Blokir login selama 5 menit
+                    loginBlocked = true;
+                    const blockUntil = Date.now() + 5 * 60 * 1000; // 5 menit
+                    localStorage.setItem('loginBlockedUntil', blockUntil);
+                    
+                    loginMessage.textContent = "Terlalu banyak percobaan login. Coba lagi dalam 5 menit.";
+                    loginBtn.disabled = true;
+                    
+                    // Mulai countdown
+                    startLoginCountdown(blockUntil);
+                    
+                    // Putar alarm
+                    playAlarm();
+                } else {
+                    loginMessage.textContent = `Username atau password salah. Percobaan ${loginAttempts}/3.`;
+                }
             }
         }
 
-        // Load level
+        // Fungsi untuk memeriksa status pembekuan login
+        function checkLoginBlockStatus() {
+            const storedAttempts = localStorage.getItem('loginAttempts');
+            const blockUntil = localStorage.getItem('loginBlockedUntil');
+            
+            if (storedAttempts) {
+                loginAttempts = parseInt(storedAttempts);
+            }
+            
+            if (blockUntil) {
+                const currentTime = Date.now();
+                const blockTime = parseInt(blockUntil);
+                
+                if (currentTime < blockTime) {
+                    // Login masih diblokir
+                    loginBlocked = true;
+                    loginBtn.disabled = true;
+                    loginMessage.textContent = "Login dibekukan. Silakan coba lagi nanti.";
+                    startLoginCountdown(blockTime);
+                } else {
+                    // Waktu blokir sudah selesai
+                    loginBlocked = false;
+                    localStorage.removeItem('loginBlockedUntil');
+                    localStorage.removeItem('loginAttempts');
+                    loginAttempts = 0;
+                }
+            }
+        }
+
+        // Fungsi untuk memulai countdown pembekuan login
+        function startLoginCountdown(blockUntil) {
+            const countdownInterval = setInterval(() => {
+                const currentTime = Date.now();
+                const timeLeft = blockUntil - currentTime;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    loginBlocked = false;
+                    loginBtn.disabled = false;
+                    loginMessage.textContent = "";
+                    countdownEl.textContent = "";
+                    localStorage.removeItem('loginBlockedUntil');
+                    localStorage.removeItem('loginAttempts');
+                    loginAttempts = 0;
+                    return;
+                }
+                
+                const minutes = Math.floor(timeLeft / 60000);
+                const seconds = Math.floor((timeLeft % 60000) / 1000);
+                
+                countdownEl.textContent = `Coba lagi dalam: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }, 1000);
+        }
+
+        // Fungsi untuk menampilkan modal WhatsApp
+        function showWhatsappModal() {
+            // Cek status pembekuan WhatsApp
+            checkWhatsappBlockStatus();
+            
+            if (whatsappBlocked) {
+                whatsappMessage.textContent = "Verifikasi WhatsApp dibekukan. Silakan coba lagi nanti.";
+                return;
+            }
+            
+            whatsappModal.style.display = 'flex';
+            whatsappCode.value = '';
+            whatsappMessage.textContent = '';
+        }
+
+        // Fungsi untuk memverifikasi kode WhatsApp
+        function verifyWhatsappCode() {
+            const code = whatsappCode.value;
+            
+            if (code === WHATSAPP_CODE) {
+                // Kode benar
+                whatsappMessage.textContent = "Verifikasi berhasil!";
+                whatsappMessage.style.color = "#4cd964";
+                
+                // Reset percobaan WhatsApp
+                whatsappAttempts = 0;
+                localStorage.removeItem('whatsappBlockedUntil');
+                localStorage.removeItem('whatsappAttempts');
+                
+                // Tutup modal setelah 1 detik
+                setTimeout(() => {
+                    closeWhatsappModal();
+                    showToast("Verifikasi WhatsApp berhasil!", "success");
+                }, 1000);
+            } else {
+                // Kode salah
+                whatsappAttempts++;
+                localStorage.setItem('whatsappAttempts', whatsappAttempts);
+                
+                if (whatsappAttempts >= 3) {
+                    // Blokir WhatsApp selama 5 menit
+                    whatsappBlocked = true;
+                    const blockUntil = Date.now() + 5 * 60 * 1000; // 5 menit
+                    localStorage.setItem('whatsappBlockedUntil', blockUntil);
+                    
+                    whatsappMessage.textContent = "Terlalu banyak percobaan. Coba lagi dalam 5 menit.";
+                    verifyWhatsappBtn.disabled = true;
+                    
+                    // Putar alarm
+                    playAlarm();
+                    
+                    // Mulai countdown
+                    startWhatsappCountdown(blockUntil);
+                } else {
+                    whatsappMessage.textContent = `Kode keamanan salah. Percobaan ${whatsappAttempts}/3.`;
+                }
+            }
+        }
+
+        // Fungsi untuk memeriksa status pembekuan WhatsApp
+        function checkWhatsappBlockStatus() {
+            const storedAttempts = localStorage.getItem('whatsappAttempts');
+            const blockUntil = localStorage.getItem('whatsappBlockedUntil');
+            
+            if (storedAttempts) {
+                whatsappAttempts = parseInt(storedAttempts);
+            }
+            
+            if (blockUntil) {
+                const currentTime = Date.now();
+                const blockTime = parseInt(blockUntil);
+                
+                if (currentTime < blockTime) {
+                    // WhatsApp masih diblokir
+                    whatsappBlocked = true;
+                    verifyWhatsappBtn.disabled = true;
+                } else {
+                    // Waktu blokir sudah selesai
+                    whatsappBlocked = false;
+                    localStorage.removeItem('whatsappBlockedUntil');
+                    localStorage.removeItem('whatsappAttempts');
+                    whatsappAttempts = 0;
+                }
+            }
+        }
+
+        // Fungsi untuk memulai countdown pembekuan WhatsApp
+        function startWhatsappCountdown(blockUntil) {
+            const countdownInterval = setInterval(() => {
+                const currentTime = Date.now();
+                const timeLeft = blockUntil - currentTime;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    whatsappBlocked = false;
+                    verifyWhatsappBtn.disabled = false;
+                    whatsappMessage.textContent = "";
+                    localStorage.removeItem('whatsappBlockedUntil');
+                    localStorage.removeItem('whatsappAttempts');
+                    whatsappAttempts = 0;
+                    return;
+                }
+                
+                const minutes = Math.floor(timeLeft / 60000);
+                const seconds = Math.floor((timeLeft % 60000) / 1000);
+                
+                // Update pesan countdown
+                whatsappMessage.textContent = `Coba lagi dalam: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }, 1000);
+        }
+
+        // Fungsi untuk memutar alarm
+        function playAlarm() {
+            if (alarmPlaying) return;
+            
+            alarmPlaying = true;
+            alarmIndicator.style.display = 'flex';
+            
+            // Coba putar alarm
+            alarmSound.play().catch(error => {
+                console.log("Autoplain dicegah:", error);
+                // Fallback: coba putar dengan interaksi pengguna
+                document.addEventListener('click', function userInteraction() {
+                    alarmSound.play();
+                    document.removeEventListener('click', userInteraction);
+                });
+            });
+            
+            // Hentikan alarm setelah 10 detik
+            setTimeout(() => {
+                alarmSound.pause();
+                alarmSound.currentTime = 0;
+                alarmPlaying = false;
+                alarmIndicator.style.display = 'none';
+            }, 10000);
+        }
+
+        // Fungsi untuk memuat level
         function loadLevel(levelIndex) {
             if (levelIndex >= questions.length) {
-                levelIndex = 0;
+                // Game selesai
+                showResultModal(true);
+                return;
             }
             
-            currentLevel = levelIndex;
-            answered = false;
-            
             const question = questions[levelIndex];
-            questionEl.innerHTML = `<div class="question-number">Pertanyaan ${levelIndex + 1}</div>${question.question}`;
+            currentLevel = levelIndex;
+            
+            // Update UI
+            currentLevelEl.textContent = levelIndex + 1;
+            questionEl.innerHTML = `<p>${question.question}</p>`;
+            progressBar.style.width = `${((levelIndex + 1) / questions.length) * 100}%`;
             
             // Kosongkan opsi
             optionsEl.innerHTML = '';
             
-            // Tambahkan opsi
+            // Tambahkan opsi jawaban
             question.options.forEach((option, index) => {
                 const optionElement = document.createElement('div');
                 optionElement.className = 'option';
                 optionElement.innerHTML = `
                     <div class="option-number">${String.fromCharCode(65 + index)}</div>
-                    ${option}
+                    <div class="option-text">${option}</div>
                 `;
-                optionElement.addEventListener('click', () => selectOption(index));
+                
+                optionElement.addEventListener('click', () => checkAnswer(index));
                 optionsEl.appendChild(optionElement);
             });
             
-            // Update UI
-            currentLevelEl.textContent = levelIndex + 1;
-            progressBar.style.width = `${((levelIndex + 1) / questions.length) * 100}%`;
+            // Nonaktifkan tombol next
             nextBtn.disabled = true;
-            
-            // Update tombol level
-            updateLevelSelection();
-            
-            // Simpan state
-            saveGameState();
         }
 
-        // Pilih opsi
-        function selectOption(selectedIndex) {
-            if (answered) return;
-            
-            answered = true;
+        // Fungsi untuk memeriksa jawaban
+        function checkAnswer(selectedIndex) {
             const question = questions[currentLevel];
-            const options = optionsEl.querySelectorAll('.option');
+            const options = document.querySelectorAll('.option');
             
-            // Tandai jawaban yang benar dan salah
-            options[question.correctIndex].classList.add('correct');
-            if (selectedIndex !== question.correctIndex) {
-                options[selectedIndex].classList.add('incorrect');
-            }
+            // Nonaktifkan semua opsi
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
             
-            // Periksa jawaban
-            if (selectedIndex === question.correctIndex) {
+            if (selectedIndex === question.correctAnswer) {
                 // Jawaban benar
+                options[selectedIndex].classList.add('correct');
                 score += 10;
                 scoreValue.textContent = score;
-                showMessage('Jawaban benar! +10 poin', 'success');
                 
-                // Tandai level sebagai selesai
-                completedLevels.add(currentLevel);
+                // Aktifkan tombol next
+                nextBtn.disabled = false;
                 
-                // Periksa achievement
-                checkAchievements();
+                // Tampilkan pesan sukses
+                showToast("Jawaban benar! +10 poin", "success");
             } else {
                 // Jawaban salah
-                showMessage('Jawaban salah! Coba lagi di level berikutnya.', 'error');
+                options[selectedIndex].classList.add('incorrect');
+                options[question.correctAnswer].classList.add('correct');
+                
+                // Tampilkan pesan error
+                showToast("Jawaban salah! Coba lagi", "error");
             }
-            
-            // Aktifkan tombol next
-            nextBtn.disabled = false;
-            
-            // Simpan state
-            saveGameState();
         }
 
-        // Level selanjutnya
+        // Fungsi untuk level selanjutnya
         function nextLevel() {
-            if (currentLevel < questions.length - 1) {
-                loadLevel(currentLevel + 1);
-            } else {
-                // Kembali ke level pertama jika sudah di level terakhir
-                loadLevel(0);
-            }
+            currentLevel++;
+            loadLevel(currentLevel);
         }
 
-        // Tampilkan petunjuk
+        // Fungsi untuk menampilkan petunjuk
         function showHint() {
             if (hints <= 0) {
-                showMessage('Anda kehabisan petunjuk!', 'error');
+                showToast("Anda kehabisan petunjuk!", "error");
                 return;
             }
             
-            hints--;
-            hintsValue.textContent = hints;
-            
             const question = questions[currentLevel];
-            hintText.textContent = question.hint;
+            hintText.textContent = question.hint || "Tidak ada petunjuk untuk pertanyaan ini.";
             hintModal.style.display = 'flex';
             
-            // Simpan state
-            saveGameState();
+            // Kurangi petunjuk
+            hints--;
+            hintsValue.textContent = hints;
         }
 
-        // Level acak
+        // Fungsi untuk level acak
         function randomLevel() {
-            let randomLevel;
-            do {
-                randomLevel = Math.floor(Math.random() * questions.length);
-            } while (randomLevel === currentLevel && questions.length > 1);
-            
-            loadLevel(randomLevel);
-            showMessage('Memuat level acak...', 'info');
+            const randomIndex = Math.floor(Math.random() * questions.length);
+            currentLevel = randomIndex;
+            loadLevel(currentLevel);
         }
 
-        // Tampilkan modal konfirmasi keluar
-        function showExitConfirmation() {
-            exitModal.style.display = 'flex';
-        }
-
-        // Tampilkan modal kode keamanan WhatsApp
-        function showSecurityModal() {
-            securityModal.style.display = 'flex';
-            securityCode.value = '';
-            securityMessage.textContent = '';
-        }
-
-        // Verifikasi kode keamanan
-        function verifySecurityCode() {
-            const code = securityCode.value;
-            
-            if (code === '19880912') {
-                securityVerified = true;
-                securityMessage.textContent = 'Kode benar! Mengarahkan ke WhatsApp...';
-                securityMessage.style.color = '#4cd964';
-                
-                // Redirect ke WhatsApp setelah 1 detik
-                setTimeout(() => {
-                    window.open('https://wa.me/1234567890?text=Halo,%20saya%20membutuhkan%20bantuan%20mengenai%20game%20Logika%20Lucu.', '_blank');
-                    closeSecurityModal();
-                }, 1000);
+        // Fungsi untuk menampilkan modal hasil
+        function showResultModal(isGameComplete = false) {
+            if (isGameComplete) {
+                resultTitle.textContent = "Selamat!";
+                resultMessage.textContent = "Anda telah menyelesaikan semua level!";
             } else {
-                securityMessage.textContent = 'Kode keamanan salah! Silakan coba lagi.';
-                securityMessage.style.color = '#ff7e5f';
-                
-                // Animasi shake
-                securityCode.classList.add('shake');
-                setTimeout(() => {
-                    securityCode.classList.remove('shake');
-                }, 500);
+                resultTitle.textContent = "Permainan Dihentikan";
+                resultMessage.textContent = "Anda memilih untuk keluar dari game.";
+            }
+            
+            finalScore.textContent = score;
+            resultModal.style.display = 'flex';
+        }
+
+        // Fungsi untuk menutup modal hasil
+        function closeResultModal() {
+            resultModal.style.display = 'none';
+            if (currentLevel >= questions.length) {
+                // Mulai ulang game jika sudah selesai
+                restartGame();
             }
         }
 
-        // Format kode keamanan
-        function formatSecurityCode() {
-            // Hanya izinkan input angka
-            securityCode.value = securityCode.value.replace(/\D/g, '');
+        // Fungsi untuk menutup modal petunjuk
+        function closeHintModal() {
+            hintModal.style.display = 'none';
         }
 
-        // Toggle menu
-        function toggleMenu() {
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-        }
-
-        // Tampilkan pemilihan level
-        function showLevelSelection() {
-            levelModal.style.display = 'flex';
-            menu.style.display = 'none';
-        }
-
-        // Update pemilihan level
-        function updateLevelSelection() {
+        // Fungsi untuk menampilkan modal level
+        function showLevelModal() {
             levelSelection.innerHTML = '';
             
+            // Buat tombol untuk setiap level
             for (let i = 0; i < questions.length; i++) {
-                const levelBtn = document.createElement('button');
+                const levelBtn = document.createElement('div');
                 levelBtn.className = 'level-btn';
-                levelBtn.textContent = i + 1;
-                
                 if (i === currentLevel) {
                     levelBtn.classList.add('current');
-                } else if (completedLevels.has(i)) {
+                } else if (i < currentLevel) {
                     levelBtn.classList.add('completed');
                 }
                 
+                levelBtn.textContent = i + 1;
                 levelBtn.addEventListener('click', () => {
-                    loadLevel(i);
+                    currentLevel = i;
+                    loadLevel(currentLevel);
                     closeLevelModal();
-                    showMessage(`Memuat level ${i + 1}`, 'info');
                 });
                 
                 levelSelection.appendChild(levelBtn);
             }
+            
+            levelModal.style.display = 'flex';
+            menu.style.display = 'none';
         }
 
-        // Tampilkan form tambah pertanyaan
-        function showAddQuestionForm() {
+        // Fungsi untuk menutup modal level
+        function closeLevelModal() {
+            levelModal.style.display = 'none';
+        }
+
+        // Fungsi untuk menutup modal WhatsApp
+        function closeWhatsappModal() {
+            whatsappModal.style.display = 'none';
+        }
+
+        // Fungsi untuk menampilkan modal tambah pertanyaan
+        function showAddQuestionModal() {
             addQuestionModal.style.display = 'flex';
             menu.style.display = 'none';
         }
 
-        // Tambah pertanyaan baru
+        // Fungsi untuk menutup modal tambah pertanyaan
+        function closeAddQuestionModal() {
+            addQuestionModal.style.display = 'none';
+        }
+
+        // Fungsi untuk menambah pertanyaan baru
         function addNewQuestion(e) {
             e.preventDefault();
-            
-            const newQuestion = document.getElementById('new-question').value;
-            const optionInputs = addQuestionForm.querySelectorAll('.option-input input[type="text"]');
-            const correctOptionIndex = parseInt(addQuestionForm.querySelector('input[name="correct-option"]:checked').value);
-            const hint = document.getElementById('question-hint').value;
-            
-            // Validasi
-            if (!newQuestion || !hint) {
-                showMessage('Semua field harus diisi!', 'error');
-                return;
-            }
-            
-            for (let i = 0; i < optionInputs.length; i++) {
-                if (!optionInputs[i].value) {
-                    showMessage('Semua opsi jawaban harus diisi!', 'error');
-                    return;
-                }
-            }
+            const formData = new FormData(e.target);
+            const question = e.target[0].value;
+            const options = [
+                e.target[1].value,
+                e.target[2].value,
+                e.target[3].value,
+                e.target[4].value
+            ];
+            const correctAnswer = parseInt(e.target[5].value);
+            const hint = e.target[9].value;
             
             // Tambahkan pertanyaan baru
-            const options = Array.from(optionInputs).map(input => input.value);
             questions.push({
-                question: newQuestion,
-                options: options,
-                correctIndex: correctOptionIndex,
-                hint: hint
+                question,
+                options,
+                correctAnswer,
+                hint
             });
-            
-            // Reset form
-            addQuestionForm.reset();
             
             // Tutup modal
             closeAddQuestionModal();
             
             // Tampilkan pesan sukses
-            showMessage('Pertanyaan berhasil ditambahkan!', 'success');
-            
-            // Update UI
-            updateLevelSelection();
+            showToast("Pertanyaan berhasil ditambahkan!", "success");
         }
 
-        // Restart game
-        function restartGame() {
-            if (confirm('Apakah Anda yakin ingin memulai ulang? Semua progress akan dihapus.')) {
-                currentLevel = 0;
-                score = 0;
-                hints = 3;
-                completedLevels.clear();
-                
-                scoreValue.textContent = score;
-                hintsValue.textContent = hints;
-                
-                loadLevel(currentLevel);
-                showMessage('Game dimulai ulang!', 'info');
-                
-                menu.style.display = 'none';
-                
-                saveGameState();
-            }
+        // Fungsi untuk menampilkan modal keluar
+        function showExitModal() {
+            exitModal.style.display = 'flex';
         }
 
-        // Toggle sound
-        function toggleSound() {
-            isSoundOn = !isSoundOn;
-            const soundBtn = document.getElementById('sound-btn');
-            soundBtn.innerHTML = isSoundOn ? 
-                '<i class="fas fa-volume-up"></i> Suara: On' : 
-                '<i class="fas fa-volume-mute"></i> Suara: Off';
-                
-            showMessage(isSoundOn ? 'Suara diaktifkan' : 'Suara dimatikan', 'info');
-            
-            menu.style.display = 'none';
-        }
-
-        // Tampilkan bantuan
-        function showHelp() {
-            helpModal.style.display = 'flex';
-            menu.style.display = 'none';
-        }
-
-        // Logout
-        function logout() {
-            if (confirm('Apakah Anda yakin ingin logout?')) {
-                isLoggedIn = false;
-                gameContainer.style.display = 'none';
-                loginContainer.style.display = 'block';
-                loginForm.reset();
-                menu.style.display = 'none';
-            }
-        }
-
-        // Tutup modal hasil
-        function closeResultModal() {
-            resultModal.style.display = 'none';
-        }
-
-        // Tutup modal petunjuk
-        function closeHintModal() {
-            hintModal.style.display = 'none';
-        }
-
-        // Tutup modal level
-        function closeLevelModal() {
-            levelModal.style.display = 'none';
-        }
-
-        // Tutup modal bantuan
-        function closeHelpModal() {
-            helpModal.style.display = 'none';
-        }
-
-        // Tutup modal tambah pertanyaan
-        function closeAddQuestionModal() {
-            addQuestionModal.style.display = 'none';
-        }
-
-        // Tutup modal keluar
+        // Fungsi untuk menutup modal keluar
         function closeExitModal() {
             exitModal.style.display = 'none';
         }
 
-        // Tutup modal keamanan
-        function closeSecurityModal() {
-            securityModal.style.display = 'none';
+        // Fungsi untuk konfirmasi keluar
+        function confirmExit() {
+            closeExitModal();
+            showResultModal(false);
         }
 
-        // Konfirmasi keluar
-        function confirmExit() {
-            saveGameState();
-            exitModal.style.display = 'none';
+        // Fungsi untuk toggle menu
+        function toggleMenu() {
+            if (menu.style.display === 'block') {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'block';
+            }
+        }
+
+        // Fungsi untuk memulai ulang game
+        function restartGame() {
+            currentLevel = 0;
+            score = 0;
+            hints = 3;
+            scoreValue.textContent = score;
+            hintsValue.textContent = hints;
+            loadLevel(currentLevel);
+            menu.style.display = 'none';
+            
+            // Tampilkan pesan
+            showToast("Permainan dimulai ulang!", "info");
+        }
+
+        // Fungsi untuk toggle sound
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            soundBtn.innerHTML = `<i class="fas fa-volume-${soundEnabled ? 'up' : 'mute'}"></i> Suara: ${soundEnabled ? 'On' : 'Off'}`;
+            
+            // Tampilkan pesan
+            showToast(`Suara ${soundEnabled ? 'diaktifkan' : 'dimatikan'}!`, "info");
+        }
+
+        // Fungsi untuk menampilkan bantuan
+        function showHelp() {
+            hintText.textContent = "Game Logika Lucu adalah game teka-teki sederhana. Pilih jawaban yang menurut Anda benar untuk mendapatkan poin. Gunakan petunjuk jika Anda kesulitan menjawab. Selamat bermain!";
+            hintModal.style.display = 'flex';
+            menu.style.display = 'none';
+        }
+
+        // Fungsi untuk logout
+        function logout() {
             gameContainer.style.display = 'none';
             loginContainer.style.display = 'block';
-            showMessage('Progress disimpan. Sampai jumpa!', 'info');
+            menu.style.display = 'none';
+            
+            // Reset form login
+            loginForm.reset();
+            loginMessage.textContent = "";
         }
 
-        // Tampilkan pesan
-        function showMessage(text, type) {
-            const messageContainer = document.getElementById('message-container');
-            const message = document.createElement('div');
-            message.className = `message ${type}`;
+        // Fungsi untuk menampilkan toast notifikasi
+        function showToast(message, type = "info") {
+            // Buat elemen toast jika belum ada
+            let toast = document.querySelector('.toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.className = 'toast';
+                document.body.appendChild(toast);
+            }
             
+            // Set pesan dan jenis toast
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            
+            // Tambahkan ikon berdasarkan jenis
             let icon = '';
             switch (type) {
                 case 'success':
@@ -1717,51 +1879,22 @@
                 case 'error':
                     icon = '<i class="fas fa-exclamation-circle"></i>';
                     break;
-                case 'info':
+                default:
                     icon = '<i class="fas fa-info-circle"></i>';
-                    break;
             }
             
-            message.innerHTML = `${icon} ${text}`;
-            messageContainer.appendChild(message);
+            toast.innerHTML = `${icon} ${message}`;
             
-            // Tampilkan pesan
-            setTimeout(() => {
-                message.classList.add('show');
-            }, 10);
+            // Tampilkan toast
+            toast.style.opacity = '1';
             
-            // Sembunyikan pesan setelah 3 detik
+            // Sembunyikan setelah 3 detik
             setTimeout(() => {
-                message.classList.remove('show');
-                setTimeout(() => {
-                    messageContainer.removeChild(message);
-                }, 300);
+                toast.style.opacity = '0';
             }, 3000);
         }
 
-        // Periksa achievement
-        function checkAchievements() {
-            if (completedLevels.size === 5) {
-                showAchievement('Ahli Logika', 'Anda telah menyelesaikan 5 level!');
-            } else if (completedLevels.size === questions.length) {
-                showAchievement('Master Logika', 'Anda telah menyelesaikan semua level!');
-            } else if (score >= 50) {
-                showAchievement('Pemburu Skor', 'Anda telah mencapai 50 poin!');
-            }
-        }
-
-        // Tampilkan achievement
-        function showAchievement(title, description) {
-            achievementTitle.textContent = title;
-            achievementDescription.textContent = description;
-            achievementBadge.classList.add('show');
-            
-            setTimeout(() => {
-                achievementBadge.classList.remove('show');
-            }, 5000);
-        }
-
-        // Buat partikel
+        // Fungsi untuk membuat partikel latar belakang
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
             const particleCount = 30;
@@ -1771,7 +1904,7 @@
                 particle.className = 'particle';
                 
                 // Ukuran acak
-                const size = Math.random() * 10 + 5;
+                const size = Math.random() * 20 + 5;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
                 
@@ -1779,60 +1912,28 @@
                 particle.style.left = `${Math.random() * 100}%`;
                 particle.style.top = `${Math.random() * 100}%`;
                 
-                // Warna acak
-                const colors = ['rgba(255, 126, 95, 0.5)', 'rgba(106, 17, 203, 0.5)', 'rgba(37, 117, 252, 0.5)', 'rgba(254, 180, 123, 0.5)'];
+                // Warna acak dengan transparansi
+                const colors = [
+                    'rgba(255, 126, 95, 0.3)',
+                    'rgba(106, 17, 203, 0.3)',
+                    'rgba(37, 117, 252, 0.3)',
+                    'rgba(254, 180, 123, 0.3)'
+                ];
                 particle.style.background = colors[Math.floor(Math.random() * colors.length)];
                 
-                // Animasi acak
-                const duration = Math.random() * 15 + 10;
-                const delay = Math.random() * 5;
+                // Animasi dengan durasi acak
+                const duration = Math.random() * 20 + 10;
                 particle.style.animationDuration = `${duration}s`;
-                particle.style.animationDelay = `${delay}s`;
+                
+                // Delay acak
+                particle.style.animationDelay = `-${Math.random() * 20}s`;
                 
                 particlesContainer.appendChild(particle);
             }
         }
 
-        // Update UI
-        function updateUI() {
-            scoreValue.textContent = score;
-            hintsValue.textContent = hints;
-            currentLevelEl.textContent = currentLevel + 1;
-            progressBar.style.width = `${((currentLevel + 1) / questions.length) * 100}%`;
-        }
-
-        // Simpan state game
-        function saveGameState() {
-            const gameState = {
-                currentLevel,
-                score,
-                hints,
-                completedLevels: Array.from(completedLevels),
-                isSoundOn
-            };
-            
-            localStorage.setItem('logikaLucuGameState', JSON.stringify(gameState));
-        }
-
-        // Load state game
-        function loadGameState() {
-            const savedState = localStorage.getItem('logikaLucuGameState');
-            
-            if (savedState) {
-                const gameState = JSON.parse(savedState);
-                currentLevel = gameState.currentLevel || 0;
-                score = gameState.score || 0;
-                hints = gameState.hints || 3;
-                completedLevels = new Set(gameState.completedLevels || []);
-                isSoundOn = gameState.isSoundOn !== undefined ? gameState.isSoundOn : true;
-                
-                // Update UI
-                updateUI();
-            }
-        }
-
-        // Inisialisasi
-        init();
+        // Inisialisasi game saat halaman dimuat
+        window.addEventListener('load', init);
     </script>
 </body>
 </html>
