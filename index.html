@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAME AMIABI</title>
+    <title>Logika Lucu - Game Premium</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <style>
@@ -960,7 +960,7 @@
         <div class="logo">
             <i class="fas fa-brain"></i>
         </div>
-        <h2>Game Logika</h2>
+        <h2>Logika Lucu Premium</h2>
         <form class="login-form" id="login-form">
             <div class="form-group">
                 <label for="username">Username</label>
@@ -1284,6 +1284,8 @@
         const DEFAULT_USERNAME = "abi";
         const DEFAULT_PASSWORD = "19990401";
         const WHATSAPP_CODE = "19880912";
+        const WHATSAPP_NUMBER = "085647709114";
+        const WHATSAPP_MESSAGE = "Haaii suamiku sayaaank....";
 
         // Inisialisasi game
         function init() {
@@ -1457,7 +1459,7 @@
             checkWhatsappBlockStatus();
             
             if (whatsappBlocked) {
-                whatsappMessage.textContent = "Verifikasi WhatsApp dibekukan. Silakan coba lagi nanti.";
+                showToast("Verifikasi WhatsApp dibekukan. Silakan coba lagi nanti.", "error");
                 return;
             }
             
@@ -1472,7 +1474,7 @@
             
             if (code === WHATSAPP_CODE) {
                 // Kode benar
-                whatsappMessage.textContent = "Verifikasi berhasil!";
+                whatsappMessage.textContent = "Verifikasi berhasil! Mengarahkan ke WhatsApp...";
                 whatsappMessage.style.color = "#4cd964";
                 
                 // Reset percobaan WhatsApp
@@ -1480,9 +1482,16 @@
                 localStorage.removeItem('whatsappBlockedUntil');
                 localStorage.removeItem('whatsappAttempts');
                 
-                // Tutup modal setelah 1 detik
+                // Redirect ke WhatsApp setelah 1 detik
                 setTimeout(() => {
                     closeWhatsappModal();
+                    
+                    // Encode pesan untuk URL
+                    const encodedMessage = encodeURIComponent(WHATSAPP_MESSAGE);
+                    
+                    // Redirect ke WhatsApp dengan nomor dan pesan yang benar
+                    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank');
+                    
                     showToast("Verifikasi WhatsApp berhasil!", "success");
                 }, 1000);
             } else {
